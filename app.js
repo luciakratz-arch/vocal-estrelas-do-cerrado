@@ -409,7 +409,7 @@ function Login({ members, onLogin, config }) {
                 {[
                     { id:"admin",   icon:"shield",     label:"Acesso Administrativo", sub:"Gestão completa do coral",   cor:COR,       bg:"rgba(180,16,32,0.08)" },
                     { id:"corista", icon:"users",      label:"Sou Corista",            sub:"Acesso às músicas e agenda", cor:"#2E7D32",  bg:"rgba(46,125,50,0.08)" },
-                    { id:"rh",      icon:"briefcase",  label:"Sou do RH",              sub:"Pessoas e Cultura",          cor:"#1565C0",  bg:"rgba(21,101,192,0.08)" },
+
                 ].map(p=>(
                     <button key={p.id} onClick={()=>{setTela(p.id);setErro("");setSenha("");setBusca("");setSugestoes([]);}}
                         style={{ display:"flex", alignItems:"center", gap:14, background:p.bg, border:`1px solid ${p.cor}22`, borderRadius:12, padding:"16px", width:"100%", marginBottom:10, cursor:"pointer", textAlign:"left", fontFamily:"inherit" }}>
@@ -446,26 +446,7 @@ function Login({ members, onLogin, config }) {
                 </div>
             </div>}
 
-            {tela==="rh" && <div style={s.card}>
-                <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:20 }}>
-                    <div style={{ width:36, height:36, background:"rgba(21,101,192,0.08)", borderRadius:8, display:"flex", alignItems:"center", justifyContent:"center" }}>
-                        <Icon name="briefcase" size={17} color="#1565C0" />
-                    </div>
-                    <div style={{ fontFamily:"'Playfair Display',serif", fontSize:18, fontWeight:700, color:"#1A1D23" }}>RH — Pessoas e Cultura</div>
-                </div>
-                <div style={{ position:"relative", marginBottom:12 }}>
-                    <input style={{ ...s.inp, paddingRight:44 }} type={mostrar?"text":"password"} placeholder="Senha de acesso" value={senha}
-                        onChange={e=>{setSenha(e.target.value);setErro("");}} onKeyDown={e=>e.key==="Enter"&&entrarRH()} autoFocus />
-                    <button onClick={()=>setMostrar(v=>!v)} style={{ position:"absolute", right:12, top:"50%", transform:"translateY(-50%)", background:"none", border:"none", cursor:"pointer" }}>
-                        <Icon name={mostrar?"eye-off":"eye"} size={16} color="#AAA" />
-                    </button>
-                </div>
-                {erro && <div style={{ fontSize:13, color:cor, marginBottom:10 }}>{erro}</div>}
-                <div style={{ display:"flex", gap:10 }}>
-                    <button style={s.btnSec} onClick={()=>{setTela(null);setErro("");}}>Voltar</button>
-                    <button style={{...s.btnPri, background:"#1565C0"}} onClick={entrarRH}>Entrar</button>
-                </div>
-            </div>}
+
 
             {tela==="corista" && <div style={s.card}>
                 <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:20 }}>
@@ -2107,6 +2088,7 @@ function Relatorios({ config }) {
     const { data:members }     = useCollection("members");
     const { data:songs }       = useCollection("songs");
     const { data:frequencias } = useCollection("frequencias","dataHora");
+    const { data:blogPosts }   = useCollection("blog_posts");
     const cor = config.corPrimaria||COR;
 
     const [dataInicio, setDataInicio] = useState(new Date().getFullYear()+"-01-01");
@@ -2489,6 +2471,7 @@ ${textos.equipe?`<div class="bloco"><div class="bloco-titulo">Equipe de Produç�
                     { label:"Total atividades", value:eventosFiltrados.length, icon:"calendar", color:cor },
                     { label:"Integrantes ativos", value:ativos.length, icon:"users", color:"#2E7D32" },
                     { label:"Apresentações", value:apresentacoes.length, icon:"mic", color:cor },
+                    { label:"Posts no Blog", value:blogPosts.filter(p=>p.status==="publicado").length, icon:"newspaper", color:"#2E7D32" },
                 ].map(m=>(
                     <div key={m.label} style={{ ...card, marginBottom:0, textAlign:"center", padding:"16px" }}>
                         <div style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:6, marginBottom:6 }}>
@@ -3963,6 +3946,228 @@ function AreaRH({ config, abaInicial }) {
 
 
 // ── NAV ───────────────────────────────────────────────────────────────────────
+
+// ── BLOG DO GRUPO ─────────────────────────────────────────────────────────────
+function BlogGrupo({ config, isAdmin, user }) {
+    const { data:posts, loading } = useCollection("blog_posts");
+    const [modal, setModal]       = useState(null);
+    const [form, setForm]         = useState({ titulo:"", texto:"", imageUrl:"", categoria:"Geral" });
+    const [salvando, setSalvando] = useState(false);
+    const [erro, setErro]         = useState("");
+    const [filtro, setFiltro]     = useState("Todos");
+    const cor = config.corPrimaria||COR;
+
+    const categorias = ["Geral","Apresentação","Ensaio","Conquista","Comunicado","Evento"];
+
+    // Admin vê tudo; corista vê só aprovados + seus próprios pendentes
+    const visiveis = posts.filter(p => {
+        if (isAdmin) return true;
+        return p.status === "publicado" || p.autorNome === user.name;
+    }).filter(p => filtro === "Todos" || p.categoria === filtro);
+
+    function abrirNovo() { setForm({ titulo:"", texto:"", imageUrl:"", categoria:"Geral" }); setModal("novo"); setErro(""); }
+    function abrirEditar(p) { setForm({...p}); setModal(p); setErro(""); }
+    function fechar() { setModal(null); setForm({ titulo:"", texto:"", imageUrl:"", categoria:"Geral" }); }
+
+    async function salvar() {
+        if (!form.titulo.trim()) { setErro("Título é obrigatório."); return; }
+        if (!form.texto.trim())  { setErro("Texto é obrigatório."); return; }
+        setSalvando(true);
+        if (modal && modal !== "novo") {
+            // Edição (admin pode publicar/reprovar)
+            await db.collection("blog_posts").doc(modal.id).update({
+                titulo: form.titulo, texto: form.texto,
+                imageUrl: form.imageUrl||"", categoria: form.categoria,
+                status: form.status||modal.status,
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+        } else {
+            // Novo post
+            const status = isAdmin ? "publicado" : "pendente";
+            await db.collection("blog_posts").add({
+                titulo: form.titulo, texto: form.texto,
+                imageUrl: form.imageUrl||"", categoria: form.categoria,
+                autorNome: user.name, autorPerfil: isAdmin ? "admin" : "corista",
+                status,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+        }
+        setSalvando(false);
+        fechar();
+    }
+
+    async function excluir() {
+        if (!window.confirm("Excluir este post?")) return;
+        await db.collection("blog_posts").doc(modal.id).delete();
+        fechar();
+    }
+
+    async function aprovar(p) {
+        await db.collection("blog_posts").doc(p.id).update({ status:"publicado", updatedAt: firebase.firestore.FieldValue.serverTimestamp() });
+    }
+    async function reprovar(p) {
+        await db.collection("blog_posts").doc(p.id).update({ status:"reprovado", updatedAt: firebase.firestore.FieldValue.serverTimestamp() });
+    }
+
+    if (loading) return <Spinner />;
+
+    const pendentes = posts.filter(p => p.status === "pendente");
+
+    const inp = { width:"100%", padding:"11px 14px", border:"1px solid #E8E0E0", borderRadius:10, fontSize:14, outline:"none", fontFamily:"inherit", color:"#1A1D23", background:"#FAFAFA" };
+    const lbl = { display:"block", fontSize:12, fontWeight:600, color:"#888", marginBottom:5 };
+    const statusStyle = { publicado:{ bg:"#E8F5E9", color:"#2E7D32" }, pendente:{ bg:"#FFF8E1", color:"#E65100" }, reprovado:{ bg:"#FFF0F0", color:"#B41020" } };
+
+    return (
+        <div>
+            <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:20 }}>
+                <div>
+                    <div style={{ fontFamily:"'Playfair Display',serif", fontSize:28, fontWeight:700, color:cor }}>Blog do Grupo</div>
+                    <div style={{ fontSize:13, color:"#AAA", marginTop:2 }}>Notícias e histórias do Estrelas do Cerrado</div>
+                </div>
+                <button onClick={abrirNovo}
+                    style={{ display:"flex", alignItems:"center", gap:8, padding:"10px 20px", background:cor, border:"none", borderRadius:10, fontSize:13, fontWeight:700, color:"#fff", cursor:"pointer", fontFamily:"inherit" }}>
+                    <Icon name="plus" size={14} color="#fff" /> {isAdmin ? "Nova Publicação" : "Sugerir Post"}
+                </button>
+            </div>
+
+            {/* Pendentes — só admin vê */}
+            {isAdmin && pendentes.length > 0 && (
+                <div style={{ background:"#FFF8E1", border:"1px solid #FDE68A", borderRadius:12, padding:"16px 20px", marginBottom:16 }}>
+                    <div style={{ fontSize:13, fontWeight:700, color:"#E65100", marginBottom:12 }}>
+                        ⏳ Aguardando aprovação ({pendentes.length})
+                    </div>
+                    {pendentes.map(p => (
+                        <div key={p.id} style={{ background:"#fff", borderRadius:10, padding:"12px 16px", marginBottom:8, display:"flex", alignItems:"center", gap:12 }}>
+                            <div style={{ flex:1 }}>
+                                <div style={{ fontSize:14, fontWeight:700, color:"#1A1D23" }}>{p.titulo}</div>
+                                <div style={{ fontSize:12, color:"#AAA" }}>por {p.autorNome} · {p.categoria}</div>
+                                <div style={{ fontSize:13, color:"#555", marginTop:4 }}>{p.texto.slice(0,100)}...</div>
+                            </div>
+                            <div style={{ display:"flex", gap:8 }}>
+                                <button onClick={()=>aprovar(p)}
+                                    style={{ padding:"7px 14px", background:"#E8F5E9", color:"#2E7D32", border:"none", borderRadius:8, fontSize:12, fontWeight:700, cursor:"pointer", fontFamily:"inherit" }}>
+                                    ✓ Publicar
+                                </button>
+                                <button onClick={()=>reprovar(p)}
+                                    style={{ padding:"7px 14px", background:"#FFF0F0", color:"#B41020", border:"none", borderRadius:8, fontSize:12, fontWeight:700, cursor:"pointer", fontFamily:"inherit" }}>
+                                    ✕ Reprovar
+                                </button>
+                                <button onClick={()=>abrirEditar(p)}
+                                    style={{ padding:"7px 10px", background:"#F5F5F5", color:"#666", border:"none", borderRadius:8, fontSize:12, cursor:"pointer", fontFamily:"inherit" }}>
+                                    <Icon name="pencil" size={13} color="#888" />
+                                </button>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            )}
+
+            {/* Filtro por categoria */}
+            <div style={{ display:"flex", gap:8, flexWrap:"wrap", marginBottom:16 }}>
+                {["Todos", ...categorias].map(c => (
+                    <button key={c} onClick={()=>setFiltro(c)}
+                        style={{ padding:"5px 14px", borderRadius:20, border:`1px solid ${filtro===c?cor:"#EEE"}`, background:filtro===c?cor:"#fff", color:filtro===c?"#fff":"#555", fontSize:13, fontWeight:600, cursor:"pointer", fontFamily:"inherit" }}>
+                        {c}
+                    </button>
+                ))}
+            </div>
+
+            {/* Posts */}
+            {visiveis.filter(p => p.status !== "pendente" || isAdmin).length === 0
+                ? <div style={{ background:"#fff", borderRadius:12, border:"1px solid #EEE8E8", padding:"32px", textAlign:"center", color:"#CCC", fontSize:14 }}>
+                    Nenhuma publicação ainda.
+                  </div>
+                : visiveis.map(p => {
+                    const st = statusStyle[p.status] || statusStyle.publicado;
+                    return (
+                        <div key={p.id} style={{ background:"#fff", borderRadius:12, border:"1px solid #EEE8E8", marginBottom:12, overflow:"hidden", boxShadow:"0 1px 4px rgba(0,0,0,0.04)" }}>
+                            {p.imageUrl && <img src={p.imageUrl} alt="" style={{ width:"100%", height:160, objectFit:"cover" }} onError={e=>e.target.style.display="none"} />}
+                            <div style={{ padding:"16px 20px" }}>
+                                <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:8, flexWrap:"wrap" }}>
+                                    <span style={{ fontSize:11, padding:"2px 8px", borderRadius:10, background:cor+"18", color:cor, fontWeight:700 }}>{p.categoria||"Geral"}</span>
+                                    <span style={{ fontSize:11, padding:"2px 8px", borderRadius:10, background:st.bg, color:st.color, fontWeight:700 }}>{p.status==="publicado"?"✓ Publicado":p.status==="pendente"?"⏳ Aguardando":p.status==="reprovado"?"✕ Reprovado":""}</span>
+                                    {p.createdAt?.seconds && <span style={{ fontSize:11, color:"#AAA" }}>{new Date(p.createdAt.seconds*1000).toLocaleDateString("pt-BR",{day:"numeric",month:"long",year:"numeric"})}</span>}
+                                </div>
+                                <div style={{ fontSize:16, fontWeight:700, color:"#1A1D23", marginBottom:6 }}>{p.titulo}</div>
+                                <div style={{ fontSize:13, color:"#555", lineHeight:1.6, marginBottom:8 }}>{p.texto}</div>
+                                <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between" }}>
+                                    <div style={{ fontSize:12, color:"#AAA" }}>por {p.autorNome||"Administrador"}</div>
+                                    {(isAdmin || p.autorNome === user.name) && (
+                                        <button onClick={()=>abrirEditar(p)}
+                                            style={{ background:"none", border:"none", cursor:"pointer", display:"flex", alignItems:"center", gap:4, fontSize:12, color:"#AAA", fontFamily:"inherit" }}>
+                                            <Icon name="pencil" size={13} color="#AAA" /> Editar
+                                        </button>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    );
+                })
+            }
+
+            {/* Modal */}
+            {modal && (
+                <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.5)", zIndex:300, display:"flex", alignItems:"flex-end", justifyContent:"center" }}
+                    onClick={e=>e.target===e.currentTarget&&fechar()}>
+                    <div style={{ background:"#FAFAFA", borderRadius:"20px 20px 0 0", padding:"24px 20px", width:"100%", maxWidth:640, maxHeight:"92vh", overflowY:"auto" }}>
+                        <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:20 }}>
+                            <div style={{ fontFamily:"'Playfair Display',serif", fontSize:20, fontWeight:700, color:"#1A1D23" }}>
+                                {modal==="novo" ? (isAdmin?"Nova Publicação":"Sugerir Post") : "Editar Post"}
+                            </div>
+                            <button onClick={fechar} style={{ background:"#EEE", border:"none", borderRadius:8, width:32, height:32, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center" }}>
+                                <Icon name="x" size={16} color="#666" />
+                            </button>
+                        </div>
+                        {!isAdmin && modal==="novo" && (
+                            <div style={{ background:"#F3E8F7", borderRadius:10, padding:"10px 14px", marginBottom:16, fontSize:13, color:cor }}>
+                                ✨ Seu post será enviado para aprovação do administrador antes de ser publicado.
+                            </div>
+                        )}
+                        <div style={{ marginBottom:14 }}>
+                            <label style={lbl}>Título *</label>
+                            <input style={inp} value={form.titulo||""} onChange={e=>{setForm(f=>({...f,titulo:e.target.value}));setErro("");}} autoFocus />
+                            {erro && <div style={{ fontSize:12, color:cor, marginTop:4 }}>{erro}</div>}
+                        </div>
+                        <div style={{ marginBottom:14 }}>
+                            <label style={lbl}>Categoria</label>
+                            <select style={inp} value={form.categoria||"Geral"} onChange={e=>setForm(f=>({...f,categoria:e.target.value}))}>
+                                {categorias.map(c=><option key={c}>{c}</option>)}
+                            </select>
+                        </div>
+                        <div style={{ marginBottom:14 }}>
+                            <label style={lbl}>URL da imagem (opcional)</label>
+                            <input style={inp} value={form.imageUrl||""} onChange={e=>setForm(f=>({...f,imageUrl:e.target.value}))} placeholder="https://..." />
+                        </div>
+                        <div style={{ marginBottom:14 }}>
+                            <label style={lbl}>Texto *</label>
+                            <textarea style={{ ...inp, minHeight:140, resize:"vertical" }} value={form.texto||""} onChange={e=>{setForm(f=>({...f,texto:e.target.value}));setErro("");}} />
+                        </div>
+                        {isAdmin && modal && modal !== "novo" && (
+                            <div style={{ marginBottom:14 }}>
+                                <label style={lbl}>Status</label>
+                                <select style={inp} value={form.status||"publicado"} onChange={e=>setForm(f=>({...f,status:e.target.value}))}>
+                                    <option value="publicado">Publicado</option>
+                                    <option value="pendente">Pendente</option>
+                                    <option value="reprovado">Reprovado</option>
+                                </select>
+                            </div>
+                        )}
+                        <div style={{ display:"flex", gap:10 }}>
+                            {modal !== "novo" && (isAdmin || (modal && modal.autorNome === user.name)) && (
+                                <button onClick={excluir} style={{ padding:"12px 16px", background:"#FFF0F0", color:"#B41020", border:"1px solid #F5DADA", borderRadius:10, fontSize:13, fontWeight:600, cursor:"pointer", fontFamily:"inherit" }}>Excluir</button>
+                            )}
+                            <button onClick={fechar} style={{ flex:1, padding:"13px", background:"#F0EAE8", color:"#666", border:"none", borderRadius:10, fontSize:14, fontWeight:600, cursor:"pointer", fontFamily:"inherit" }}>Cancelar</button>
+                            <button onClick={salvar} disabled={salvando} style={{ flex:1, padding:"13px", background:cor, color:"#fff", border:"none", borderRadius:10, fontSize:14, fontWeight:700, cursor:"pointer", fontFamily:"inherit", opacity:salvando?0.7:1 }}>
+                                {salvando?"Salvando...":(modal==="novo"?(isAdmin?"Publicar":"Enviar para aprovação"):"Salvar")}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+}
+
 const NAV_ADMIN = [
     { key:"painel",       label:"Painel",            icon:"layout-dashboard" },
     { key:"integrantes",  label:"Integrantes",        icon:"users" },
@@ -3974,20 +4179,17 @@ const NAV_ADMIN = [
     { key:"apresentacao", label:"Apresentação",       icon:"mic" },
     { key:"declaracao",   label:"Declaração Digital", icon:"file-text" },
     { key:"relatorios",   label:"Relatórios",         icon:"chart-bar" },
+    { key:"blog",         label:"Blog do Grupo",      icon:"newspaper" },
     { key:"config",       label:"Configurações",      icon:"settings" },
 ];
-const NAV_RH = [
-    { key:"rh_dashboard",   label:"Dashboard",   icon:"bar-chart-2" },
-    { key:"rh_noticias",    label:"Notícias",     icon:"newspaper" },
-    { key:"rh_declaracoes", label:"Declarações",  icon:"file-text" },
-    { key:"rh_historico",   label:"Histórico",    icon:"clock" },
-];
+const NAV_RH = [];
 
 const NAV_CORISTA = [
     { key:"inicio",     label:"Início",          icon:"home" },
     { key:"musicas",    label:"Músicas",          icon:"music" },
     { key:"estudos",    label:"Sala de Estudos",  icon:"graduation-cap" },
     { key:"declaracao", label:"Minha Declaração", icon:"file-text" },
+    { key:"blog",       label:"Blog do Grupo",    icon:"newspaper" },
 ];
 
 // ── APP ───────────────────────────────────────────────────────────────────────
@@ -4048,6 +4250,7 @@ function App() {
         rh_noticias:    <AreaRH config={config} abaInicial="noticias" />,
         rh_declaracoes: <AreaRH config={config} abaInicial="declaracoes" />,
         rh_historico:   <AreaRH config={config} abaInicial="historico" />,
+        blog:         <BlogGrupo config={config} isAdmin={isAdmin} user={user} />,
         config:       <Configuracoes config={config} save={save} />,
         inicio:       <PainelCorista user={user} config={config} />,
     };
