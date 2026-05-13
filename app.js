@@ -101,8 +101,8 @@ function CadastroPublico({ config }) {
     return (
         <div style={{ minHeight:"100vh", background:fundo, display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", padding:"32px 20px" }}>
             <div style={{ textAlign:"center", marginBottom:24 }}>
-                <div style={{ width:80, height:80, background:"#fff", borderRadius:"50%", display:"flex", alignItems:"center", justifyContent:"center", margin:"0 auto 14px", boxShadow:"0 4px 20px rgba(0,0,0,0.1)" }}>
-                    <img src={config.logoUrl||LOGO_URL} alt="" style={{ width:56, height:56, objectFit:"contain" }} onError={e=>e.target.style.display="none"} />
+                <div style={{ width:90, height:90, borderRadius:16, overflow:"hidden", margin:"0 auto 14px", boxShadow:"0 4px 20px rgba(0,0,0,0.1)" }}>
+                    <img src={config.logoUrl||LOGO_URL} alt="" style={{ width:"100%", height:"100%", objectFit:"cover" }} onError={e=>e.target.style.display="none"} />
                 </div>
                 <div style={{ fontFamily:"'Playfair Display',serif", fontSize:22, fontWeight:700, color:cor }}>{config.nomeApp||"Estrelas do Cerrado"}</div>
                 <div style={{ fontSize:13, color:"#AAA", marginTop:4 }}>Cadastro de Corista</div>
@@ -398,8 +398,8 @@ function Login({ members, onLogin, config }) {
     return (
         <div style={s.wrap}>
             <div style={{ textAlign:"center", marginBottom:28 }}>
-                <div style={{ width:90, height:90, background:"#fff", borderRadius:"50%", display:"flex", alignItems:"center", justifyContent:"center", margin:"0 auto 16px", boxShadow:"0 4px 20px rgba(0,0,0,0.1)" }}>
-                    <img src={config.logoUrl||LOGO_URL} alt="Logo" style={{ width:64, height:64, objectFit:"contain" }} onError={e=>e.target.style.display="none"} />
+                <div style={{ width:110, height:110, borderRadius:20, overflow:"hidden", margin:"0 auto 16px", boxShadow:"0 4px 20px rgba(0,0,0,0.15)" }}>
+                    <img src={config.logoUrl||LOGO_URL} alt="Logo" style={{ width:"100%", height:"100%", objectFit:"cover" }} onError={e=>e.target.style.display="none"} />
                 </div>
                 <div style={{ fontFamily:"'Playfair Display',serif", fontSize:26, fontWeight:700, color:cor }}>{config.nomeApp||"Estrelas do Cerrado"}</div>
                 <div style={{ fontSize:14, color:"#AAA", marginTop:4 }}>{config.subtitulo||"Portal de Gestão"}</div>
@@ -2714,8 +2714,8 @@ function CheckinPublico({ sessaoId, config }) {
     return (
         <div style={wrap}>
             <div style={{ textAlign:"center", marginBottom:24 }}>
-                <div style={{ width:64, height:64, background:"#fff", borderRadius:"50%", display:"flex", alignItems:"center", justifyContent:"center", margin:"0 auto 12px", boxShadow:"0 2px 12px rgba(0,0,0,0.1)" }}>
-                    <img src={config.logoUrl||LOGO_URL} alt="" style={{ width:44, height:44, objectFit:"contain" }} onError={e=>e.target.style.display="none"} />
+                <div style={{ width:64, height:64, borderRadius:12, overflow:"hidden", margin:"0 auto 12px", boxShadow:"0 2px 12px rgba(0,0,0,0.1)" }}>
+                    <img src={config.logoUrl||LOGO_URL} alt="" style={{ width:"100%", height:"100%", objectFit:"cover" }} onError={e=>e.target.style.display="none"} />
                 </div>
                 <div style={{ fontFamily:"'Playfair Display',serif", fontSize:20, fontWeight:700, color:cor }}>{config.nomeApp||"Coral Flamboyant"}</div>
                 <div style={{ fontSize:13, color:"#AAA", marginTop:4 }}>Check-in de presença</div>
@@ -4264,8 +4264,8 @@ function App() {
             <aside style={{ width:260, background:"#fff", borderRight:"1px solid #EEE0E0", display:"flex", flexDirection:"column", position:"fixed", top:0, left:0, height:"100vh", zIndex:200, boxShadow:"2px 0 12px rgba(0,0,0,0.04)" }} className="sidebar-desktop">
                 <div style={{ padding:"20px 20px 16px", borderBottom:"1px solid #F5EAEA" }}>
                     <div style={{ display:"flex", alignItems:"center", gap:12 }}>
-                        <div style={{ width:40, height:40, background:fundo, borderRadius:10, display:"flex", alignItems:"center", justifyContent:"center" }}>
-                            <img src={config.logoUrl||LOGO_URL} alt="" style={{ width:28, height:28, objectFit:"contain" }} onError={e=>e.target.style.display="none"} />
+                        <div style={{ width:40, height:40, borderRadius:10, overflow:"hidden" }}>
+                            <img src={config.logoUrl||LOGO_URL} alt="" style={{ width:"100%", height:"100%", objectFit:"cover" }} onError={e=>e.target.style.display="none"} />
                         </div>
                         <div>
                             <div style={{ fontFamily:"'Playfair Display',serif", fontSize:15, fontWeight:700, color:cor, lineHeight:1.2 }}>{config.nomeApp||"Estrelas do Cerrado"}</div>
