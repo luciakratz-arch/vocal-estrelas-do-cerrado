@@ -101,8 +101,8 @@ function CadastroPublico({ config }) {
     return (
         <div style={{ minHeight:"100vh", background:fundo, display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", padding:"32px 20px" }}>
             <div style={{ textAlign:"center", marginBottom:24 }}>
-                <div style={{ width:90, height:90, borderRadius:16, overflow:"hidden", margin:"0 auto 14px", boxShadow:"0 4px 20px rgba(0,0,0,0.1)" }}>
-                    <img src={config.logoUrl||LOGO_URL} alt="" style={{ width:"100%", height:"100%", objectFit:"cover" }} onError={e=>e.target.style.display="none"} />
+                <div style={{ width:90, height:90, borderRadius:16, overflow:"hidden", margin:"0 auto 14px", boxShadow:"0 4px 20px rgba(0,0,0,0.1)", background:"#7B2D8B", display:"flex", alignItems:"center", justifyContent:"center", padding:6 }}>
+                    <img src={config.logoUrl||LOGO_URL} alt="" style={{ width:"100%", height:"100%", objectFit:"contain" }} onError={e=>e.target.style.display="none"} />
                 </div>
                 <div style={{ fontFamily:"'Playfair Display',serif", fontSize:22, fontWeight:700, color:cor }}>{config.nomeApp||"Estrelas do Cerrado"}</div>
                 <div style={{ fontSize:13, color:"#AAA", marginTop:4 }}>Cadastro de Corista</div>
@@ -398,8 +398,8 @@ function Login({ members, onLogin, config }) {
     return (
         <div style={s.wrap}>
             <div style={{ textAlign:"center", marginBottom:28 }}>
-                <div style={{ width:110, height:110, borderRadius:20, overflow:"hidden", margin:"0 auto 16px", boxShadow:"0 4px 20px rgba(0,0,0,0.15)" }}>
-                    <img src={config.logoUrl||LOGO_URL} alt="Logo" style={{ width:"100%", height:"100%", objectFit:"cover" }} onError={e=>e.target.style.display="none"} />
+                <div style={{ width:110, height:110, borderRadius:20, overflow:"hidden", margin:"0 auto 16px", boxShadow:"0 4px 20px rgba(0,0,0,0.15)", background:"#7B2D8B", display:"flex", alignItems:"center", justifyContent:"center", padding:8 }}>
+                    <img src={config.logoUrl||LOGO_URL} alt="Logo" style={{ width:"100%", height:"100%", objectFit:"contain" }} onError={e=>e.target.style.display="none"} />
                 </div>
                 <div style={{ fontFamily:"'Playfair Display',serif", fontSize:26, fontWeight:700, color:cor }}>{config.nomeApp||"Estrelas do Cerrado"}</div>
                 <div style={{ fontSize:14, color:"#AAA", marginTop:4 }}>{config.subtitulo||"Portal de Gestão"}</div>
@@ -2714,8 +2714,8 @@ function CheckinPublico({ sessaoId, config }) {
     return (
         <div style={wrap}>
             <div style={{ textAlign:"center", marginBottom:24 }}>
-                <div style={{ width:64, height:64, borderRadius:12, overflow:"hidden", margin:"0 auto 12px", boxShadow:"0 2px 12px rgba(0,0,0,0.1)" }}>
-                    <img src={config.logoUrl||LOGO_URL} alt="" style={{ width:"100%", height:"100%", objectFit:"cover" }} onError={e=>e.target.style.display="none"} />
+                <div style={{ width:64, height:64, borderRadius:12, overflow:"hidden", margin:"0 auto 12px", boxShadow:"0 2px 12px rgba(0,0,0,0.1)", background:"#7B2D8B", display:"flex", alignItems:"center", justifyContent:"center", padding:4 }}>
+                    <img src={config.logoUrl||LOGO_URL} alt="" style={{ width:"100%", height:"100%", objectFit:"contain" }} onError={e=>e.target.style.display="none"} />
                 </div>
                 <div style={{ fontFamily:"'Playfair Display',serif", fontSize:20, fontWeight:700, color:cor }}>{config.nomeApp||"Coral Flamboyant"}</div>
                 <div style={{ fontSize:13, color:"#AAA", marginTop:4 }}>Check-in de presença</div>
