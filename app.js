@@ -44,10 +44,10 @@ function useCollection(col, orderField="createdAt") {
 function useConfig() {
     const [config, setConfig] = useState({ nomeApp:"Estrelas do Cerrado", subtitulo:"Portal de Gestão", logoUrl:LOGO_URL, corPrimaria:COR, corFundo:COR_FUNDO });
     useEffect(() => {
-        const unsub = db.collection("config").doc("app").onSnapshot(snap => { if (snap.exists) setConfig(c=>({...c,...snap.data()})); });
+        const unsub = db.collection("estrelas_config").doc("app").onSnapshot(snap => { if (snap.exists) setConfig(c=>({...c,...snap.data()})); });
         return unsub;
     }, []);
-    return { config, save:(d)=>db.collection("config").doc("app").set(d,{merge:true}) };
+    return { config, save:(d)=>db.collection("estrelas_config").doc("app").set(d,{merge:true}) };
 }
 
 const Icon = ({ name, size=16, color }) => {
@@ -74,7 +74,7 @@ function CadastroPublico({ config }) {
         if (!form.name.trim())  { setErro("Nome é obrigatório.");     return; }
         if (!form.phone.trim()) { setErro("Telefone é obrigatório."); return; }
         setSalvando(true);
-        await db.collection("members").add({
+        await db.collection("estrelas_members").add({
             ...form,
             active:    true,
             startDate: todayStr(),
@@ -265,7 +265,7 @@ function MesaSom({ eventoId, config }) {
     const cor = config.corPrimaria || COR;
 
     useEffect(() => {
-        db.collection("events").doc(eventoId).get().then(doc => {
+        db.collection("estrelas_events").doc(eventoId).get().then(doc => {
             if (doc.exists) setEvento({ id: doc.id, ...doc.data() });
             setLoading(false);
         });
@@ -586,15 +586,15 @@ function ModalIntegrante({ membro, onClose, config }) {
         if (!form.name.trim()) { setErro("Nome é obrigatório."); return; }
         setSalvando(true);
         const d = { name:form.name, funcao:form.funcao, voice:form.voice, email:form.email||"", phone:form.phone||"", cpf:form.cpf||"", rg:form.rg||"", birthday:form.birthday||"", startDate:form.startDate||"", notes:form.notes||"", active:form.active };
-        if (membro) await db.collection("members").doc(membro.id).update({...d, updatedAt:firebase.firestore.FieldValue.serverTimestamp()});
-        else await db.collection("members").add({...d, createdAt:firebase.firestore.FieldValue.serverTimestamp()});
+        if (membro) await db.collection("estrelas_members").doc(membro.id).update({...d, updatedAt:firebase.firestore.FieldValue.serverTimestamp()});
+        else await db.collection("estrelas_members").add({...d, createdAt:firebase.firestore.FieldValue.serverTimestamp()});
         setSalvando(false);
         onClose();
     }
 
     async function excluir() {
         if (!window.confirm("Excluir este integrante permanentemente?")) return;
-        await db.collection("members").doc(membro.id).delete();
+        await db.collection("estrelas_members").doc(membro.id).delete();
         onClose();
     }
 
@@ -830,7 +830,7 @@ function ModalEvento({ evento, onClose, config }) {
         const grupoId = Date.now().toString(36) + Math.random().toString(36).substr(2);
         const d = { title:form.title, date:form.date, tipo:form.tipo, status:form.status, timeChegada:form.timeChegada||"", timeApresentacao:form.timeApresentacao||"", local:form.local||"", mapsUrl:form.mapsUrl||"", notes:form.notes||"", recorrencia:form.recorrencia, setlist:form.setlist||[] };
         if (evento) {
-            await db.collection("events").doc(evento.id).update({...d, updatedAt:firebase.firestore.FieldValue.serverTimestamp()});
+            await db.collection("estrelas_events").doc(evento.id).update({...d, updatedAt:firebase.firestore.FieldValue.serverTimestamp()});
         } else {
             const datas = [form.date];
             if (form.recorrencia !== "Sem recorrência" && form.date) {
@@ -846,10 +846,10 @@ function ModalEvento({ evento, onClose, config }) {
             }
             const temGrupo = datas.length > 1;
             for (const dt of datas) {
-                await db.collection("events").add({...d, date:dt, ...(temGrupo?{grupoId}:{}), createdAt:firebase.firestore.FieldValue.serverTimestamp()});
+                await db.collection("estrelas_events").add({...d, date:dt, ...(temGrupo?{grupoId}:{}), createdAt:firebase.firestore.FieldValue.serverTimestamp()});
             }
             // Aviso automático para o primeiro evento
-            await db.collection("avisos").add({
+            await db.collection("estrelas_avisos").add({
                 title: `📅 Novo evento: ${form.title}`,
                 text: `Um novo evento foi adicionado à agenda: "${form.title}" em ${fmtDate(form.date)}${form.local?" — "+form.local:""}.`,
                 tipo: "auto_evento",
@@ -864,18 +864,18 @@ function ModalEvento({ evento, onClose, config }) {
     async function excluir() {
         if (!evento.grupoId) {
             if (!window.confirm("Excluir este evento?")) return;
-            await db.collection("events").doc(evento.id).delete();
+            await db.collection("estrelas_events").doc(evento.id).delete();
         } else {
             const opcao = window.confirm("Clique OK para excluir ESTE E OS FUTUROS eventos da série.\nClique Cancelar para excluir SÓ ESTE evento.");
             if (opcao === null) return;
             if (opcao) {
                 // Excluir este e futuros do mesmo grupo
-                const snap = await db.collection("events").where("grupoId","==",evento.grupoId).get();
+                const snap = await db.collection("estrelas_events").where("grupoId","==",evento.grupoId).get();
                 const batch = db.batch();
                 snap.docs.forEach(doc => { if (doc.data().date >= evento.date) batch.delete(doc.ref); });
                 await batch.commit();
             } else {
-                await db.collection("events").doc(evento.id).delete();
+                await db.collection("estrelas_events").doc(evento.id).delete();
             }
         }
         onClose();
@@ -1002,12 +1002,12 @@ function ModalExcluirEvento({ evento, onClose }) {
 
     async function excluirSoEste() {
         setExcluindo(true);
-        await db.collection("events").doc(evento.id).delete();
+        await db.collection("estrelas_events").doc(evento.id).delete();
         onClose();
     }
     async function excluirFuturos() {
         setExcluindo(true);
-        const snap = await db.collection("events").where("grupoId","==",evento.grupoId).get();
+        const snap = await db.collection("estrelas_events").where("grupoId","==",evento.grupoId).get();
         const batch = db.batch();
         snap.docs.forEach(doc => { if (doc.data().date >= evento.date) batch.delete(doc.ref); });
         await batch.commit();
@@ -1015,7 +1015,7 @@ function ModalExcluirEvento({ evento, onClose }) {
     }
     async function excluirTodos() {
         setExcluindo(true);
-        const snap = await db.collection("events").where("grupoId","==",evento.grupoId).get();
+        const snap = await db.collection("estrelas_events").where("grupoId","==",evento.grupoId).get();
         const batch = db.batch();
         snap.docs.forEach(doc => batch.delete(doc.ref));
         await batch.commit();
@@ -1138,7 +1138,7 @@ function Agenda({ config, isAdmin }) {
                                         style={{ padding:"7px 14px", background:cor, color:"#fff", border:"none", borderRadius:8, fontSize:12, fontWeight:700, cursor:"pointer", fontFamily:"inherit" }}>
                                         Detalhes
                                     </button>
-                                    <button onClick={()=>{ e.grupoId ? setExcluirEvento(e) : (window.confirm("Excluir este evento?") && db.collection("events").doc(e.id).delete()); }}
+                                    <button onClick={()=>{ e.grupoId ? setExcluirEvento(e) : (window.confirm("Excluir este evento?") && db.collection("estrelas_events").doc(e.id).delete()); }}
                                         style={{ width:32, height:32, background:"#FFF0F0", border:"1px solid #F5DADA", borderRadius:8, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center" }}>
                                         <Icon name="trash-2" size={14} color="#B41020" />
                                     </button>
@@ -1169,9 +1169,9 @@ function ModalAviso({ aviso, onClose, config }) {
         if (!form.text.trim())  { setErro("Mensagem é obrigatória."); return; }
         setSalvando(true);
         if (aviso) {
-            await db.collection("avisos").doc(aviso.id).update({ title:form.title, prioridade:form.prioridade, text:form.text, updatedAt:firebase.firestore.FieldValue.serverTimestamp() });
+            await db.collection("estrelas_avisos").doc(aviso.id).update({ title:form.title, prioridade:form.prioridade, text:form.text, updatedAt:firebase.firestore.FieldValue.serverTimestamp() });
         } else {
-            await db.collection("avisos").add({ title:form.title, prioridade:form.prioridade, text:form.text, tipo:"manual", createdAt:firebase.firestore.FieldValue.serverTimestamp() });
+            await db.collection("estrelas_avisos").add({ title:form.title, prioridade:form.prioridade, text:form.text, tipo:"manual", createdAt:firebase.firestore.FieldValue.serverTimestamp() });
         }
         setSalvando(false);
         onClose();
@@ -1249,7 +1249,7 @@ function Avisos({ config, isAdmin }) {
 
     async function excluir(id) {
         if (!window.confirm("Excluir este aviso?")) return;
-        await db.collection("avisos").doc(id).delete();
+        await db.collection("estrelas_avisos").doc(id).delete();
     }
 
     return (
@@ -1353,11 +1353,11 @@ function ModalMusica({ musica, onClose, config }) {
         setSalvando(true);
         const d = { title:form.title, categoria:form.categoria, compositor:form.compositor||"", partitura:form.partitura||"", audioOriginal:form.audioOriginal||"", audioArranjo:form.audioArranjo||"", playback:form.playback||"", soprano:form.soprano||"", mezzoSoprano:form.mezzoSoprano||"", contralto:form.contralto||"", tenor:form.tenor||"", baritono:form.baritono||"", baixo:form.baixo||"", letra:form.letra||"", notes:form.notes||"" };
         if (musica) {
-            await db.collection("songs").doc(musica.id).update({...d, updatedAt:firebase.firestore.FieldValue.serverTimestamp()});
+            await db.collection("estrelas_songs").doc(musica.id).update({...d, updatedAt:firebase.firestore.FieldValue.serverTimestamp()});
         } else {
-            await db.collection("songs").add({...d, createdAt:firebase.firestore.FieldValue.serverTimestamp()});
+            await db.collection("estrelas_songs").add({...d, createdAt:firebase.firestore.FieldValue.serverTimestamp()});
             // Aviso automático
-            await db.collection("avisos").add({ title:`🎵 Nova música: ${form.title}`, text:`"${form.title}"${form.compositor?" de "+form.compositor:""} foi adicionada ao repertório na categoria ${form.categoria}.`, tipo:"auto_musica", prioridade:"Normal", createdAt:firebase.firestore.FieldValue.serverTimestamp() });
+            await db.collection("estrelas_avisos").add({ title:`🎵 Nova música: ${form.title}`, text:`"${form.title}"${form.compositor?" de "+form.compositor:""} foi adicionada ao repertório na categoria ${form.categoria}.`, tipo:"auto_musica", prioridade:"Normal", createdAt:firebase.firestore.FieldValue.serverTimestamp() });
         }
         setSalvando(false);
         onClose();
@@ -1365,7 +1365,7 @@ function ModalMusica({ musica, onClose, config }) {
 
     async function excluir() {
         if (!window.confirm("Excluir esta música do repertório?")) return;
-        await db.collection("songs").doc(musica.id).delete();
+        await db.collection("estrelas_songs").doc(musica.id).delete();
         onClose();
     }
 
@@ -1577,10 +1577,10 @@ function ModalEstudo({ estudo, onClose, config }) {
         setSalvando(true);
         const d = { tipo:form.tipo, categoria:form.categoria, title:form.title, descricao:form.descricao||"", url:form.url };
         if (estudo) {
-            await db.collection("estudos").doc(estudo.id).update({...d, updatedAt:firebase.firestore.FieldValue.serverTimestamp()});
+            await db.collection("estrelas_estudos").doc(estudo.id).update({...d, updatedAt:firebase.firestore.FieldValue.serverTimestamp()});
         } else {
-            await db.collection("estudos").add({...d, createdAt:firebase.firestore.FieldValue.serverTimestamp()});
-            await db.collection("avisos").add({ title:`📚 Novo material: ${form.title}`, text:`Um novo material foi adicionado à Sala de Estudos: "${form.title}" (${TIPOS_MIDIA.find(t=>t.key===form.tipo)?.label||form.tipo} — ${form.categoria}).`, tipo:"auto_estudo", prioridade:"Normal", createdAt:firebase.firestore.FieldValue.serverTimestamp() });
+            await db.collection("estrelas_estudos").add({...d, createdAt:firebase.firestore.FieldValue.serverTimestamp()});
+            await db.collection("estrelas_avisos").add({ title:`📚 Novo material: ${form.title}`, text:`Um novo material foi adicionado à Sala de Estudos: "${form.title}" (${TIPOS_MIDIA.find(t=>t.key===form.tipo)?.label||form.tipo} — ${form.categoria}).`, tipo:"auto_estudo", prioridade:"Normal", createdAt:firebase.firestore.FieldValue.serverTimestamp() });
         }
         setSalvando(false);
         onClose();
@@ -1588,7 +1588,7 @@ function ModalEstudo({ estudo, onClose, config }) {
 
     async function excluir() {
         if (!window.confirm("Excluir este material?")) return;
-        await db.collection("estudos").doc(estudo.id).delete();
+        await db.collection("estrelas_estudos").doc(estudo.id).delete();
         onClose();
     }
 
@@ -1735,7 +1735,7 @@ function SalaEstudos({ config, isAdmin }) {
                                             <button onClick={()=>setModal(e)} style={{ width:32, height:32, background:"#F5F5F5", border:"none", borderRadius:8, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center" }}>
                                                 <Icon name="pencil" size={13} color="#888" />
                                             </button>
-                                            <button onClick={async()=>{ if(window.confirm("Excluir este material?")) await db.collection("estudos").doc(e.id).delete(); }}
+                                            <button onClick={async()=>{ if(window.confirm("Excluir este material?")) await db.collection("estrelas_estudos").doc(e.id).delete(); }}
                                                 style={{ width:32, height:32, background:"#FFF0F0", border:"none", borderRadius:8, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center" }}>
                                                 <Icon name="trash-2" size={13} color="#B41020" />
                                             </button>
@@ -1778,7 +1778,7 @@ function Apresentacao({ config }) {
     async function salvarOrdem(nova) {
         if (!eventoSel) return;
         setSetlist(nova);
-        await db.collection("events").doc(eventoSel.id).update({
+        await db.collection("estrelas_events").doc(eventoSel.id).update({
             setlist: nova,
             updatedAt: firebase.firestore.FieldValue.serverTimestamp()
         });
@@ -1996,7 +1996,7 @@ function FrequenciaAcesso({ config }) {
     const cor = config.corPrimaria||COR;
 
     useEffect(()=>{
-        db.collection("acessos").onSnapshot(snap=>{
+        db.collection("estrelas_acessos").onSnapshot(snap=>{
             setAcessos(snap.docs.map(d=>({id:d.id,...d.data()})));
         });
     },[]);
@@ -2101,14 +2101,14 @@ function Relatorios({ config }) {
 
     // Carregar textos qualitativos do Firebase
     useEffect(()=>{
-        db.collection("config").doc("relatorio").get().then(doc=>{
+        db.collection("estrelas_config").doc("relatorio").get().then(doc=>{
             if (doc.exists) { setTextos(doc.data()); setFormTextos(doc.data()); }
         });
     },[]);
 
     async function salvarTextos() {
         setSalvandoTextos(true);
-        await db.collection("config").doc("relatorio").set(formTextos, {merge:true});
+        await db.collection("estrelas_config").doc("relatorio").set(formTextos, {merge:true});
         setTextos(formTextos);
         setSalvandoTextos(false);
         setEditTextos(false);
@@ -2339,7 +2339,7 @@ ${blocosPresenca?`<div class="secao">Listas de Presença por Evento</div>${bloco
         win.document.close();
         setTimeout(()=>win.print(), 800);
         // Salvar no histórico
-        db.collection("relatorios_historico").add({ tipo:"Relatório Completo", periodo:`${dataInicio} a ${dataFim}`, geradoEm:firebase.firestore.FieldValue.serverTimestamp(), geradoPor:"Gestor" });
+        db.collection("estrelas_relatorios_historico").add({ tipo:"Relatório Completo", periodo:`${dataInicio} a ${dataFim}`, geradoEm:firebase.firestore.FieldValue.serverTimestamp(), geradoPor:"Gestor" });
     }
 
     function gerarPDF() {
@@ -2629,7 +2629,7 @@ function CheckinPublico({ sessaoId, config }) {
 
     useEffect(()=>{
         // Carregar sessão
-        db.collection("sessoes_checkin").doc(sessaoId).get().then(doc=>{
+        db.collection("estrelas_sessoes_checkin").doc(sessaoId).get().then(doc=>{
             if (!doc.exists) { setStatus("erro"); setLoading(false); return; }
             const d = { id:doc.id, ...doc.data() };
             // Verificar validade 24h
@@ -2640,7 +2640,7 @@ function CheckinPublico({ sessaoId, config }) {
             setLoading(false);
         });
         // Carregar membros
-        db.collection("members").onSnapshot(snap=>{
+        db.collection("estrelas_members").onSnapshot(snap=>{
             setMembers(snap.docs.map(d=>({id:d.id,...d.data()})));
         });
     },[sessaoId]);
@@ -2653,9 +2653,9 @@ function CheckinPublico({ sessaoId, config }) {
 
     async function confirmarPresenca(m) {
         // Verificar se já fez check-in
-        const snap = await db.collection("frequencias").where("sessaoId","==",sessaoId).where("membroId","==",m.id).get();
+        const snap = await db.collection("estrelas_frequencias").where("sessaoId","==",sessaoId).where("membroId","==",m.id).get();
         if (!snap.empty) { setMembro(m); setStatus("jaRegistrado"); return; }
-        await db.collection("frequencias").add({
+        await db.collection("estrelas_frequencias").add({
             sessaoId,
             eventoId:  sessao.eventoId,
             eventoTitulo: sessao.eventoTitulo,
@@ -2755,7 +2755,7 @@ function Frequencia({ config }) {
     // Carregar sessão ativa do evento selecionado
     useEffect(()=>{
         if (!eventoSel) { setSessaoAtiva(null); setQrUrl(""); setShowQR(false); return; }
-        const unsub = db.collection("sessoes_checkin")
+        const unsub = db.collection("estrelas_sessoes_checkin")
             .where("eventoId","==",eventoSel)
             .onSnapshot(snap=>{
                 const ativas = snap.docs.map(d=>({id:d.id,...d.data()}))
@@ -2773,7 +2773,7 @@ function Frequencia({ config }) {
     // Carregar frequências do evento selecionado
     useEffect(()=>{
         if (!eventoSel) { setFrequencias([]); return; }
-        const unsub = db.collection("frequencias")
+        const unsub = db.collection("estrelas_frequencias")
             .where("eventoId","==",eventoSel)
             .onSnapshot(snap=>setFrequencias(snap.docs.map(d=>({id:d.id,...d.data()}))));
         return unsub;
@@ -2785,7 +2785,7 @@ function Frequencia({ config }) {
         if (!evento) return;
         setGerando(true);
         const expiraEm = new Date(Date.now() + 24*60*60*1000); // 24 horas
-        const ref = await db.collection("sessoes_checkin").add({
+        const ref = await db.collection("estrelas_sessoes_checkin").add({
             eventoId: eventoSel,
             eventoTitulo: evento.title,
             eventoData: evento.date,
@@ -2801,7 +2801,7 @@ function Frequencia({ config }) {
     async function encerrarSessao() {
         if (!sessaoAtiva) return;
         if (!window.confirm("Encerrar sessão de check-in?")) return;
-        await db.collection("sessoes_checkin").doc(sessaoAtiva.id).update({
+        await db.collection("estrelas_sessoes_checkin").doc(sessaoAtiva.id).update({
             expiraEm: firebase.firestore.Timestamp.fromDate(new Date(0))
         });
         setSessaoAtiva(null); setShowQR(false); setQrUrl("");
@@ -2945,7 +2945,7 @@ function Declaracao({ config }) {
     const cor = config.corPrimaria||COR;
 
     useEffect(()=>{
-        db.collection("config").doc("relatorio").get().then(doc=>{
+        db.collection("estrelas_config").doc("relatorio").get().then(doc=>{
             if (doc.exists) setTextos(doc.data());
         });
     },[]);
@@ -3274,7 +3274,7 @@ function PainelCorista({ user, config }) {
     // Carregar confirmações do corista
     useEffect(()=>{
         if (!user.name) return;
-        db.collection("confirmacoes").where("membroNome","==",user.name)
+        db.collection("estrelas_confirmacoes").where("membroNome","==",user.name)
             .onSnapshot(snap=>{
                 const m = {};
                 snap.docs.forEach(d=>{ m[d.data().eventoId] = d.data().status; });
@@ -3283,12 +3283,12 @@ function PainelCorista({ user, config }) {
     },[user.name]);
 
     async function confirmar(eventoId, status) {
-        const snap = await db.collection("confirmacoes")
+        const snap = await db.collection("estrelas_confirmacoes")
             .where("membroNome","==",user.name).where("eventoId","==",eventoId).get();
         if (!snap.empty) {
             await snap.docs[0].ref.update({ status, updatedAt:firebase.firestore.FieldValue.serverTimestamp() });
         } else {
-            await db.collection("confirmacoes").add({
+            await db.collection("estrelas_confirmacoes").add({
                 membroNome: user.name, eventoId, status,
                 createdAt: firebase.firestore.FieldValue.serverTimestamp()
             });
@@ -3484,7 +3484,7 @@ function MinhaDeclaracao({ user, config }) {
     const cor = config.corPrimaria||COR;
 
     useEffect(()=>{
-        db.collection("config").doc("relatorio").get().then(doc=>{ if(doc.exists) setTextos(doc.data()); });
+        db.collection("estrelas_config").doc("relatorio").get().then(doc=>{ if(doc.exists) setTextos(doc.data()); });
     },[]);
 
     const freqCorista = frequencias.filter(f=>
@@ -3619,15 +3619,15 @@ function ModalNoticia({ noticia, onClose, config }) {
         if (!form.texto.trim())  { setErro("Texto é obrigatório."); return; }
         setSalvando(true);
         const d = { titulo:form.titulo, texto:form.texto, imageUrl:form.imageUrl||"", categoria:form.categoria, createdAt: noticia ? noticia.createdAt : firebase.firestore.FieldValue.serverTimestamp() };
-        if (noticia) await db.collection("noticias").doc(noticia.id).update({...d, updatedAt:firebase.firestore.FieldValue.serverTimestamp()});
-        else await db.collection("noticias").add(d);
+        if (noticia) await db.collection("estrelas_noticias").doc(noticia.id).update({...d, updatedAt:firebase.firestore.FieldValue.serverTimestamp()});
+        else await db.collection("estrelas_noticias").add(d);
         setSalvando(false);
         onClose();
     }
 
     async function excluir() {
         if (!window.confirm("Excluir esta notícia?")) return;
-        await db.collection("noticias").doc(noticia.id).delete();
+        await db.collection("estrelas_noticias").doc(noticia.id).delete();
         onClose();
     }
 
@@ -3690,7 +3690,7 @@ function AreaRH({ config, abaInicial }) {
     const today = todayStr();
 
     useEffect(()=>{
-        db.collection("config").doc("relatorio").get().then(doc=>{ if(doc.exists) setTextos(doc.data()); });
+        db.collection("estrelas_config").doc("relatorio").get().then(doc=>{ if(doc.exists) setTextos(doc.data()); });
     },[]);
 
     const ativos      = members.filter(m=>m.active);
@@ -3714,7 +3714,7 @@ function AreaRH({ config, abaInicial }) {
 
     // Confirmações
     const [confirmacoes, setConfirmacoes] = useState([]);
-    useEffect(()=>{ db.collection("confirmacoes").onSnapshot(snap=>setConfirmacoes(snap.docs.map(d=>({id:d.id,...d.data()})))); },[]);
+    useEffect(()=>{ db.collection("estrelas_confirmacoes").onSnapshot(snap=>setConfirmacoes(snap.docs.map(d=>({id:d.id,...d.data()})))); },[]);
     const vaiParticipiar = confirmacoes.filter(c=>c.status==="vou").length;
     const naoVai = confirmacoes.filter(c=>c.status==="nao").length;
 
@@ -3763,7 +3763,7 @@ function AreaRH({ config, abaInicial }) {
 </body></html>`;
         const win=window.open("","_blank"); win.document.write(html); win.document.close(); setTimeout(()=>win.print(),800);
         // Salvar no histórico
-        db.collection("relatorios_historico").add({ tipo:"Declaração Individual", corista:coristaAtual.name, periodo:`${dataInicio} a ${dataFim}`, geradoEm:firebase.firestore.FieldValue.serverTimestamp(), geradoPor:"RH" });
+        db.collection("estrelas_relatorios_historico").add({ tipo:"Declaração Individual", corista:coristaAtual.name, periodo:`${dataInicio} a ${dataFim}`, geradoEm:firebase.firestore.FieldValue.serverTimestamp(), geradoPor:"RH" });
     }
 
     const inp = { padding:"10px 14px", border:"1px solid #E8E0E0", borderRadius:10, fontSize:13, outline:"none", fontFamily:"inherit", color:"#1A1D23", background:"#FAFAFA" };
@@ -3975,7 +3975,7 @@ function BlogGrupo({ config, isAdmin, user }) {
         setSalvando(true);
         if (modal && modal !== "novo") {
             // Edição (admin pode publicar/reprovar)
-            await db.collection("blog_posts").doc(modal.id).update({
+            await db.collection("estrelas_blog_posts").doc(modal.id).update({
                 titulo: form.titulo, texto: form.texto,
                 imageUrl: form.imageUrl||"", categoria: form.categoria,
                 status: form.status||modal.status,
@@ -3984,7 +3984,7 @@ function BlogGrupo({ config, isAdmin, user }) {
         } else {
             // Novo post
             const status = isAdmin ? "publicado" : "pendente";
-            await db.collection("blog_posts").add({
+            await db.collection("estrelas_blog_posts").add({
                 titulo: form.titulo, texto: form.texto,
                 imageUrl: form.imageUrl||"", categoria: form.categoria,
                 autorNome: user.name, autorPerfil: isAdmin ? "admin" : "corista",
@@ -3998,15 +3998,15 @@ function BlogGrupo({ config, isAdmin, user }) {
 
     async function excluir() {
         if (!window.confirm("Excluir este post?")) return;
-        await db.collection("blog_posts").doc(modal.id).delete();
+        await db.collection("estrelas_blog_posts").doc(modal.id).delete();
         fechar();
     }
 
     async function aprovar(p) {
-        await db.collection("blog_posts").doc(p.id).update({ status:"publicado", updatedAt: firebase.firestore.FieldValue.serverTimestamp() });
+        await db.collection("estrelas_blog_posts").doc(p.id).update({ status:"publicado", updatedAt: firebase.firestore.FieldValue.serverTimestamp() });
     }
     async function reprovar(p) {
-        await db.collection("blog_posts").doc(p.id).update({ status:"reprovado", updatedAt: firebase.firestore.FieldValue.serverTimestamp() });
+        await db.collection("estrelas_blog_posts").doc(p.id).update({ status:"reprovado", updatedAt: firebase.firestore.FieldValue.serverTimestamp() });
     }
 
     if (loading) return <Spinner />;
@@ -4200,7 +4200,7 @@ function App() {
     const { config, save }      = useConfig();
 
     useEffect(()=>{
-        const unsub = db.collection("members").onSnapshot(snap=>setMembers(snap.docs.map(d=>({id:d.id,...d.data()}))));
+        const unsub = db.collection("estrelas_members").onSnapshot(snap=>setMembers(snap.docs.map(d=>({id:d.id,...d.data()}))));
         return unsub;
     },[]);
 
@@ -4211,7 +4211,7 @@ function App() {
         // Registrar acesso do corista
         if (u.role === "corista" && u.name) {
             const agora = new Date();
-            db.collection("acessos").add({
+            db.collection("estrelas_acessos").add({
                 nome: u.name,
                 dataHora: firebase.firestore.FieldValue.serverTimestamp(),
                 data: agora.toISOString().split("T")[0]
