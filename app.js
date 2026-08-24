@@ -1,4 +1,5 @@
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _createForOfIteratorHelper(r, e) { var t = "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (!t) { if (Array.isArray(r) || (t = _unsupportedIterableToArray(r)) || e && r && "number" == typeof r.length) { t && (r = t); var _n = 0, F = function F() {}; return { s: F, n: function n() { return _n >= r.length ? { done: !0 } : { done: !1, value: r[_n++] }; }, e: function e(r) { throw r; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var o, a = !0, u = !1; return { s: function s() { t = t.call(r); }, n: function n() { var r = t.next(); return a = r.done, r; }, e: function e(r) { u = !0, o = r; }, f: function f() { try { a || null == t.return || t.return(); } finally { if (u) throw o; } } }; }
 function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
@@ -27,13 +28,13 @@ var firebaseConfig = {
   projectId: "flamboyant-coral",
   storageBucket: "flamboyant-coral.firebasestorage.app",
   messagingSenderId: "15022873086",
-  appId: "1:15022873086:web:507d97757035ac90d108af"
+  appId: "1:15022873086:web:49f348d9567bdcaed108af"
 };
 if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
 var db = firebase.firestore();
-var COR = "#B41020";
-var COR_FUNDO = "#F5EAEA";
-var LOGO_URL = "https://raw.githubusercontent.com/luciakratz-arch/coral-flamboyant/main/unnamed.png";
+var COR = "#7B2D8B";
+var COR_FUNDO = "#F3E8F7";
+var LOGO_URL = "https://raw.githubusercontent.com/luciakratz-arch/vocal-estrelas-do-cerrado/main/logo.png";
 var MONTHS_PT = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"];
 var MONTHS_SHORT = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
 var NAIPES = ["Soprano", "Contralto", "Mezzo-soprano", "Alto", "Tenor", "Barítono", "Baixo"];
@@ -95,7 +96,7 @@ function useCollection(col) {
 }
 function useConfig() {
   var _useState5 = useState({
-      nomeApp: "Flamboyant Coral",
+      nomeApp: "Estrelas do Cerrado",
       subtitulo: "Portal de Gestão",
       logoUrl: LOGO_URL,
       corPrimaria: COR,
@@ -105,7 +106,7 @@ function useConfig() {
     config = _useState6[0],
     setConfig = _useState6[1];
   useEffect(function () {
-    var unsub = db.collection("config").doc("app").onSnapshot(function (snap) {
+    var unsub = db.collection("estrelas_config").doc("app").onSnapshot(function (snap) {
       if (snap.exists) setConfig(function (c) {
         return _objectSpread(_objectSpread({}, c), snap.data());
       });
@@ -115,7 +116,7 @@ function useConfig() {
   return {
     config: config,
     save: function save(d) {
-      return db.collection("config").doc("app").set(d, {
+      return db.collection("estrelas_config").doc("app").set(d, {
         merge: true
       });
     }
@@ -212,7 +213,7 @@ function CadastroPublico(_ref2) {
           case 2:
             setSalvando(true);
             _context.n = 3;
-            return db.collection("members").add(_objectSpread(_objectSpread({}, form), {}, {
+            return db.collection("estrelas_members").add(_objectSpread(_objectSpread({}, form), {}, {
               active: true,
               startDate: todayStr(),
               createdAt: firebase.firestore.FieldValue.serverTimestamp()
@@ -310,22 +311,24 @@ function CadastroPublico(_ref2) {
     }
   }, /*#__PURE__*/React.createElement("div", {
     style: {
-      width: 80,
-      height: 80,
-      background: "#fff",
-      borderRadius: "50%",
+      width: 90,
+      height: 90,
+      borderRadius: 16,
+      overflow: "hidden",
+      margin: "0 auto 14px",
+      boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
+      background: "#7B2D8B",
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
-      margin: "0 auto 14px",
-      boxShadow: "0 4px 20px rgba(0,0,0,0.1)"
+      padding: 6
     }
   }, /*#__PURE__*/React.createElement("img", {
     src: config.logoUrl || LOGO_URL,
     alt: "",
     style: {
-      width: 56,
-      height: 56,
+      width: "100%",
+      height: "100%",
       objectFit: "contain"
     },
     onError: function onError(e) {
@@ -338,7 +341,7 @@ function CadastroPublico(_ref2) {
       fontWeight: 700,
       color: cor
     }
-  }, config.nomeApp || "Flamboyant Coral"), /*#__PURE__*/React.createElement("div", {
+  }, config.nomeApp || "Estrelas do Cerrado"), /*#__PURE__*/React.createElement("div", {
     style: {
       fontSize: 13,
       color: "#AAA",
@@ -498,7 +501,7 @@ function CadastroPublico(_ref2) {
       fontSize: 11,
       color: "#CCC"
     }
-  }, config.nomeApp || "Flamboyant Coral", " \xB7 Portal de Gest\xE3o"));
+  }, config.nomeApp || "Estrelas do Cerrado", " \xB7 Portal de Gest\xE3o"));
 }
 
 // ── PLAYER MODAL UNIVERSAL ────────────────────────────────────────────────────
@@ -793,7 +796,7 @@ function MesaSom(_ref6) {
     setLoading = _useState18[1];
   var cor = config.corPrimaria || COR;
   useEffect(function () {
-    db.collection("events").doc(eventoId).get().then(function (doc) {
+    db.collection("estrelas_events").doc(eventoId).get().then(function (doc) {
       if (doc.exists) setEvento(_objectSpread({
         id: doc.id
       }, doc.data()));
@@ -1139,7 +1142,7 @@ function Login(_ref7) {
     });
   }
   function entrarRH() {
-    if (senha === "1234") onLogin({
+    if (senha === "estrelas1234") onLogin({
       name: "RH",
       isAdmin: false,
       role: "rh"
@@ -1178,7 +1181,7 @@ function Login(_ref7) {
     btnSec: {
       flex: 1,
       padding: "13px",
-      background: "#F5EAEA",
+      background: "#F3E8F7",
       color: cor,
       border: "none",
       borderRadius: 10,
@@ -1209,22 +1212,24 @@ function Login(_ref7) {
     }
   }, /*#__PURE__*/React.createElement("div", {
     style: {
-      width: 90,
-      height: 90,
-      background: "#fff",
-      borderRadius: "50%",
+      width: 110,
+      height: 110,
+      borderRadius: 20,
+      overflow: "hidden",
+      margin: "0 auto 16px",
+      boxShadow: "0 4px 20px rgba(0,0,0,0.15)",
+      background: "#7B2D8B",
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
-      margin: "0 auto 16px",
-      boxShadow: "0 4px 20px rgba(0,0,0,0.1)"
+      padding: 8
     }
   }, /*#__PURE__*/React.createElement("img", {
     src: config.logoUrl || LOGO_URL,
     alt: "Logo",
     style: {
-      width: 64,
-      height: 64,
+      width: "100%",
+      height: "100%",
       objectFit: "contain"
     },
     onError: function onError(e) {
@@ -1237,7 +1242,7 @@ function Login(_ref7) {
       fontWeight: 700,
       color: cor
     }
-  }, config.nomeApp || "Flamboyant Coral"), /*#__PURE__*/React.createElement("div", {
+  }, config.nomeApp || "Estrelas do Cerrado"), /*#__PURE__*/React.createElement("div", {
     style: {
       fontSize: 14,
       color: "#AAA",
@@ -1259,13 +1264,6 @@ function Login(_ref7) {
     sub: "Acesso às músicas e agenda",
     cor: "#2E7D32",
     bg: "rgba(46,125,50,0.08)"
-  }, {
-    id: "rh",
-    icon: "briefcase",
-    label: "Sou do RH",
-    sub: "Pessoas e Cultura",
-    cor: "#1565C0",
-    bg: "rgba(21,101,192,0.08)"
   }].map(function (p) {
     return /*#__PURE__*/React.createElement("button", {
       key: p.id,
@@ -1339,7 +1337,7 @@ function Login(_ref7) {
     style: {
       width: 36,
       height: 36,
-      background: "rgba(180,16,32,0.08)",
+      background: "rgba(123,45,139,0.08)",
       borderRadius: 8,
       display: "flex",
       alignItems: "center",
@@ -1415,97 +1413,6 @@ function Login(_ref7) {
   }, "Voltar"), /*#__PURE__*/React.createElement("button", {
     style: s.btnPri,
     onClick: entrarAdmin
-  }, "Entrar"))), tela === "rh" && /*#__PURE__*/React.createElement("div", {
-    style: s.card
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "flex",
-      alignItems: "center",
-      gap: 10,
-      marginBottom: 20
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      width: 36,
-      height: 36,
-      background: "rgba(21,101,192,0.08)",
-      borderRadius: 8,
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center"
-    }
-  }, /*#__PURE__*/React.createElement(Icon, {
-    name: "briefcase",
-    size: 17,
-    color: "#1565C0"
-  })), /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontFamily: "'Playfair Display',serif",
-      fontSize: 18,
-      fontWeight: 700,
-      color: "#1A1D23"
-    }
-  }, "RH \u2014 Pessoas e Cultura")), /*#__PURE__*/React.createElement("div", {
-    style: {
-      position: "relative",
-      marginBottom: 12
-    }
-  }, /*#__PURE__*/React.createElement("input", {
-    style: _objectSpread(_objectSpread({}, s.inp), {}, {
-      paddingRight: 44
-    }),
-    type: mostrar ? "text" : "password",
-    placeholder: "Senha de acesso",
-    value: senha,
-    onChange: function onChange(e) {
-      setSenha(e.target.value);
-      setErro("");
-    },
-    onKeyDown: function onKeyDown(e) {
-      return e.key === "Enter" && entrarRH();
-    },
-    autoFocus: true
-  }), /*#__PURE__*/React.createElement("button", {
-    onClick: function onClick() {
-      return setMostrar(function (v) {
-        return !v;
-      });
-    },
-    style: {
-      position: "absolute",
-      right: 12,
-      top: "50%",
-      transform: "translateY(-50%)",
-      background: "none",
-      border: "none",
-      cursor: "pointer"
-    }
-  }, /*#__PURE__*/React.createElement(Icon, {
-    name: mostrar ? "eye-off" : "eye",
-    size: 16,
-    color: "#AAA"
-  }))), erro && /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 13,
-      color: cor,
-      marginBottom: 10
-    }
-  }, erro), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "flex",
-      gap: 10
-    }
-  }, /*#__PURE__*/React.createElement("button", {
-    style: s.btnSec,
-    onClick: function onClick() {
-      setTela(null);
-      setErro("");
-    }
-  }, "Voltar"), /*#__PURE__*/React.createElement("button", {
-    style: _objectSpread(_objectSpread({}, s.btnPri), {}, {
-      background: "#1565C0"
-    }),
-    onClick: entrarRH
   }, "Entrar"))), tela === "corista" && /*#__PURE__*/React.createElement("div", {
     style: s.card
   }, /*#__PURE__*/React.createElement("div", {
@@ -1609,23 +1516,23 @@ function Login(_ref7) {
       fontSize: 11,
       color: "#CCC"
     }
-  }, config.nomeApp || "Flamboyant Coral", " \xB7 Portal de Gest\xE3o"));
+  }, config.nomeApp || "Estrelas do Cerrado", " \xB7 Portal de Gest\xE3o"));
 }
 
 // ── PAINEL ────────────────────────────────────────────────────────────────────
 function Painel(_ref8) {
   var user = _ref8.user,
     config = _ref8.config;
-  var _useCollection = useCollection("members"),
+  var _useCollection = useCollection("estrelas_members"),
     members = _useCollection.data,
     lM = _useCollection.loading;
-  var _useCollection2 = useCollection("events", "date"),
+  var _useCollection2 = useCollection("estrelas_events", "date"),
     events = _useCollection2.data,
     lE = _useCollection2.loading;
-  var _useCollection3 = useCollection("songs"),
+  var _useCollection3 = useCollection("estrelas_songs"),
     songs = _useCollection3.data,
     lS = _useCollection3.loading;
-  var _useCollection4 = useCollection("avisos"),
+  var _useCollection4 = useCollection("estrelas_avisos"),
     avisos = _useCollection4.data,
     lA = _useCollection4.loading;
   if (lM || lE || lS || lA) return /*#__PURE__*/React.createElement(Spinner, null);
@@ -1818,7 +1725,7 @@ function Painel(_ref8) {
       style: {
         width: 38,
         height: 38,
-        background: "rgba(180,16,32,0.08)",
+        background: "rgba(123,45,139,0.08)",
         borderRadius: 10,
         display: "flex",
         alignItems: "center",
@@ -1859,7 +1766,7 @@ function Painel(_ref8) {
       fontWeight: 700,
       color: "#1A1D23"
     }
-  }, "Avisos Recentes")), avisos.filter(function(a) { return !a.oculto; }).slice(0, 3).map(function (a) {
+  }, "Avisos Recentes")), avisos.slice(0, 3).map(function (a) {
     var _a$createdAt;
     return /*#__PURE__*/React.createElement("div", {
       key: a.id,
@@ -1964,7 +1871,7 @@ function ModalIntegrante(_ref9) {
               break;
             }
             _context2.n = 2;
-            return db.collection("members").doc(membro.id).update(_objectSpread(_objectSpread({}, d), {}, {
+            return db.collection("estrelas_members").doc(membro.id).update(_objectSpread(_objectSpread({}, d), {}, {
               updatedAt: firebase.firestore.FieldValue.serverTimestamp()
             }));
           case 2:
@@ -1972,7 +1879,7 @@ function ModalIntegrante(_ref9) {
             break;
           case 3:
             _context2.n = 4;
-            return db.collection("members").add(_objectSpread(_objectSpread({}, d), {}, {
+            return db.collection("estrelas_members").add(_objectSpread(_objectSpread({}, d), {}, {
               createdAt: firebase.firestore.FieldValue.serverTimestamp()
             }));
           case 4:
@@ -2000,7 +1907,7 @@ function ModalIntegrante(_ref9) {
             return _context3.a(2);
           case 1:
             _context3.n = 2;
-            return db.collection("members").doc(membro.id).delete();
+            return db.collection("estrelas_members").doc(membro.id).delete();
           case 2:
             onClose();
           case 3:
@@ -2322,7 +2229,7 @@ function ModalIntegrante(_ref9) {
 // ── INTEGRANTES ───────────────────────────────────────────────────────────────
 function Integrantes(_ref0) {
   var config = _ref0.config;
-  var _useCollection5 = useCollection("members"),
+  var _useCollection5 = useCollection("estrelas_members"),
     members = _useCollection5.data,
     loading = _useCollection5.loading;
   var _useState37 = useState(""),
@@ -2893,7 +2800,7 @@ function Configuracoes(_ref1) {
       fontWeight: 700,
       color: form.corPrimaria || COR
     }
-  }, form.nomeApp || "Flamboyant Coral"), /*#__PURE__*/React.createElement("div", {
+  }, form.nomeApp || "Estrelas do Cerrado"), /*#__PURE__*/React.createElement("div", {
     style: {
       fontSize: 13,
       color: "#AAA",
@@ -2935,7 +2842,7 @@ function ModalEvento(_ref10) {
     onClose = _ref10.onClose,
     config = _ref10.config;
   var cor = config.corPrimaria || COR;
-  var _useCollection6 = useCollection("songs"),
+  var _useCollection6 = useCollection("estrelas_songs"),
     songs = _useCollection6.data;
   var vazio = {
     title: "",
@@ -3007,7 +2914,7 @@ function ModalEvento(_ref10) {
               break;
             }
             _context5.n = 3;
-            return db.collection("events").doc(evento.id).update(_objectSpread(_objectSpread({}, d), {}, {
+            return db.collection("estrelas_events").doc(evento.id).update(_objectSpread(_objectSpread({}, d), {}, {
               updatedAt: firebase.firestore.FieldValue.serverTimestamp()
             }));
           case 3:
@@ -3035,7 +2942,7 @@ function ModalEvento(_ref10) {
             }
             dt = _datas[_i];
             _context5.n = 6;
-            return db.collection("events").add(_objectSpread(_objectSpread(_objectSpread({}, d), {}, {
+            return db.collection("estrelas_events").add(_objectSpread(_objectSpread(_objectSpread({}, d), {}, {
               date: dt
             }, temGrupo ? {
               grupoId: grupoId
@@ -3048,7 +2955,7 @@ function ModalEvento(_ref10) {
             break;
           case 7:
             _context5.n = 8;
-            return db.collection("avisos").add({
+            return db.collection("estrelas_avisos").add({
               title: "\uD83D\uDCC5 Novo evento: ".concat(form.title),
               text: "Um novo evento foi adicionado \xE0 agenda: \"".concat(form.title, "\" em ").concat(fmtDate(form.date)).concat(form.local ? " — " + form.local : "", "."),
               tipo: "auto_evento",
@@ -3085,7 +2992,7 @@ function ModalEvento(_ref10) {
             return _context6.a(2);
           case 1:
             _context6.n = 2;
-            return db.collection("events").doc(evento.id).delete();
+            return db.collection("estrelas_events").doc(evento.id).delete();
           case 2:
             _context6.n = 8;
             break;
@@ -3102,7 +3009,7 @@ function ModalEvento(_ref10) {
               break;
             }
             _context6.n = 5;
-            return db.collection("events").where("grupoId", "==", evento.grupoId).get();
+            return db.collection("estrelas_events").where("grupoId", "==", evento.grupoId).get();
           case 5:
             snap = _context6.v;
             batch = db.batch();
@@ -3116,7 +3023,7 @@ function ModalEvento(_ref10) {
             break;
           case 7:
             _context6.n = 8;
-            return db.collection("events").doc(evento.id).delete();
+            return db.collection("estrelas_events").doc(evento.id).delete();
           case 8:
             onClose();
           case 9:
@@ -3579,7 +3486,7 @@ function ModalExcluirEvento(_ref11) {
           case 0:
             setExcluindo(true);
             _context7.n = 1;
-            return db.collection("events").doc(evento.id).delete();
+            return db.collection("estrelas_events").doc(evento.id).delete();
           case 1:
             onClose();
           case 2:
@@ -3600,7 +3507,7 @@ function ModalExcluirEvento(_ref11) {
           case 0:
             setExcluindo(true);
             _context8.n = 1;
-            return db.collection("events").where("grupoId", "==", evento.grupoId).get();
+            return db.collection("estrelas_events").where("grupoId", "==", evento.grupoId).get();
           case 1:
             snap = _context8.v;
             batch = db.batch();
@@ -3629,7 +3536,7 @@ function ModalExcluirEvento(_ref11) {
           case 0:
             setExcluindo(true);
             _context9.n = 1;
-            return db.collection("events").where("grupoId", "==", evento.grupoId).get();
+            return db.collection("estrelas_events").where("grupoId", "==", evento.grupoId).get();
           case 1:
             snap = _context9.v;
             batch = db.batch();
@@ -3700,7 +3607,7 @@ function ModalExcluirEvento(_ref11) {
     onClick: excluirSoEste,
     disabled: excluindo,
     style: _objectSpread(_objectSpread({}, btnBase), {}, {
-      background: "#F5EAEA",
+      background: "#F3E8F7",
       color: "#B41020"
     })
   }, "S\xF3 este evento"), /*#__PURE__*/React.createElement("button", {
@@ -3730,7 +3637,7 @@ function ModalExcluirEvento(_ref11) {
 function Agenda(_ref12) {
   var config = _ref12.config,
     isAdmin = _ref12.isAdmin;
-  var _useCollection7 = useCollection("events", "date"),
+  var _useCollection7 = useCollection("estrelas_events", "date"),
     events = _useCollection7.data,
     loading = _useCollection7.loading;
   var _useState57 = useState(new Date().getMonth()),
@@ -4038,7 +3945,7 @@ function Agenda(_ref12) {
       }
     }, "Detalhes"), /*#__PURE__*/React.createElement("button", {
       onClick: function onClick() {
-        e.grupoId ? setExcluirEvento(e) : window.confirm("Excluir este evento?") && db.collection("events").doc(e.id).delete();
+        e.grupoId ? setExcluirEvento(e) : window.confirm("Excluir este evento?") && db.collection("estrelas_events").doc(e.id).delete();
       },
       style: {
         width: 32,
@@ -4124,7 +4031,7 @@ function ModalAviso(_ref13) {
               break;
             }
             _context0.n = 3;
-            return db.collection("avisos").doc(aviso.id).update({
+            return db.collection("estrelas_avisos").doc(aviso.id).update({
               title: form.title,
               prioridade: form.prioridade,
               text: form.text,
@@ -4135,7 +4042,7 @@ function ModalAviso(_ref13) {
             break;
           case 4:
             _context0.n = 5;
-            return db.collection("avisos").add({
+            return db.collection("estrelas_avisos").add({
               title: form.title,
               prioridade: form.prioridade,
               text: form.text,
@@ -4326,10 +4233,10 @@ function ModalAviso(_ref13) {
 function Avisos(_ref14) {
   var config = _ref14.config,
     isAdmin = _ref14.isAdmin;
-  var _useCollection8 = useCollection("avisos"),
+  var _useCollection8 = useCollection("estrelas_avisos"),
     avisos = _useCollection8.data,
     lA = _useCollection8.loading;
-  var _useCollection9 = useCollection("members"),
+  var _useCollection9 = useCollection("estrelas_members"),
     members = _useCollection9.data;
   var _useState73 = useState(false),
     _useState74 = _slicedToArray(_useState73, 2),
@@ -4390,7 +4297,7 @@ function Avisos(_ref14) {
             return _context1.a(2);
           case 1:
             _context1.n = 2;
-            return db.collection("avisos").doc(id).delete();
+            return db.collection("estrelas_avisos").doc(id).delete();
           case 2:
             return _context1.a(2);
         }
@@ -4495,7 +4402,7 @@ function Avisos(_ref14) {
       color: "#CCC",
       fontSize: 14
     }
-  }, "Nenhum aviso publicado."), avisos.filter(function(a) { return isAdmin || !a.oculto; }).map(function (a) {
+  }, "Nenhum aviso publicado."), avisos.map(function (a) {
     var _a$createdAt2;
     var isAuto = a.tipo && a.tipo !== "manual";
     var borderColor = isAuto ? "#F59E0B" : prioColor[a.prioridade] || cor;
@@ -4564,47 +4471,34 @@ function Avisos(_ref14) {
         return setEditAviso(a);
       },
       style: {
-        background: "#EFF6FF",
-        border: "1px solid #BFDBFE",
-        borderRadius: 6,
+        background: "none",
+        border: "none",
         cursor: "pointer",
-        padding: "4px 10px",
-        fontSize: 11,
-        fontWeight: 600,
-        color: "#1D4ED8",
-        fontFamily: "inherit"
+        display: "flex",
+        alignItems: "center",
+        padding: 2
       }
-    }, "Editar"), isAdmin && /*#__PURE__*/React.createElement("button", {
+    }, /*#__PURE__*/React.createElement(Icon, {
+      name: "pencil",
+      size: 14,
+      color: "#AAA"
+    })), isAdmin && /*#__PURE__*/React.createElement("button", {
       onClick: function onClick() {
         return excluir(a.id);
       },
       style: {
-        background: "#FEE2E2",
-        border: "1px solid #FECACA",
-        borderRadius: 6,
+        background: "none",
+        border: "none",
         cursor: "pointer",
-        padding: "4px 10px",
-        fontSize: 11,
-        fontWeight: 600,
-        color: "#DC2626",
-        fontFamily: "inherit"
+        display: "flex",
+        alignItems: "center",
+        padding: 2
       }
-    }, "Excluir"), isAdmin && /*#__PURE__*/React.createElement("button", {
-      onClick: function onClick() {
-        return db.collection("avisos").doc(a.id).update({ oculto: !a.oculto });
-      },
-      style: {
-        background: a.oculto ? "#FFF3CD" : "#F3F4F6",
-        border: a.oculto ? "1px solid #F59E0B" : "1px solid #D1D5DB",
-        borderRadius: 6,
-        cursor: "pointer",
-        padding: "4px 10px",
-        fontSize: 11,
-        fontWeight: 600,
-        color: a.oculto ? "#B45309" : "#555",
-        fontFamily: "inherit"
-      }
-    }, a.oculto ? "Mostrar" : "Ocultar"))), /*#__PURE__*/React.createElement("div", {
+    }, /*#__PURE__*/React.createElement(Icon, {
+      name: "trash-2",
+      size: 14,
+      color: "#CCC"
+    })))), /*#__PURE__*/React.createElement("div", {
       style: {
         fontSize: 14,
         color: "#555",
@@ -4730,7 +4624,7 @@ function ModalMusica(_ref15) {
               break;
             }
             _context10.n = 2;
-            return db.collection("songs").doc(musica.id).update(_objectSpread(_objectSpread({}, d), {}, {
+            return db.collection("estrelas_songs").doc(musica.id).update(_objectSpread(_objectSpread({}, d), {}, {
               updatedAt: firebase.firestore.FieldValue.serverTimestamp()
             }));
           case 2:
@@ -4738,12 +4632,12 @@ function ModalMusica(_ref15) {
             break;
           case 3:
             _context10.n = 4;
-            return db.collection("songs").add(_objectSpread(_objectSpread({}, d), {}, {
+            return db.collection("estrelas_songs").add(_objectSpread(_objectSpread({}, d), {}, {
               createdAt: firebase.firestore.FieldValue.serverTimestamp()
             }));
           case 4:
             _context10.n = 5;
-            return db.collection("avisos").add({
+            return db.collection("estrelas_avisos").add({
               title: "\uD83C\uDFB5 Nova m\xFAsica: ".concat(form.title),
               text: "\"".concat(form.title, "\"").concat(form.compositor ? " de " + form.compositor : "", " foi adicionada ao repert\xF3rio na categoria ").concat(form.categoria, "."),
               tipo: "auto_musica",
@@ -4775,7 +4669,7 @@ function ModalMusica(_ref15) {
             return _context11.a(2);
           case 1:
             _context11.n = 2;
-            return db.collection("songs").doc(musica.id).delete();
+            return db.collection("estrelas_songs").doc(musica.id).delete();
           case 2:
             onClose();
           case 3:
@@ -5242,7 +5136,7 @@ function ModalMusica(_ref15) {
 function Repertorio(_ref16) {
   var config = _ref16.config,
     isAdmin = _ref16.isAdmin;
-  var _useCollection0 = useCollection("songs"),
+  var _useCollection0 = useCollection("estrelas_songs"),
     songs = _useCollection0.data,
     loading = _useCollection0.loading;
   var _useState89 = useState(""),
@@ -5291,7 +5185,7 @@ function Repertorio(_ref16) {
         gap: 4,
         padding: "3px 8px",
         borderRadius: 10,
-        background: "#F5EAEA",
+        background: "#F3E8F7",
         color: cor,
         fontSize: 11,
         fontWeight: 600,
@@ -5504,7 +5398,7 @@ function Repertorio(_ref16) {
         gap: 4,
         padding: "3px 8px",
         borderRadius: 10,
-        background: "#F5EAEA",
+        background: "#F3E8F7",
         color: cor,
         fontSize: 11,
         fontWeight: 600,
@@ -5657,7 +5551,7 @@ function ModalEstudo(_ref18) {
               break;
             }
             _context12.n = 3;
-            return db.collection("estudos").doc(estudo.id).update(_objectSpread(_objectSpread({}, d), {}, {
+            return db.collection("estrelas_estudos").doc(estudo.id).update(_objectSpread(_objectSpread({}, d), {}, {
               updatedAt: firebase.firestore.FieldValue.serverTimestamp()
             }));
           case 3:
@@ -5665,12 +5559,12 @@ function ModalEstudo(_ref18) {
             break;
           case 4:
             _context12.n = 5;
-            return db.collection("estudos").add(_objectSpread(_objectSpread({}, d), {}, {
+            return db.collection("estrelas_estudos").add(_objectSpread(_objectSpread({}, d), {}, {
               createdAt: firebase.firestore.FieldValue.serverTimestamp()
             }));
           case 5:
             _context12.n = 6;
-            return db.collection("avisos").add({
+            return db.collection("estrelas_avisos").add({
               title: "\uD83D\uDCDA Novo material: ".concat(form.title),
               text: "Um novo material foi adicionado \xE0 Sala de Estudos: \"".concat(form.title, "\" (").concat(((_TIPOS_MIDIA$find = TIPOS_MIDIA.find(function (t) {
                 return t.key === form.tipo;
@@ -5704,7 +5598,7 @@ function ModalEstudo(_ref18) {
             return _context13.a(2);
           case 1:
             _context13.n = 2;
-            return db.collection("estudos").doc(estudo.id).delete();
+            return db.collection("estrelas_estudos").doc(estudo.id).delete();
           case 2:
             onClose();
           case 3:
@@ -5983,7 +5877,7 @@ function ModalEstudo(_ref18) {
 function SalaEstudos(_ref19) {
   var config = _ref19.config,
     isAdmin = _ref19.isAdmin;
-  var _useCollection1 = useCollection("estudos"),
+  var _useCollection1 = useCollection("estrelas_estudos"),
     estudos = _useCollection1.data,
     loading = _useCollection1.loading;
   var _useState103 = useState("Todos"),
@@ -6234,7 +6128,7 @@ function SalaEstudos(_ref19) {
                 break;
               }
               _context14.n = 1;
-              return db.collection("estudos").doc(e.id).delete();
+              return db.collection("estrelas_estudos").doc(e.id).delete();
             case 1:
               return _context14.a(2);
           }
@@ -6274,7 +6168,7 @@ function SalaEstudos(_ref19) {
 // ── APRESENTAÇÃO ──────────────────────────────────────────────────────────────
 function Apresentacao(_ref21) {
   var config = _ref21.config;
-  var _useCollection10 = useCollection("events", "date"),
+  var _useCollection10 = useCollection("estrelas_events", "date"),
     events = _useCollection10.data;
   var _useState109 = useState(null),
     _useState110 = _slicedToArray(_useState109, 2),
@@ -6284,20 +6178,31 @@ function Apresentacao(_ref21) {
     _useState112 = _slicedToArray(_useState111, 2),
     setlist = _useState112[0],
     setSetlist = _useState112[1];
-  var _useState113 = useState(null),
+  var _useState113 = useState({}),
     _useState114 = _slicedToArray(_useState113, 2),
-    tocando = _useState114[0],
-    setTocando = _useState114[1];
-  var _useState115 = useState(null),
-    _useState116 = _slicedToArray(_useState115, 2),
-    dragIdx = _useState116[0],
-    setDragIdx = _useState116[1];
+    planos = _useState114[0],
+    setPlanos = _useState114[1];
   var cor = config.corPrimaria || COR;
   var today = todayStr();
   useEffect(function () {
     if (eventoSel) setSetlist(eventoSel.setlist || []);else setSetlist([]);
-    setTocando(null);
+    setPlanos({});
   }, [eventoSel === null || eventoSel === void 0 ? void 0 : eventoSel.id]);
+  function togglePlano(id) {
+    setPlanos(function (p) {
+      return _objectSpread(_objectSpread({}, p), {}, _defineProperty({}, id, p[id] === "B" ? "A" : "B"));
+    });
+  }
+  function getUrl(s) {
+    var plano = planos[s.id] || "A";
+    var url = plano === "B" ? s.playbackB || s.playback || s.audioOriginal : s.playback || s.audioOriginal;
+    if (!url) return null;
+    var dr = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+    if (dr) return "https://drive.google.com/file/d/" + dr[1] + "/preview";
+    var yt = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/);
+    if (yt) return "https://www.youtube.com/embed/" + yt[1] + "?autoplay=0";
+    return url;
+  }
   var proximos = events.filter(function (e) {
     var _e$setlist;
     return e.date >= today && ((_e$setlist = e.setlist) === null || _e$setlist === void 0 ? void 0 : _e$setlist.length) > 0;
@@ -6326,7 +6231,7 @@ function Apresentacao(_ref21) {
           case 1:
             setSetlist(nova);
             _context15.n = 2;
-            return db.collection("events").doc(eventoSel.id).update({
+            return db.collection("estrelas_events").doc(eventoSel.id).update({
               setlist: nova,
               updatedAt: firebase.firestore.FieldValue.serverTimestamp()
             });
@@ -6339,21 +6244,82 @@ function Apresentacao(_ref21) {
   }
   function moverCima(idx) {
     if (idx === 0) return;
-    var nova = _toConsumableArray(setlist);
-    var _ref22 = [nova[idx], nova[idx - 1]];
-    nova[idx - 1] = _ref22[0];
-    nova[idx] = _ref22[1];
-    salvarOrdem(nova);
+    var n = _toConsumableArray(setlist);
+    var _ref22 = [n[idx], n[idx - 1]];
+    n[idx - 1] = _ref22[0];
+    n[idx] = _ref22[1];
+    salvarOrdem(n);
   }
   function moverBaixo(idx) {
     if (idx === setlist.length - 1) return;
-    var nova = _toConsumableArray(setlist);
-    var _ref23 = [nova[idx + 1], nova[idx]];
-    nova[idx] = _ref23[0];
-    nova[idx + 1] = _ref23[1];
-    salvarOrdem(nova);
+    var n = _toConsumableArray(setlist);
+    var _ref23 = [n[idx + 1], n[idx]];
+    n[idx] = _ref23[0];
+    n[idx + 1] = _ref23[1];
+    salvarOrdem(n);
   }
-  var mesaUrl = eventoSel ? "".concat(window.location.origin).concat(window.location.pathname, "?mesa=").concat(eventoSel.id) : "";
+  function prepararOffline() {
+    return _prepararOffline.apply(this, arguments);
+  }
+  function _prepararOffline() {
+    _prepararOffline = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee16() {
+      var _iterator, _step, s, plano, url, yt, dr, urlAbrir, _t;
+      return _regenerator().w(function (_context16) {
+        while (1) switch (_context16.p = _context16.n) {
+          case 0:
+            _iterator = _createForOfIteratorHelper(setlist);
+            _context16.p = 1;
+            _iterator.s();
+          case 2:
+            if ((_step = _iterator.n()).done) {
+              _context16.n = 6;
+              break;
+            }
+            s = _step.value;
+            plano = planos[s.id] || "A";
+            url = plano === "B" ? s.playbackB || s.playback || s.audioOriginal : s.playback || s.audioOriginal;
+            if (url) {
+              _context16.n = 3;
+              break;
+            }
+            return _context16.a(3, 5);
+          case 3:
+            yt = url.match(/(?:youtube\.com|youtu\.be)/);
+            if (!yt) {
+              _context16.n = 4;
+              break;
+            }
+            return _context16.a(3, 5);
+          case 4:
+            dr = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+            urlAbrir = dr ? "https://drive.google.com/file/d/" + dr[1] + "/view" : url;
+            window.open(urlAbrir, "_blank");
+            _context16.n = 5;
+            return new Promise(function (r) {
+              return setTimeout(r, 800);
+            });
+          case 5:
+            _context16.n = 2;
+            break;
+          case 6:
+            _context16.n = 8;
+            break;
+          case 7:
+            _context16.p = 7;
+            _t = _context16.v;
+            _iterator.e(_t);
+          case 8:
+            _context16.p = 8;
+            _iterator.f();
+            return _context16.f(8);
+          case 9:
+            return _context16.a(2);
+        }
+      }, _callee16, null, [[1, 7, 8, 9]]);
+    }));
+    return _prepararOffline.apply(this, arguments);
+  }
+  var mesaUrl = eventoSel ? window.location.origin + window.location.pathname + "?mesa=" + eventoSel.id : "";
   var card = {
     background: "#fff",
     borderRadius: 12,
@@ -6400,17 +6366,9 @@ function Apresentacao(_ref21) {
       color: "#1A1D23",
       marginBottom: 12
     }
-  }, "Selecionar Evento"), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "flex",
-      gap: 10,
-      alignItems: "center",
-      flexWrap: "wrap"
-    }
-  }, /*#__PURE__*/React.createElement("select", {
+  }, "Selecionar Evento"), /*#__PURE__*/React.createElement("select", {
     style: _objectSpread(_objectSpread({}, inp), {}, {
-      flex: 1,
-      minWidth: 200
+      width: "100%"
     }),
     value: (eventoSel === null || eventoSel === void 0 ? void 0 : eventoSel.id) || "",
     onChange: function onChange(e) {
@@ -6435,13 +6393,7 @@ function Apresentacao(_ref21) {
       key: e.id,
       value: e.id
     }, e.date, " \u2014 ", e.title);
-  })))), eventoSel && setlist.length === 0 && /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 12,
-      color: "#E65100",
-      marginTop: 8
-    }
-  }, "Este evento n\xE3o tem m\xFAsicas no repert\xF3rio. Adicione pelo m\xF3dulo Agenda \u2192 editar evento.")), eventoSel && mesaUrl && /*#__PURE__*/React.createElement("div", {
+  })))), eventoSel && mesaUrl && /*#__PURE__*/React.createElement("div", {
     style: {
       background: "#1A1D23",
       borderRadius: 12,
@@ -6450,28 +6402,18 @@ function Apresentacao(_ref21) {
     }
   }, /*#__PURE__*/React.createElement("div", {
     style: {
-      display: "flex",
-      alignItems: "center",
-      gap: 8,
-      marginBottom: 6
-    }
-  }, /*#__PURE__*/React.createElement(Icon, {
-    name: "monitor-speaker",
-    size: 16,
-    color: "#AAA"
-  }), /*#__PURE__*/React.createElement("div", {
-    style: {
       fontSize: 14,
       fontWeight: 700,
-      color: "#fff"
+      color: "#fff",
+      marginBottom: 6
     }
-  }, "Mesa de Som \u2014 Painel do Sonoplasta")), /*#__PURE__*/React.createElement("div", {
+  }, "Mesa de Som \u2014 Painel do Sonoplasta"), /*#__PURE__*/React.createElement("div", {
     style: {
       fontSize: 12,
       color: "#888",
       marginBottom: 10
     }
-  }, "Acesso p\xFAblico sem senha \u2014 envie este link para o sonoplasta no dia da apresenta\xE7\xE3o."), /*#__PURE__*/React.createElement("div", {
+  }, "Envie este link para o sonoplasta no dia da apresenta\xE7\xE3o."), /*#__PURE__*/React.createElement("div", {
     style: {
       display: "flex",
       gap: 8,
@@ -6518,6 +6460,45 @@ function Apresentacao(_ref21) {
       textDecoration: "none"
     }
   }, "Abrir"))), eventoSel && setlist.length > 0 && /*#__PURE__*/React.createElement("div", {
+    style: _objectSpread(_objectSpread({}, card), {}, {
+      background: "#FFF8E1",
+      border: "1px solid #FFE082",
+      display: "flex",
+      alignItems: "center",
+      gap: 12,
+      flexWrap: "wrap"
+    })
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      flex: 1
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 13,
+      fontWeight: 700,
+      color: "#1A1D23"
+    }
+  }, "\uD83D\uDCE5 Salvar \xE1udios para uso offline"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 12,
+      color: "#888",
+      marginTop: 2
+    }
+  }, "Abre cada arquivo do Drive para voc\xEA salvar no dispositivo antes do show.")), /*#__PURE__*/React.createElement("button", {
+    onClick: prepararOffline,
+    style: {
+      padding: "10px 20px",
+      background: cor,
+      color: "#fff",
+      border: "none",
+      borderRadius: 10,
+      fontSize: 13,
+      fontWeight: 700,
+      cursor: "pointer",
+      fontFamily: "inherit",
+      whiteSpace: "nowrap"
+    }
+  }, "\uD83D\uDCC2 Abrir \xE1udios")), eventoSel && setlist.length > 0 && /*#__PURE__*/React.createElement("div", {
     style: {
       display: "grid",
       gridTemplateColumns: "1fr 1fr",
@@ -6532,17 +6513,13 @@ function Apresentacao(_ref21) {
       gap: 8,
       marginBottom: 12
     }
-  }, /*#__PURE__*/React.createElement(Icon, {
-    name: "music",
-    size: 16,
-    color: cor
-  }), /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React.createElement("div", {
     style: {
       fontSize: 14,
       fontWeight: 700,
       color: cor
     }
-  }, "Setlist"), /*#__PURE__*/React.createElement("div", {
+  }, "\uD83C\uDFB5 Setlist"), /*#__PURE__*/React.createElement("div", {
     style: {
       fontSize: 12,
       color: "#AAA"
@@ -6553,12 +6530,9 @@ function Apresentacao(_ref21) {
       color: "#CCC",
       marginLeft: "auto"
     }
-  }, "\u2191\u2193 para reordenar")), setlist.map(function (s, i) {
+  }, "\u2191\u2193 reordenar")), setlist.map(function (s, i) {
     return /*#__PURE__*/React.createElement("div", {
-      key: i,
-      onClick: function onClick() {
-        return setTocando(s);
-      },
+      key: s.id || i,
       style: {
         display: "flex",
         alignItems: "center",
@@ -6566,10 +6540,8 @@ function Apresentacao(_ref21) {
         padding: "10px 12px",
         borderRadius: 8,
         marginBottom: 6,
-        cursor: "pointer",
-        background: (tocando === null || tocando === void 0 ? void 0 : tocando.id) === s.id ? cor + "15" : "#F9F5F5",
-        border: (tocando === null || tocando === void 0 ? void 0 : tocando.id) === s.id ? "1px solid ".concat(cor, "33") : "1px solid transparent",
-        transition: "background 0.15s"
+        background: "#F9F5F5",
+        border: "1px solid transparent"
       }
     }, /*#__PURE__*/React.createElement("span", {
       style: {
@@ -6594,7 +6566,24 @@ function Apresentacao(_ref21) {
         fontSize: 11,
         color: "#AAA"
       }
-    }, s.compositor)), /*#__PURE__*/React.createElement("div", {
+    }, s.compositor)), /*#__PURE__*/React.createElement("button", {
+      onClick: function onClick(e) {
+        e.stopPropagation();
+        togglePlano(s.id);
+      },
+      style: {
+        padding: "3px 8px",
+        borderRadius: 6,
+        border: "1.5px solid " + (planos[s.id] === "B" ? "#E65100" : cor),
+        background: planos[s.id] === "B" ? "#E65100" : cor,
+        color: "#fff",
+        fontSize: 11,
+        fontWeight: 700,
+        cursor: "pointer",
+        fontFamily: "inherit",
+        minWidth: 32
+      }
+    }, planos[s.id] === "B" ? "B" : "A"), /*#__PURE__*/React.createElement("div", {
       style: {
         display: "flex",
         flexDirection: "column",
@@ -6610,13 +6599,10 @@ function Apresentacao(_ref21) {
         border: "none",
         cursor: "pointer",
         padding: 2,
-        color: i === 0 ? "#EEE" : "#888"
+        fontSize: 12,
+        color: i === 0 ? "#DDD" : "#888"
       }
-    }, /*#__PURE__*/React.createElement(Icon, {
-      name: "chevron-up",
-      size: 14,
-      color: i === 0 ? "#EEE" : "#888"
-    })), /*#__PURE__*/React.createElement("button", {
+    }, "\u25B2"), /*#__PURE__*/React.createElement("button", {
       onClick: function onClick(e) {
         e.stopPropagation();
         moverBaixo(i);
@@ -6626,158 +6612,106 @@ function Apresentacao(_ref21) {
         border: "none",
         cursor: "pointer",
         padding: 2,
-        color: i === setlist.length - 1 ? "#EEE" : "#888"
+        fontSize: 12,
+        color: i === setlist.length - 1 ? "#DDD" : "#888"
       }
-    }, /*#__PURE__*/React.createElement(Icon, {
-      name: "chevron-down",
-      size: 14,
-      color: i === setlist.length - 1 ? "#EEE" : "#888"
-    }))));
+    }, "\u25BC")));
   })), /*#__PURE__*/React.createElement("div", {
     style: card
   }, /*#__PURE__*/React.createElement("div", {
     style: {
-      display: "flex",
-      alignItems: "center",
-      gap: 8,
-      marginBottom: 12
-    }
-  }, /*#__PURE__*/React.createElement(Icon, {
-    name: "volume-2",
-    size: 16,
-    color: cor
-  }), /*#__PURE__*/React.createElement("div", {
-    style: {
       fontSize: 14,
       fontWeight: 700,
-      color: cor
-    }
-  }, "Player")), !tocando ? /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      justifyContent: "center",
-      padding: "40px 20px",
-      color: "#CCC",
-      gap: 12
-    }
-  }, /*#__PURE__*/React.createElement(Icon, {
-    name: "music",
-    size: 40,
-    color: "#EEE"
-  }), /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 13
-    }
-  }, "Clique em uma m\xFAsica para reproduzir")) : /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 14,
-      fontWeight: 700,
-      color: "#1A1D23",
-      marginBottom: 4
-    }
-  }, tocando.title), tocando.compositor && /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 12,
-      color: "#AAA",
+      color: cor,
       marginBottom: 12
     }
-  }, tocando.compositor), tocando.playback || tocando.audioOriginal ? /*#__PURE__*/React.createElement("iframe", {
-    src: function () {
-      var url = tocando.playback || tocando.audioOriginal;
-      var yt = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
-      if (yt) return "https://www.youtube.com/embed/".concat(yt[1], "?autoplay=1");
-      var dr = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
-      if (dr) return "https://drive.google.com/file/d/".concat(dr[1], "/preview");
-      return url;
-    }(),
-    style: {
-      width: "100%",
-      height: 200,
-      border: "none",
-      borderRadius: 8
-    },
-    allow: "autoplay; fullscreen",
-    title: tocando.title
-  }) : /*#__PURE__*/React.createElement("div", {
-    style: {
-      padding: "20px",
-      background: "#F5F5F5",
-      borderRadius: 8,
-      textAlign: "center",
-      color: "#AAA",
-      fontSize: 13
-    }
-  }, "Esta m\xFAsica n\xE3o tem playback cadastrado."), setlist[setlist.findIndex(function (s) {
-    return s.id === tocando.id;
-  }) + 1] && /*#__PURE__*/React.createElement("div", {
-    style: {
-      marginTop: 12,
-      padding: "8px 12px",
-      background: "#F9F5F5",
-      borderRadius: 8,
-      display: "flex",
-      alignItems: "center",
-      gap: 8
-    }
-  }, /*#__PURE__*/React.createElement(Icon, {
-    name: "skip-forward",
-    size: 13,
-    color: "#AAA"
-  }), /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 12,
-      color: "#AAA"
-    }
-  }, "A seguir: ", /*#__PURE__*/React.createElement("span", {
-    style: {
-      color: "#1A1D23",
-      fontWeight: 600
-    }
-  }, setlist[setlist.findIndex(function (s) {
-    return s.id === tocando.id;
-  }) + 1].title)), /*#__PURE__*/React.createElement("button", {
-    onClick: function onClick() {
-      return setTocando(setlist[setlist.findIndex(function (s) {
-        return s.id === tocando.id;
-      }) + 1]);
-    },
-    style: {
-      marginLeft: "auto",
-      padding: "4px 10px",
-      background: cor,
-      color: "#fff",
-      border: "none",
-      borderRadius: 6,
-      fontSize: 11,
-      fontWeight: 700,
-      cursor: "pointer",
-      fontFamily: "inherit"
-    }
-  }, "Pr\xF3xima"))))), !eventoSel && /*#__PURE__*/React.createElement("div", {
+  }, "\uD83D\uDD0A Player"), setlist.map(function (s, i) {
+    return /*#__PURE__*/React.createElement("div", {
+      key: s.id + "-" + (planos[s.id] || "A"),
+      style: {
+        marginBottom: 16
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: "flex",
+        alignItems: "center",
+        gap: 8,
+        marginBottom: 6
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 13,
+        color: cor,
+        fontWeight: 700,
+        minWidth: 22
+      }
+    }, i + 1), /*#__PURE__*/React.createElement("div", {
+      style: {
+        flex: 1
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 13,
+        fontWeight: 600,
+        color: "#1A1D23"
+      }
+    }, s.title), s.compositor && /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 11,
+        color: "#AAA"
+      }
+    }, s.compositor)), /*#__PURE__*/React.createElement("span", {
+      style: {
+        padding: "2px 8px",
+        borderRadius: 6,
+        background: planos[s.id] === "B" ? "#E65100" : cor,
+        color: "#fff",
+        fontSize: 10,
+        fontWeight: 700
+      }
+    }, "Plano ", planos[s.id] || "A")), getUrl(s) ? /*#__PURE__*/React.createElement("iframe", {
+      src: getUrl(s),
+      style: {
+        width: "100%",
+        height: 80,
+        border: "none",
+        borderRadius: 8,
+        display: "block"
+      },
+      allow: "autoplay",
+      title: s.title
+    }) : /*#__PURE__*/React.createElement("div", {
+      style: {
+        padding: "10px 16px",
+        background: "#F5F5F5",
+        borderRadius: 8,
+        textAlign: "center",
+        color: "#AAA",
+        fontSize: 12
+      }
+    }, "Sem playback Plano ", planos[s.id] || "A", " cadastrado"));
+  }))), !eventoSel && /*#__PURE__*/React.createElement("div", {
     style: _objectSpread(_objectSpread({}, card), {}, {
       textAlign: "center",
       padding: "48px 20px",
       color: "#CCC"
     })
-  }, /*#__PURE__*/React.createElement(Icon, {
-    name: "qr-code",
-    size: 48,
-    color: "#EEE"
-  }), /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React.createElement("div", {
     style: {
-      marginTop: 12,
+      fontSize: 48,
+      marginBottom: 12
+    }
+  }, "\uD83D\uDCCB"), /*#__PURE__*/React.createElement("div", {
+    style: {
       fontSize: 15,
-      fontWeight: 600,
-      color: "#CCC"
+      fontWeight: 600
     }
   }, "Selecione um evento acima"), /*#__PURE__*/React.createElement("div", {
     style: {
       fontSize: 13,
       marginTop: 4
     }
-  }, "Para gerenciar o setlist e playbacks da apresenta\xE7\xE3o")));
+  }, "Para gerenciar o setlist e playbacks")));
 }
 
 // ── FREQUÊNCIA POR EVENTOS (usado no Relatório) ───────────────────────────────
@@ -6884,13 +6818,13 @@ function FrequenciaEventos(_ref24) {
 // ── FREQUÊNCIA DE ACESSO ──────────────────────────────────────────────────────
 function FrequenciaAcesso(_ref25) {
   var config = _ref25.config;
-  var _useState117 = useState([]),
-    _useState118 = _slicedToArray(_useState117, 2),
-    acessos = _useState118[0],
-    setAcessos = _useState118[1];
+  var _useState115 = useState([]),
+    _useState116 = _slicedToArray(_useState115, 2),
+    acessos = _useState116[0],
+    setAcessos = _useState116[1];
   var cor = config.corPrimaria || COR;
   useEffect(function () {
-    db.collection("acessos").onSnapshot(function (snap) {
+    db.collection("estrelas_acessos").onSnapshot(function (snap) {
       setAcessos(snap.docs.map(function (d) {
         return _objectSpread({
           id: d.id
@@ -7158,47 +7092,49 @@ function FrequenciaAcesso(_ref25) {
 // ── RELATÓRIOS ────────────────────────────────────────────────────────────────
 function Relatorios(_ref32) {
   var config = _ref32.config;
-  var _useCollection11 = useCollection("events", "date"),
+  var _useCollection11 = useCollection("estrelas_events", "date"),
     events = _useCollection11.data;
-  var _useCollection12 = useCollection("members"),
+  var _useCollection12 = useCollection("estrelas_members"),
     members = _useCollection12.data;
-  var _useCollection13 = useCollection("songs"),
+  var _useCollection13 = useCollection("estrelas_songs"),
     songs = _useCollection13.data;
-  var _useCollection14 = useCollection("frequencias", "dataHora"),
+  var _useCollection14 = useCollection("estrelas_frequencias", "dataHora"),
     frequencias = _useCollection14.data;
+  var _useCollection15 = useCollection("estrelas_blog_posts"),
+    blogPosts = _useCollection15.data;
   var cor = config.corPrimaria || COR;
-  var _useState119 = useState(new Date().getFullYear() + "-01-01"),
+  var _useState117 = useState(new Date().getFullYear() + "-01-01"),
+    _useState118 = _slicedToArray(_useState117, 2),
+    dataInicio = _useState118[0],
+    setDataInicio = _useState118[1];
+  var _useState119 = useState(todayStr()),
     _useState120 = _slicedToArray(_useState119, 2),
-    dataInicio = _useState120[0],
-    setDataInicio = _useState120[1];
-  var _useState121 = useState(todayStr()),
+    dataFim = _useState120[0],
+    setDataFim = _useState120[1];
+  var _useState121 = useState("todos"),
     _useState122 = _slicedToArray(_useState121, 2),
-    dataFim = _useState122[0],
-    setDataFim = _useState122[1];
-  var _useState123 = useState("todos"),
+    eventoFiltro = _useState122[0],
+    setEventoFiltro = _useState122[1];
+  var _useState123 = useState({}),
     _useState124 = _slicedToArray(_useState123, 2),
-    eventoFiltro = _useState124[0],
-    setEventoFiltro = _useState124[1];
-  var _useState125 = useState({}),
+    textos = _useState124[0],
+    setTextos = _useState124[1];
+  var _useState125 = useState(false),
     _useState126 = _slicedToArray(_useState125, 2),
-    textos = _useState126[0],
-    setTextos = _useState126[1];
-  var _useState127 = useState(false),
+    editTextos = _useState126[0],
+    setEditTextos = _useState126[1];
+  var _useState127 = useState({}),
     _useState128 = _slicedToArray(_useState127, 2),
-    editTextos = _useState128[0],
-    setEditTextos = _useState128[1];
-  var _useState129 = useState({}),
+    formTextos = _useState128[0],
+    setFormTextos = _useState128[1];
+  var _useState129 = useState(false),
     _useState130 = _slicedToArray(_useState129, 2),
-    formTextos = _useState130[0],
-    setFormTextos = _useState130[1];
-  var _useState131 = useState(false),
-    _useState132 = _slicedToArray(_useState131, 2),
-    salvandoTextos = _useState132[0],
-    setSalvandoTextos = _useState132[1];
+    salvandoTextos = _useState130[0],
+    setSalvandoTextos = _useState130[1];
 
   // Carregar textos qualitativos do Firebase
   useEffect(function () {
-    db.collection("config").doc("relatorio").get().then(function (doc) {
+    db.collection("estrelas_config").doc("relatorio").get().then(function (doc) {
       if (doc.exists) {
         setTextos(doc.data());
         setFormTextos(doc.data());
@@ -7209,13 +7145,13 @@ function Relatorios(_ref32) {
     return _salvarTextos.apply(this, arguments);
   } // Filtrar eventos por período
   function _salvarTextos() {
-    _salvarTextos = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee16() {
-      return _regenerator().w(function (_context16) {
-        while (1) switch (_context16.n) {
+    _salvarTextos = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee17() {
+      return _regenerator().w(function (_context17) {
+        while (1) switch (_context17.n) {
           case 0:
             setSalvandoTextos(true);
-            _context16.n = 1;
-            return db.collection("config").doc("relatorio").set(formTextos, {
+            _context17.n = 1;
+            return db.collection("estrelas_config").doc("relatorio").set(formTextos, {
               merge: true
             });
           case 1:
@@ -7223,9 +7159,9 @@ function Relatorios(_ref32) {
             setSalvandoTextos(false);
             setEditTextos(false);
           case 2:
-            return _context16.a(2);
+            return _context17.a(2);
         }
-      }, _callee16);
+      }, _callee17);
     }));
     return _salvarTextos.apply(this, arguments);
   }
@@ -7260,16 +7196,16 @@ function Relatorios(_ref32) {
     Reagendado: "#E65100",
     Suspenso: "#7B1FA2"
   };
-  var sigLucia = textos.sigLucia || "https://raw.githubusercontent.com/luciakratz-arch/coral-flamboyant/main/lucia-sig.png";
-  var sigMaestro = textos.sigMaestro || "https://raw.githubusercontent.com/luciakratz-arch/coral-flamboyant/main/paulo-sig.png";
+  var sigLucia = textos.sigLucia || "https://raw.githubusercontent.com/luciakratz-arch/vocal-estrelas-do-cerrado/main/lucia-sig.png";
+  var sigMaestro = textos.sigMaestro || "https://raw.githubusercontent.com/luciakratz-arch/vocal-estrelas-do-cerrado/main/paulo-sig.png";
   function gerarPDFListaPresenca() {
-    var nomeApp = config.nomeApp || "Flamboyant Coral";
+    var nomeApp = config.nomeApp || "Estrelas do Cerrado";
     var logoUrl = config.logoUrl || LOGO_URL;
     var cidade = textos.cidade || "Goiânia – GO";
     var maestro = textos.maestro || "Maestro";
     var produtora = textos.produtora || "Lucia Kratz";
-    var sigLucia = textos.sigLucia || "https://raw.githubusercontent.com/luciakratz-arch/coral-flamboyant/main/lucia-sig.png";
-    var sigMaestro = textos.sigMaestro || "https://raw.githubusercontent.com/luciakratz-arch/coral-flamboyant/main/paulo-sig.png";
+    var sigLucia = textos.sigLucia || "https://raw.githubusercontent.com/luciakratz-arch/vocal-estrelas-do-cerrado/main/lucia-sig.png";
+    var sigMaestro = textos.sigMaestro || "https://raw.githubusercontent.com/luciakratz-arch/vocal-estrelas-do-cerrado/main/paulo-sig.png";
     var hoje = new Date().toLocaleDateString("pt-BR", {
       day: "numeric",
       month: "long",
@@ -7318,13 +7254,13 @@ function Relatorios(_ref32) {
     }, 800);
   }
   function gerarPDFCompleto() {
-    var nomeApp = config.nomeApp || "Flamboyant Coral";
+    var nomeApp = config.nomeApp || "Estrelas do Cerrado";
     var logoUrl = config.logoUrl || LOGO_URL;
     var cidade = textos.cidade || "Goiânia – GO";
     var maestro = textos.maestro || "Maestro";
     var produtora = textos.produtora || "Lucia Kratz";
-    var sigLucia = textos.sigLucia || "https://raw.githubusercontent.com/luciakratz-arch/coral-flamboyant/main/lucia-sig.png";
-    var sigMaestro = textos.sigMaestro || "https://raw.githubusercontent.com/luciakratz-arch/coral-flamboyant/main/paulo-sig.png";
+    var sigLucia = textos.sigLucia || "https://raw.githubusercontent.com/luciakratz-arch/vocal-estrelas-do-cerrado/main/lucia-sig.png";
+    var sigMaestro = textos.sigMaestro || "https://raw.githubusercontent.com/luciakratz-arch/vocal-estrelas-do-cerrado/main/paulo-sig.png";
     var hoje = new Date().toLocaleDateString("pt-BR", {
       day: "numeric",
       month: "long",
@@ -7396,7 +7332,7 @@ function Relatorios(_ref32) {
       return win.print();
     }, 800);
     // Salvar no histórico
-    db.collection("relatorios_historico").add({
+    db.collection("estrelas_relatorios_historico").add({
       tipo: "Relatório Completo",
       periodo: "".concat(dataInicio, " a ").concat(dataFim),
       geradoEm: firebase.firestore.FieldValue.serverTimestamp(),
@@ -7404,7 +7340,7 @@ function Relatorios(_ref32) {
     });
   }
   function gerarPDF() {
-    var nomeApp = config.nomeApp || "Flamboyant Coral";
+    var nomeApp = config.nomeApp || "Estrelas do Cerrado";
     var logoUrl = config.logoUrl || LOGO_URL;
     var cidade = textos.cidade || "Goiânia – GO";
     var maestro = textos.maestro || "Maestro";
@@ -7573,6 +7509,13 @@ function Relatorios(_ref32) {
     value: apresentacoes.length,
     icon: "mic",
     color: cor
+  }, {
+    label: "Posts no Blog",
+    value: blogPosts.filter(function (p) {
+      return p.status === "publicado";
+    }).length,
+    icon: "newspaper",
+    color: "#2E7D32"
   }].map(function (m) {
     return /*#__PURE__*/React.createElement("div", {
       key: m.label,
@@ -8160,38 +8103,38 @@ function Relatorios(_ref32) {
 function CheckinPublico(_ref41) {
   var sessaoId = _ref41.sessaoId,
     config = _ref41.config;
+  var _useState131 = useState(null),
+    _useState132 = _slicedToArray(_useState131, 2),
+    sessao = _useState132[0],
+    setSessao = _useState132[1];
   var _useState133 = useState(null),
     _useState134 = _slicedToArray(_useState133, 2),
-    sessao = _useState134[0],
-    setSessao = _useState134[1];
-  var _useState135 = useState(null),
+    membro = _useState134[0],
+    setMembro = _useState134[1];
+  var _useState135 = useState([]),
     _useState136 = _slicedToArray(_useState135, 2),
-    membro = _useState136[0],
-    setMembro = _useState136[1];
-  var _useState137 = useState([]),
+    members = _useState136[0],
+    setMembers = _useState136[1];
+  var _useState137 = useState(""),
     _useState138 = _slicedToArray(_useState137, 2),
-    members = _useState138[0],
-    setMembers = _useState138[1];
-  var _useState139 = useState(""),
+    busca = _useState138[0],
+    setBusca = _useState138[1];
+  var _useState139 = useState([]),
     _useState140 = _slicedToArray(_useState139, 2),
-    busca = _useState140[0],
-    setBusca = _useState140[1];
-  var _useState141 = useState([]),
+    sugestoes = _useState140[0],
+    setSugestoes = _useState140[1];
+  var _useState141 = useState(null),
     _useState142 = _slicedToArray(_useState141, 2),
-    sugestoes = _useState142[0],
-    setSugestoes = _useState142[1];
-  var _useState143 = useState(null),
+    status = _useState142[0],
+    setStatus = _useState142[1]; // null | 'ok' | 'erro' | 'expirado'
+  var _useState143 = useState(true),
     _useState144 = _slicedToArray(_useState143, 2),
-    status = _useState144[0],
-    setStatus = _useState144[1]; // null | 'ok' | 'erro' | 'expirado'
-  var _useState145 = useState(true),
-    _useState146 = _slicedToArray(_useState145, 2),
-    loading = _useState146[0],
-    setLoading = _useState146[1];
+    loading = _useState144[0],
+    setLoading = _useState144[1];
   var cor = config.corPrimaria || COR;
   useEffect(function () {
     // Carregar sessão
-    db.collection("sessoes_checkin").doc(sessaoId).get().then(function (doc) {
+    db.collection("estrelas_sessoes_checkin").doc(sessaoId).get().then(function (doc) {
       if (!doc.exists) {
         setStatus("erro");
         setLoading(false);
@@ -8210,7 +8153,7 @@ function CheckinPublico(_ref41) {
       setLoading(false);
     });
     // Carregar membros
-    db.collection("members").onSnapshot(function (snap) {
+    db.collection("estrelas_members").onSnapshot(function (snap) {
       setMembers(snap.docs.map(function (d) {
         return _objectSpread({
           id: d.id
@@ -8232,25 +8175,25 @@ function CheckinPublico(_ref41) {
     return _confirmarPresenca.apply(this, arguments);
   }
   function _confirmarPresenca() {
-    _confirmarPresenca = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee17(m) {
+    _confirmarPresenca = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee18(m) {
       var snap;
-      return _regenerator().w(function (_context17) {
-        while (1) switch (_context17.n) {
+      return _regenerator().w(function (_context18) {
+        while (1) switch (_context18.n) {
           case 0:
-            _context17.n = 1;
-            return db.collection("frequencias").where("sessaoId", "==", sessaoId).where("membroId", "==", m.id).get();
+            _context18.n = 1;
+            return db.collection("estrelas_frequencias").where("sessaoId", "==", sessaoId).where("membroId", "==", m.id).get();
           case 1:
-            snap = _context17.v;
+            snap = _context18.v;
             if (snap.empty) {
-              _context17.n = 2;
+              _context18.n = 2;
               break;
             }
             setMembro(m);
             setStatus("jaRegistrado");
-            return _context17.a(2);
+            return _context18.a(2);
           case 2:
-            _context17.n = 3;
-            return db.collection("frequencias").add({
+            _context18.n = 3;
+            return db.collection("estrelas_frequencias").add({
               sessaoId: sessaoId,
               eventoId: sessao.eventoId,
               eventoTitulo: sessao.eventoTitulo,
@@ -8265,9 +8208,9 @@ function CheckinPublico(_ref41) {
             setMembro(m);
             setStatus("ok");
           case 4:
-            return _context17.a(2);
+            return _context18.a(2);
         }
-      }, _callee17);
+      }, _callee18);
     }));
     return _confirmarPresenca.apply(this, arguments);
   }
@@ -8438,20 +8381,22 @@ function CheckinPublico(_ref41) {
     style: {
       width: 64,
       height: 64,
-      background: "#fff",
-      borderRadius: "50%",
+      borderRadius: 12,
+      overflow: "hidden",
+      margin: "0 auto 12px",
+      boxShadow: "0 2px 12px rgba(0,0,0,0.1)",
+      background: "#7B2D8B",
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
-      margin: "0 auto 12px",
-      boxShadow: "0 2px 12px rgba(0,0,0,0.1)"
+      padding: 4
     }
   }, /*#__PURE__*/React.createElement("img", {
     src: config.logoUrl || LOGO_URL,
     alt: "",
     style: {
-      width: 44,
-      height: 44,
+      width: "100%",
+      height: "100%",
       objectFit: "contain"
     },
     onError: function onError(e) {
@@ -8558,32 +8503,32 @@ function CheckinPublico(_ref41) {
 }
 function Frequencia(_ref42) {
   var config = _ref42.config;
-  var _useCollection15 = useCollection("events", "date"),
-    events = _useCollection15.data;
-  var _useState147 = useState(""),
+  var _useCollection16 = useCollection("estrelas_events", "date"),
+    events = _useCollection16.data;
+  var _useState145 = useState(""),
+    _useState146 = _slicedToArray(_useState145, 2),
+    eventoSel = _useState146[0],
+    setEventoSel = _useState146[1];
+  var _useState147 = useState(null),
     _useState148 = _slicedToArray(_useState147, 2),
-    eventoSel = _useState148[0],
-    setEventoSel = _useState148[1];
-  var _useState149 = useState(null),
+    sessaoAtiva = _useState148[0],
+    setSessaoAtiva = _useState148[1];
+  var _useState149 = useState([]),
     _useState150 = _slicedToArray(_useState149, 2),
-    sessaoAtiva = _useState150[0],
-    setSessaoAtiva = _useState150[1];
-  var _useState151 = useState([]),
+    frequencias = _useState150[0],
+    setFrequencias = _useState150[1];
+  var _useState151 = useState(""),
     _useState152 = _slicedToArray(_useState151, 2),
-    frequencias = _useState152[0],
-    setFrequencias = _useState152[1];
-  var _useState153 = useState(""),
+    qrUrl = _useState152[0],
+    setQrUrl = _useState152[1];
+  var _useState153 = useState(false),
     _useState154 = _slicedToArray(_useState153, 2),
-    qrUrl = _useState154[0],
-    setQrUrl = _useState154[1];
+    gerando = _useState154[0],
+    setGerando = _useState154[1];
   var _useState155 = useState(false),
     _useState156 = _slicedToArray(_useState155, 2),
-    gerando = _useState156[0],
-    setGerando = _useState156[1];
-  var _useState157 = useState(false),
-    _useState158 = _slicedToArray(_useState157, 2),
-    showQR = _useState158[0],
-    setShowQR = _useState158[1];
+    showQR = _useState156[0],
+    setShowQR = _useState156[1];
   var cor = config.corPrimaria || COR;
   var today = todayStr();
 
@@ -8595,7 +8540,7 @@ function Frequencia(_ref42) {
       setShowQR(false);
       return;
     }
-    var unsub = db.collection("sessoes_checkin").where("eventoId", "==", eventoSel).onSnapshot(function (snap) {
+    var unsub = db.collection("estrelas_sessoes_checkin").where("eventoId", "==", eventoSel).onSnapshot(function (snap) {
       var ativas = snap.docs.map(function (d) {
         return _objectSpread({
           id: d.id
@@ -8620,7 +8565,7 @@ function Frequencia(_ref42) {
       setFrequencias([]);
       return;
     }
-    var unsub = db.collection("frequencias").where("eventoId", "==", eventoSel).onSnapshot(function (snap) {
+    var unsub = db.collection("estrelas_frequencias").where("eventoId", "==", eventoSel).onSnapshot(function (snap) {
       return setFrequencias(snap.docs.map(function (d) {
         return _objectSpread({
           id: d.id
@@ -8633,30 +8578,30 @@ function Frequencia(_ref42) {
     return _gerarQR.apply(this, arguments);
   }
   function _gerarQR() {
-    _gerarQR = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee18() {
+    _gerarQR = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee19() {
       var evento, expiraEm, ref, url;
-      return _regenerator().w(function (_context18) {
-        while (1) switch (_context18.n) {
+      return _regenerator().w(function (_context19) {
+        while (1) switch (_context19.n) {
           case 0:
             if (eventoSel) {
-              _context18.n = 1;
+              _context19.n = 1;
               break;
             }
-            return _context18.a(2);
+            return _context19.a(2);
           case 1:
             evento = events.find(function (e) {
               return e.id === eventoSel;
             });
             if (evento) {
-              _context18.n = 2;
+              _context19.n = 2;
               break;
             }
-            return _context18.a(2);
+            return _context19.a(2);
           case 2:
             setGerando(true);
             expiraEm = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 horas
-            _context18.n = 3;
-            return db.collection("sessoes_checkin").add({
+            _context19.n = 3;
+            return db.collection("estrelas_sessoes_checkin").add({
               eventoId: eventoSel,
               eventoTitulo: evento.title,
               eventoData: evento.date,
@@ -8664,15 +8609,15 @@ function Frequencia(_ref42) {
               expiraEm: firebase.firestore.Timestamp.fromDate(expiraEm)
             });
           case 3:
-            ref = _context18.v;
+            ref = _context19.v;
             url = "".concat(window.location.origin).concat(window.location.pathname, "?checkin=").concat(ref.id);
             setQrUrl("https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=".concat(encodeURIComponent(url)));
             setShowQR(true);
             setGerando(false);
           case 4:
-            return _context18.a(2);
+            return _context19.a(2);
         }
-      }, _callee18);
+      }, _callee19);
     }));
     return _gerarQR.apply(this, arguments);
   }
@@ -8680,24 +8625,24 @@ function Frequencia(_ref42) {
     return _encerrarSessao.apply(this, arguments);
   }
   function _encerrarSessao() {
-    _encerrarSessao = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee19() {
-      return _regenerator().w(function (_context19) {
-        while (1) switch (_context19.n) {
+    _encerrarSessao = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee20() {
+      return _regenerator().w(function (_context20) {
+        while (1) switch (_context20.n) {
           case 0:
             if (sessaoAtiva) {
-              _context19.n = 1;
+              _context20.n = 1;
               break;
             }
-            return _context19.a(2);
+            return _context20.a(2);
           case 1:
             if (window.confirm("Encerrar sessão de check-in?")) {
-              _context19.n = 2;
+              _context20.n = 2;
               break;
             }
-            return _context19.a(2);
+            return _context20.a(2);
           case 2:
-            _context19.n = 3;
-            return db.collection("sessoes_checkin").doc(sessaoAtiva.id).update({
+            _context20.n = 3;
+            return db.collection("estrelas_sessoes_checkin").doc(sessaoAtiva.id).update({
               expiraEm: firebase.firestore.Timestamp.fromDate(new Date(0))
             });
           case 3:
@@ -8705,9 +8650,9 @@ function Frequencia(_ref42) {
             setShowQR(false);
             setQrUrl("");
           case 4:
-            return _context19.a(2);
+            return _context20.a(2);
         }
-      }, _callee19);
+      }, _callee20);
     }));
     return _encerrarSessao.apply(this, arguments);
   }
@@ -9090,39 +9035,39 @@ function Frequencia(_ref42) {
 // ── DECLARAÇÃO DIGITAL ────────────────────────────────────────────────────────
 function Declaracao(_ref43) {
   var config = _ref43.config;
-  var _useCollection16 = useCollection("events", "date"),
-    events = _useCollection16.data;
-  var _useCollection17 = useCollection("members"),
-    members = _useCollection17.data;
-  var _useCollection18 = useCollection("frequencias", "dataHora"),
-    frequencias = _useCollection18.data;
-  var _useState159 = useState("evento"),
+  var _useCollection17 = useCollection("estrelas_events", "date"),
+    events = _useCollection17.data;
+  var _useCollection18 = useCollection("estrelas_members"),
+    members = _useCollection18.data;
+  var _useCollection19 = useCollection("estrelas_frequencias", "dataHora"),
+    frequencias = _useCollection19.data;
+  var _useState157 = useState("evento"),
+    _useState158 = _slicedToArray(_useState157, 2),
+    tipo = _useState158[0],
+    setTipo = _useState158[1]; // 'evento' | 'corista'
+  var _useState159 = useState(""),
     _useState160 = _slicedToArray(_useState159, 2),
-    tipo = _useState160[0],
-    setTipo = _useState160[1]; // 'evento' | 'corista'
+    eventoSel = _useState160[0],
+    setEventoSel = _useState160[1];
   var _useState161 = useState(""),
     _useState162 = _slicedToArray(_useState161, 2),
-    eventoSel = _useState162[0],
-    setEventoSel = _useState162[1];
-  var _useState163 = useState(""),
+    coristaId = _useState162[0],
+    setCoristaId = _useState162[1];
+  var _useState163 = useState(new Date().getFullYear() + "-01-01"),
     _useState164 = _slicedToArray(_useState163, 2),
-    coristaId = _useState164[0],
-    setCoristaId = _useState164[1];
-  var _useState165 = useState(new Date().getFullYear() + "-01-01"),
+    dataInicio = _useState164[0],
+    setDataInicio = _useState164[1];
+  var _useState165 = useState(todayStr()),
     _useState166 = _slicedToArray(_useState165, 2),
-    dataInicio = _useState166[0],
-    setDataInicio = _useState166[1];
-  var _useState167 = useState(todayStr()),
+    dataFim = _useState166[0],
+    setDataFim = _useState166[1];
+  var _useState167 = useState({}),
     _useState168 = _slicedToArray(_useState167, 2),
-    dataFim = _useState168[0],
-    setDataFim = _useState168[1];
-  var _useState169 = useState({}),
-    _useState170 = _slicedToArray(_useState169, 2),
-    textos = _useState170[0],
-    setTextos = _useState170[1];
+    textos = _useState168[0],
+    setTextos = _useState168[1];
   var cor = config.corPrimaria || COR;
   useEffect(function () {
-    db.collection("config").doc("relatorio").get().then(function (doc) {
+    db.collection("estrelas_config").doc("relatorio").get().then(function (doc) {
       if (doc.exists) setTextos(doc.data());
     });
   }, []);
@@ -9157,13 +9102,13 @@ function Declaracao(_ref43) {
   });
   function gerarPDFEvento() {
     if (!eventoAtual || freqEvento.length === 0) return;
-    var nomeApp = config.nomeApp || "Flamboyant Coral";
+    var nomeApp = config.nomeApp || "Estrelas do Cerrado";
     var logoUrl = config.logoUrl || LOGO_URL;
     var maestro = textos.maestro || "Maestro";
     var produtora = textos.produtora || "Lucia Kratz";
     var cidade = textos.cidade || "Goiânia – GO";
-    var sigLucia = textos.sigLucia || "https://raw.githubusercontent.com/luciakratz-arch/coral-flamboyant/main/lucia-sig.png";
-    var sigMaestro = textos.sigMaestro || "https://raw.githubusercontent.com/luciakratz-arch/coral-flamboyant/main/paulo-sig.png";
+    var sigLucia = textos.sigLucia || "https://raw.githubusercontent.com/luciakratz-arch/vocal-estrelas-do-cerrado/main/lucia-sig.png";
+    var sigMaestro = textos.sigMaestro || "https://raw.githubusercontent.com/luciakratz-arch/vocal-estrelas-do-cerrado/main/paulo-sig.png";
     var hoje = new Date().toLocaleDateString("pt-BR", {
       day: "numeric",
       month: "long",
@@ -9191,13 +9136,13 @@ function Declaracao(_ref43) {
   }
   function gerarPDFCorista() {
     if (!coristaAtual) return;
-    var nomeApp = config.nomeApp || "Flamboyant Coral";
+    var nomeApp = config.nomeApp || "Estrelas do Cerrado";
     var logoUrl = config.logoUrl || LOGO_URL;
     var maestro = textos.maestro || "Maestro";
     var produtora = textos.produtora || "Lucia Kratz";
     var cidade = textos.cidade || "Goiânia – GO";
-    var sigLucia = textos.sigLucia || "https://raw.githubusercontent.com/luciakratz-arch/coral-flamboyant/main/lucia-sig.png";
-    var sigMaestro = textos.sigMaestro || "https://raw.githubusercontent.com/luciakratz-arch/coral-flamboyant/main/paulo-sig.png";
+    var sigLucia = textos.sigLucia || "https://raw.githubusercontent.com/luciakratz-arch/vocal-estrelas-do-cerrado/main/lucia-sig.png";
+    var sigMaestro = textos.sigMaestro || "https://raw.githubusercontent.com/luciakratz-arch/vocal-estrelas-do-cerrado/main/paulo-sig.png";
     var hoje = new Date().toLocaleDateString("pt-BR", {
       day: "numeric",
       month: "long",
@@ -9463,68 +9408,7 @@ function Declaracao(_ref43) {
     onChange: function onChange(e) {
       return setDataFim(e.target.value);
     }
-  }))), coristaId && /*#__PURE__*/React.createElement(React.Fragment, null, freqCorista.length > 0 && /*#__PURE__*/React.createElement("div", {
-    style: {
-      marginBottom: 12
-    }
-  }, freqCorista.map(function (f, i) {
-    return /*#__PURE__*/React.createElement("div", {
-      key: f.id,
-      style: {
-        display: "flex",
-        alignItems: "center",
-        gap: 10,
-        padding: "8px 0",
-        borderBottom: "1px solid #F5F0F0"
-      }
-    }, /*#__PURE__*/React.createElement("span", {
-      style: {
-        fontSize: 12,
-        color: "#AAA",
-        minWidth: 20
-      }
-    }, i + 1), /*#__PURE__*/React.createElement("span", {
-      style: {
-        fontSize: 12,
-        color: "#888",
-        minWidth: 90
-      }
-    }, f.eventoData ? new Date(f.eventoData + "T12:00:00").toLocaleDateString("pt-BR") : ""), /*#__PURE__*/React.createElement("span", {
-      style: {
-        fontSize: 13,
-        fontWeight: 600,
-        color: "#1A1D23",
-        flex: 1
-      }
-    }, f.eventoTitulo));
-  })), freqCorista.length === 0 && /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 12,
-      color: "#888",
-      padding: "8px 0 12px",
-      fontStyle: "italic"
-    }
-  }, "Nenhuma participa\xE7\xE3o no per\xEDodo \u2014 a declara\xE7\xE3o ser\xE1 gerada com dados de v\xEDnculo."), /*#__PURE__*/React.createElement("button", {
-    onClick: gerarPDFCorista,
-    style: {
-      display: "flex",
-      alignItems: "center",
-      gap: 8,
-      padding: "11px 20px",
-      background: cor,
-      color: "#fff",
-      border: "none",
-      borderRadius: 10,
-      fontSize: 13,
-      fontWeight: 700,
-      cursor: "pointer",
-      fontFamily: "inherit"
-    }
-  }, /*#__PURE__*/React.createElement(Icon, {
-    name: "printer",
-    size: 14,
-    color: "#fff"
-  }), " Gerar PDF \u2014 Declara\xE7\xE3o Individual"))));
+  }))), coristaId && /*#__PURE__*/React.createElement(React.Fragment, null, freqCorista.length > 0 && /*#__PURE__*/React.createElement("div", {style:{marginBottom:12}}, freqCorista.map(function(f,i){ return /*#__PURE__*/React.createElement("div",{key:f.id,style:{display:"flex",gap:10,padding:"8px 0",borderBottom:"1px solid #F5F0F0",alignItems:"center"}}, /*#__PURE__*/React.createElement("span",{style:{fontSize:12,color:"#AAA",minWidth:20}},i+1), /*#__PURE__*/React.createElement("span",{style:{fontSize:12,color:"#888",minWidth:90}},f.eventoData?new Date(f.eventoData+"T12:00:00").toLocaleDateString("pt-BR"):""), /*#__PURE__*/React.createElement("span",{style:{fontSize:13,fontWeight:600,color:"#1A1D23"}},f.eventoTitulo));})), freqCorista.length === 0 && /*#__PURE__*/React.createElement("div",{style:{fontSize:12,color:"#888",padding:"8px 0 12px",fontStyle:"italic"}},"Nenhuma participação no período — declaração gerada com dados de vínculo."), /*#__PURE__*/React.createElement("button",{onClick:gerarPDFCorista,style:{display:"flex",alignItems:"center",gap:8,padding:"11px 20px",background:cor,color:"#fff",border:"none",borderRadius:10,fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}, /*#__PURE__*/React.createElement(Icon,{name:"printer",size:14,color:"#fff"}), " Gerar PDF — Declaração Individual"))));
 }
 
 // ── PLACEHOLDER ───────────────────────────────────────────────────────────────
@@ -9562,34 +9446,30 @@ function EmBreve(_ref44) {
 function PainelCorista(_ref45) {
   var user = _ref45.user,
     config = _ref45.config;
-  var _useCollection19 = useCollection("avisos"),
-    avisos = _useCollection19.data;
-  var _useCollection20 = useCollection("events", "date"),
-    events = _useCollection20.data;
-  var _useCollection21 = useCollection("songs"),
-    songs = _useCollection21.data;
-  var _useCollection22 = useCollection("noticias"),
-    noticias = _useCollection22.data;
-  var _useState171 = useState(new Date().getMonth()),
+  var _useCollection20 = useCollection("estrelas_avisos"),
+    avisos = _useCollection20.data;
+  var _useCollection21 = useCollection("estrelas_events", "date"),
+    events = _useCollection21.data;
+  var _useCollection22 = useCollection("estrelas_songs"),
+    songs = _useCollection22.data;
+  var _useCollection23 = useCollection("estrelas_noticias"),
+    noticias = _useCollection23.data;
+  var _useState169 = useState(new Date().getMonth()),
+    _useState170 = _slicedToArray(_useState169, 2),
+    mes = _useState170[0],
+    setMes = _useState170[1];
+  var _useState171 = useState(new Date().getFullYear()),
     _useState172 = _slicedToArray(_useState171, 2),
-    mes = _useState172[0],
-    setMes = _useState172[1];
-  var _useState173 = useState(new Date().getFullYear()),
+    ano = _useState172[0],
+    setAno = _useState172[1];
+  var _useState173 = useState({}),
     _useState174 = _slicedToArray(_useState173, 2),
-    ano = _useState174[0],
-    setAno = _useState174[1];
-  var _useState175 = useState({}),
+    confirmacoes = _useState174[0],
+    setConfirmacoes = _useState174[1];
+  var _useState175 = useState(null),
     _useState176 = _slicedToArray(_useState175, 2),
-    confirmacoes = _useState176[0],
-    setConfirmacoes = _useState176[1];
-  var _useState177 = useState(null),
-    _useState178 = _slicedToArray(_useState177, 2),
-    naipeOpen = _useState178[0],
-    setNaipeOpen = _useState178[1];
-  var _useState179 = useState(false),
-    _useState180 = _slicedToArray(_useState179, 2),
-    modalNoticiaCorista = _useState180[0],
-    setModalNoticiaCorista = _useState180[1];
+    naipeOpen = _useState176[0],
+    setNaipeOpen = _useState176[1];
   var cor = config.corPrimaria || COR;
   var naipe = user.voice || "";
   var naipeKey = {
@@ -9604,7 +9484,7 @@ function PainelCorista(_ref45) {
   // Carregar confirmações do corista
   useEffect(function () {
     if (!user.name) return;
-    db.collection("confirmacoes").where("membroNome", "==", user.name).onSnapshot(function (snap) {
+    db.collection("estrelas_confirmacoes").where("membroNome", "==", user.name).onSnapshot(function (snap) {
       var m = {};
       snap.docs.forEach(function (d) {
         m[d.data().eventoId] = d.data().status;
@@ -9616,101 +9496,42 @@ function PainelCorista(_ref45) {
     return _confirmar.apply(this, arguments);
   }
   function _confirmar() {
-    _confirmar = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee20(eventoId, status) {
+    _confirmar = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee21(eventoId, status) {
       var snap;
-      return _regenerator().w(function (_context20) {
-        while (1) switch (_context20.n) {
+      return _regenerator().w(function (_context21) {
+        while (1) switch (_context21.n) {
           case 0:
-            _context20.n = 1;
-            return db.collection("confirmacoes").where("membroNome", "==", user.name).where("eventoId", "==", eventoId).get();
+            _context21.n = 1;
+            return db.collection("estrelas_confirmacoes").where("membroNome", "==", user.name).where("eventoId", "==", eventoId).get();
           case 1:
-            snap = _context20.v;
+            snap = _context21.v;
             if (snap.empty) {
-              _context20.n = 3;
+              _context21.n = 3;
               break;
             }
-            _context20.n = 2;
+            _context21.n = 2;
             return snap.docs[0].ref.update({
               status: status,
               updatedAt: firebase.firestore.FieldValue.serverTimestamp()
             });
           case 2:
-            _context20.n = 4;
+            _context21.n = 4;
             break;
           case 3:
-            _context20.n = 4;
-            return db.collection("confirmacoes").add({
+            _context21.n = 4;
+            return db.collection("estrelas_confirmacoes").add({
               membroNome: user.name,
               eventoId: eventoId,
               status: status,
               createdAt: firebase.firestore.FieldValue.serverTimestamp()
             });
           case 4:
-            return _context20.a(2);
+            return _context21.a(2);
         }
-      }, _callee20);
+      }, _callee21);
     }));
     return _confirmar.apply(this, arguments);
   }
-
-  // Estado: quais eventos já tiveram presença registrada
-  var _useState_presenca = useState({}),
-    _useState_presenca2 = _slicedToArray(_useState_presenca, 2),
-    presencaRegistrada = _useState_presenca2[0],
-    setPresencaRegistrada = _useState_presenca2[1];
-
-  // Carrega frequências já registradas do corista
-  useEffect(function () {
-    if (!user.name) return;
-    db.collection("frequencias").where("membroNome", "==", user.name).onSnapshot(function (snap) {
-      var m = {};
-      snap.docs.forEach(function (d) {
-        m[d.data().eventoId] = true;
-      });
-      setPresencaRegistrada(m);
-    });
-  }, [user.name]);
-
-  function registrarPresenca(_x_ev) {
-    return _registrarPresenca.apply(this, arguments);
-  }
-  function _registrarPresenca() {
-    _registrarPresenca = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee_presenca(evento) {
-      var snap;
-      return _regenerator().w(function (_context_presenca) {
-        while (1) switch (_context_presenca.n) {
-          case 0:
-            _context_presenca.n = 1;
-            return db.collection("frequencias")
-              .where("membroNome", "==", user.name)
-              .where("eventoId", "==", evento.id)
-              .get();
-          case 1:
-            snap = _context_presenca.v;
-            if (!snap.empty) {
-              _context_presenca.n = 3;
-              break;
-            }
-            _context_presenca.n = 2;
-            return db.collection("frequencias").add({
-              membroNome: user.name,
-              eventoId: evento.id,
-              eventoTitulo: evento.title || evento.tipo || "",
-              eventoData: evento.date || "",
-              dataHora: firebase.firestore.FieldValue.serverTimestamp(),
-              via: "calendario"
-            });
-          case 2:
-            _context_presenca.n = 3;
-            break;
-          case 3:
-            return _context_presenca.a(2);
-        }
-      }, _callee_presenca);
-    }));
-    return _registrarPresenca.apply(this, arguments);
-  }
-
   function navMes(dir) {
     var nm = mes + dir,
       na = ano;
@@ -9794,7 +9615,7 @@ function PainelCorista(_ref45) {
       textTransform: "uppercase",
       letterSpacing: 1
     }
-  }, "Avisos")), avisos.filter(function(a) { return !a.oculto; }).slice(0, 4).map(function (a) {
+  }, "Avisos")), avisos.slice(0, 4).map(function (a) {
     var _a$createdAt3;
     var isAuto = a.tipo && a.tipo !== "manual";
     var bc = isAuto ? "#F59E0B" : prioColor[a.prioridade] || cor;
@@ -9838,26 +9659,12 @@ function PainelCorista(_ref45) {
       day: "numeric",
       month: "long"
     })));
-  })), modalNoticiaCorista && /*#__PURE__*/React.createElement(ModalNoticia, {
-    noticia: null,
-    onClose: function onClose() {
-      return setModalNoticiaCorista(false);
-    },
-    config: config,
-    autorInicial: user.name
-  }), /*#__PURE__*/React.createElement("div", {
+  })), noticias.length > 0 && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
     style: {
       display: "flex",
       alignItems: "center",
       gap: 8,
-      margin: "20px 0 12px",
-      justifyContent: "space-between"
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "flex",
-      alignItems: "center",
-      gap: 8
+      margin: "20px 0 12px"
     }
   }, /*#__PURE__*/React.createElement(Icon, {
     name: "newspaper",
@@ -9871,29 +9678,7 @@ function PainelCorista(_ref45) {
       textTransform: "uppercase",
       letterSpacing: 1
     }
-  }, "Galeria do Coral")), /*#__PURE__*/React.createElement("button", {
-    onClick: function onClick() {
-      return setModalNoticiaCorista(true);
-    },
-    style: {
-      display: "flex",
-      alignItems: "center",
-      gap: 6,
-      padding: "6px 12px",
-      background: cor,
-      color: "#fff",
-      border: "none",
-      borderRadius: 8,
-      fontSize: 12,
-      fontWeight: 700,
-      cursor: "pointer",
-      fontFamily: "inherit"
-    }
-  }, /*#__PURE__*/React.createElement(Icon, {
-    name: "plus",
-    size: 12,
-    color: "#fff"
-  }), " Publicar")), noticias.length > 0 && /*#__PURE__*/React.createElement(React.Fragment, null, noticias.slice(0, 3).map(function (n) {
+  }, "Galeria do Coral")), noticias.slice(0, 3).map(function (n) {
     var _n$createdAt;
     return /*#__PURE__*/React.createElement("div", {
       key: n.id,
@@ -9933,29 +9718,17 @@ function PainelCorista(_ref45) {
         color: "#555",
         lineHeight: 1.5
       }
-    }, n.texto), /*#__PURE__*/React.createElement("div", {
-      style: {
-        display: "flex",
-        gap: 12,
-        marginTop: 6,
-        alignItems: "center"
-      }
-    }, n.autorNome && /*#__PURE__*/React.createElement("div", {
+    }, n.texto), ((_n$createdAt = n.createdAt) === null || _n$createdAt === void 0 ? void 0 : _n$createdAt.seconds) && /*#__PURE__*/React.createElement("div", {
       style: {
         fontSize: 11,
-        color: cor,
-        fontWeight: 600
-      }
-    }, "\u270D\uFE0F ", n.autorNome), ((_n$createdAt = n.createdAt) === null || _n$createdAt === void 0 ? void 0 : _n$createdAt.seconds) && /*#__PURE__*/React.createElement("div", {
-      style: {
-        fontSize: 11,
-        color: "#AAA"
+        color: "#AAA",
+        marginTop: 6
       }
     }, new Date(n.createdAt.seconds * 1000).toLocaleDateString("pt-BR", {
       day: "numeric",
       month: "long",
       year: "numeric"
-    })))));
+    }))));
   })), /*#__PURE__*/React.createElement("div", {
     style: {
       display: "flex",
@@ -9986,7 +9759,7 @@ function PainelCorista(_ref45) {
       alignItems: "center",
       justifyContent: "space-between",
       padding: "14px 20px",
-      borderBottom: "1px solid #F3EEF9"
+      borderBottom: "1px solid #F5EAEA"
     }
   }, /*#__PURE__*/React.createElement("button", {
     onClick: function onClick() {
@@ -10064,15 +9837,13 @@ function PainelCorista(_ref45) {
       Reunião: "#E65100",
       Gravação: "#7B1FA2"
     }[e.tipo] || "#888";
-    // Áudio do naipe — busca em todas as músicas do setlist
+    // Áudio do naipe
     var audioNaipe = e[naipeKey] || null;
-    var urlsNaipe = (e.setlist || []).map(function (item) {
-      return songs.find(function (s) {
-        return s.id === item.id;
-      });
-    }).filter(Boolean).map(function (s) {
-      return s[naipeKey];
-    }).filter(Boolean);
+    var songNaipe = songs.find(function (s) {
+      var _e$setlist3;
+      return s.id === ((_e$setlist3 = e.setlist) === null || _e$setlist3 === void 0 || (_e$setlist3 = _e$setlist3[0]) === null || _e$setlist3 === void 0 ? void 0 : _e$setlist3.id);
+    });
+    var urlNaipe = (songNaipe === null || songNaipe === void 0 ? void 0 : songNaipe[naipeKey]) || null;
     return /*#__PURE__*/React.createElement("div", {
       key: e.id,
       style: {
@@ -10182,7 +9953,7 @@ function PainelCorista(_ref45) {
         fontStyle: "italic",
         marginBottom: 8
       }
-    }, e.notes), urlsNaipe.length > 0 && /*#__PURE__*/React.createElement("div", {
+    }, e.notes), urlNaipe && /*#__PURE__*/React.createElement("div", {
       style: {
         marginBottom: 8
       }
@@ -10208,159 +9979,88 @@ function PainelCorista(_ref45) {
       name: "music",
       size: 12,
       color: cor
-    }), "Estudar meu naipe (", naipe, ") \u2014 ", urlsNaipe.length, " m\xFAsica", urlsNaipe.length !== 1 ? "s" : "", /*#__PURE__*/React.createElement(Icon, {
+    }), "Estudar meu naipe (", naipe, ")", /*#__PURE__*/React.createElement(Icon, {
       name: naipeOpen === e.id ? "chevron-up" : "chevron-down",
       size: 12,
       color: cor
     })), naipeOpen === e.id && /*#__PURE__*/React.createElement("div", {
       style: {
-        marginTop: 8,
-        display: "flex",
-        flexDirection: "column",
-        gap: 8
+        marginTop: 8
       }
-    }, (e.setlist || []).map(function (item, idx) {
-      var song = songs.find(function (s) {
-        return s.id === item.id;
-      });
-      var urlN = song === null || song === void 0 ? void 0 : song[naipeKey];
-      if (!urlN) return null;
-      var embedUrl = function () {
-        var yt = urlN.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
-        if (yt) return "https://www.youtube.com/embed/".concat(yt[1], "?autoplay=0");
-        var dr = urlN.match(/\/d\/([a-zA-Z0-9_-]+)/);
+    }, /*#__PURE__*/React.createElement("iframe", {
+      src: function () {
+        var url = urlNaipe;
+        var yt = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+        if (yt) return "https://www.youtube.com/embed/".concat(yt[1], "?autoplay=1");
+        var dr = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
         if (dr) return "https://drive.google.com/file/d/".concat(dr[1], "/preview");
-        return urlN;
-      }();
-      return /*#__PURE__*/React.createElement("div", {
-        key: item.id || idx
-      }, /*#__PURE__*/React.createElement("div", {
-        style: {
-          fontSize: 12,
-          fontWeight: 600,
-          color: "#888",
-          marginBottom: 4
-        }
-      }, idx + 1, ". ", item.title), /*#__PURE__*/React.createElement("iframe", {
-        src: embedUrl,
-        style: {
-          width: "100%",
-          height: 80,
-          border: "none",
-          borderRadius: 8
-        },
-        allow: "autoplay",
-        title: item.title
-      }));
-    }))), /*#__PURE__*/React.createElement(React.Fragment, null,
-      (function() {
-      var hoje = todayStr();
-      var eHoje = e.date === hoje;
-      var jaRegistrou = !!presencaRegistrada[e.id];
-      var dentroJanela = false;
-      if (eHoje) {
-        var agora = new Date();
-        var horaAtual = agora.getHours() * 60 + agora.getMinutes();
-        var horaEvStr = e.hora || e.chegada || "17:00";
-        var horaEvParts = horaEvStr.replace("Chegada: ", "").split(":");
-        var horaEvMin = parseInt(horaEvParts[0] || 17) * 60 + parseInt(horaEvParts[1] || 0);
-        dentroJanela = horaAtual >= (horaEvMin - 60) && horaAtual <= (horaEvMin + 180);
+        return url;
+      }(),
+      style: {
+        width: "100%",
+        height: 120,
+        border: "none",
+        borderRadius: 8
+      },
+      allow: "autoplay",
+      title: "Naipe"
+    }))), /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: "flex",
+        alignItems: "center",
+        gap: 8,
+        flexWrap: "wrap"
       }
-      return /*#__PURE__*/React.createElement(React.Fragment, null,
-        eHoje && dentroJanela && /*#__PURE__*/React.createElement("div", {
-          style: { marginTop: 10 }
-        }, jaRegistrou
-          ? /*#__PURE__*/React.createElement("div", {
-              style: {
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 6,
-                padding: "7px 14px",
-                borderRadius: 20,
-                background: "#E8F5E9",
-                border: "1px solid #2E7D32",
-                color: "#2E7D32",
-                fontSize: 13,
-                fontWeight: 700
-              }
-            }, /*#__PURE__*/React.createElement(Icon, { name: "check-circle", size: 15, color: "#2E7D32" }), " Presen\xE7a registrada!")
-          : /*#__PURE__*/React.createElement("button", {
-              onClick: function onClick() { return registrarPresenca(e); },
-              style: {
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 6,
-                padding: "7px 14px",
-                borderRadius: 20,
-                background: cor,
-                border: "none",
-                color: "#fff",
-                fontSize: 13,
-                fontWeight: 700,
-                cursor: "pointer",
-                fontFamily: "inherit",
-                boxShadow: "0 2px 6px rgba(0,0,0,0.15)"
-              }
-            }, /*#__PURE__*/React.createElement(Icon, { name: "user-check", size: 15, color: "#fff" }), " Registrar minha presen\xE7a")),
-        /*#__PURE__*/React.createElement("div", {
-          style: {
-            display: "flex",
-            alignItems: "center",
-            gap: 8,
-            flexWrap: "wrap",
-            marginTop: eHoje && dentroJanela ? 8 : 0
-          }
-        }, /*#__PURE__*/React.createElement("span", {
-          style: {
-            fontSize: 12,
-            color: "#AAA"
-          }
-        }, "Sua presen\xE7a:"), /*#__PURE__*/React.createElement("button", {
-          onClick: function onClick() {
-            return confirmar(e.id, "vou");
-          },
-          style: {
-            display: "flex",
-            alignItems: "center",
-            gap: 5,
-            padding: "5px 12px",
-            borderRadius: 20,
-            border: "1px solid ".concat(conf === "vou" ? "#2E7D32" : "#EEE"),
-            background: conf === "vou" ? "#E8F5E9" : "#fff",
-            color: conf === "vou" ? "#2E7D32" : "#888",
-            fontSize: 12,
-            fontWeight: 600,
-            cursor: "pointer",
-            fontFamily: "inherit"
-          }
-        }, /*#__PURE__*/React.createElement(Icon, {
-          name: "check-circle",
-          size: 13,
-          color: conf === "vou" ? "#2E7D32" : "#CCC"
-        }), " Vou participar"), /*#__PURE__*/React.createElement("button", {
-          onClick: function onClick() {
-            return confirmar(e.id, "nao");
-          },
-          style: {
-            display: "flex",
-            alignItems: "center",
-            gap: 5,
-            padding: "5px 12px",
-            borderRadius: 20,
-            border: "1px solid ".concat(conf === "nao" ? cor : "#EEE"),
-            background: conf === "nao" ? "#FFF5F5" : "#fff",
-            color: conf === "nao" ? cor : "#888",
-            fontSize: 12,
-            fontWeight: 600,
-            cursor: "pointer",
-            fontFamily: "inherit"
-          }
-        }, /*#__PURE__*/React.createElement(Icon, {
-          name: "x-circle",
-          size: 13,
-          color: conf === "nao" ? cor : "#CCC"
-        }), " N\xE3o vou")));
-    })())));
+    }, /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 12,
+        color: "#AAA"
+      }
+    }, "Sua presen\xE7a:"), /*#__PURE__*/React.createElement("button", {
+      onClick: function onClick() {
+        return confirmar(e.id, "vou");
+      },
+      style: {
+        display: "flex",
+        alignItems: "center",
+        gap: 5,
+        padding: "5px 12px",
+        borderRadius: 20,
+        border: "1px solid ".concat(conf === "vou" ? "#2E7D32" : "#EEE"),
+        background: conf === "vou" ? "#E8F5E9" : "#fff",
+        color: conf === "vou" ? "#2E7D32" : "#888",
+        fontSize: 12,
+        fontWeight: 600,
+        cursor: "pointer",
+        fontFamily: "inherit"
+      }
+    }, /*#__PURE__*/React.createElement(Icon, {
+      name: "check-circle",
+      size: 13,
+      color: conf === "vou" ? "#2E7D32" : "#CCC"
+    }), " Vou participar"), /*#__PURE__*/React.createElement("button", {
+      onClick: function onClick() {
+        return confirmar(e.id, "nao");
+      },
+      style: {
+        display: "flex",
+        alignItems: "center",
+        gap: 5,
+        padding: "5px 12px",
+        borderRadius: 20,
+        border: "1px solid ".concat(conf === "nao" ? cor : "#EEE"),
+        background: conf === "nao" ? "#FFF5F5" : "#fff",
+        color: conf === "nao" ? cor : "#888",
+        fontSize: 12,
+        fontWeight: 600,
+        cursor: "pointer",
+        fontFamily: "inherit"
+      }
+    }, /*#__PURE__*/React.createElement(Icon, {
+      name: "x-circle",
+      size: 13,
+      color: conf === "nao" ? cor : "#CCC"
+    }), " N\xE3o vou"))));
   }))));
 }
 
@@ -10368,23 +10068,23 @@ function PainelCorista(_ref45) {
 function MinhaDeclaracao(_ref46) {
   var user = _ref46.user,
     config = _ref46.config;
-  var _useCollection23 = useCollection("frequencias", "dataHora"),
-    frequencias = _useCollection23.data;
-  var _useState181 = useState(new Date().getFullYear() + "-01-01"),
+  var _useCollection24 = useCollection("estrelas_frequencias", "dataHora"),
+    frequencias = _useCollection24.data;
+  var _useState177 = useState(new Date().getFullYear() + "-01-01"),
+    _useState178 = _slicedToArray(_useState177, 2),
+    dataInicio = _useState178[0],
+    setDataInicio = _useState178[1];
+  var _useState179 = useState(todayStr()),
+    _useState180 = _slicedToArray(_useState179, 2),
+    dataFim = _useState180[0],
+    setDataFim = _useState180[1];
+  var _useState181 = useState({}),
     _useState182 = _slicedToArray(_useState181, 2),
-    dataInicio = _useState182[0],
-    setDataInicio = _useState182[1];
-  var _useState183 = useState(todayStr()),
-    _useState184 = _slicedToArray(_useState183, 2),
-    dataFim = _useState184[0],
-    setDataFim = _useState184[1];
-  var _useState185 = useState({}),
-    _useState186 = _slicedToArray(_useState185, 2),
-    textos = _useState186[0],
-    setTextos = _useState186[1];
+    textos = _useState182[0],
+    setTextos = _useState182[1];
   var cor = config.corPrimaria || COR;
   useEffect(function () {
-    db.collection("config").doc("relatorio").get().then(function (doc) {
+    db.collection("estrelas_config").doc("relatorio").get().then(function (doc) {
       if (doc.exists) setTextos(doc.data());
     });
   }, []);
@@ -10421,30 +10121,24 @@ function MinhaDeclaracao(_ref46) {
     letterSpacing: 0.8
   };
   function gerarPDF() {
-    var nomeApp = config.nomeApp || "Onix Brasil Vocal Internacional";
+    
+    var nomeApp = config.nomeApp || "Estrelas do Cerrado";
     var logoUrl = config.logoUrl || LOGO_URL;
     var cidade = textos.cidade || "Goiânia – GO";
     var maestro = textos.maestro || "Maestro";
     var produtora = textos.produtora || "Lucia Kratz";
-    var sigLucia = textos.sigLucia || "https://raw.githubusercontent.com/luciakratz-arch/onix-brasil/main/lucia-sig.png";
-    var sigMaestro = textos.sigMaestro || "https://raw.githubusercontent.com/luciakratz-arch/onix-brasil/main/paulo-sig.png";
+    var sigLucia = textos.sigLucia || "https://raw.githubusercontent.com/luciakratz-arch/vocal-estrelas-do-cerrado/main/lucia-sig.png";
+    var sigMaestro = textos.sigMaestro || "https://raw.githubusercontent.com/luciakratz-arch/vocal-estrelas-do-cerrado/main/paulo-sig.png";
     var hoje = new Date().toLocaleDateString("pt-BR", {
       day: "numeric",
       month: "long",
       year: "numeric"
     });
     var periodoFmt = "".concat(new Date(dataInicio + "T12:00:00").toLocaleDateString("pt-BR"), " a ").concat(new Date(dataFim + "T12:00:00").toLocaleDateString("pt-BR"));
-    var admissao = user.startDate ? new Date(user.startDate + "T12:00:00").toLocaleDateString("pt-BR", {
-      month: "long",
-      year: "numeric"
-    }) : "—";
-    var temFreq = freqCorista.length > 0;
-    var linhas = temFreq ? freqCorista.map(function (f, i) {
+    var linhas = freqCorista.map(function (f, i) {
       return "\n            <tr><td>".concat(i + 1, "</td>\n            <td>").concat(f.eventoData ? new Date(f.eventoData + "T12:00:00").toLocaleDateString("pt-BR") : "", "</td>\n            <td>").concat(f.eventoTitulo || "—", "</td></tr>");
-    }).join("") : "";
-    var tabelaHTML = temFreq ? "\n<table><thead><tr><th>#</th><th>Data</th><th>Evento</th></tr></thead>\n<tbody>".concat(linhas, "</tbody></table>") : "";
-    var textoDecl = temFreq ? "Declaramos para os devidos fins que <strong>".concat(user.name, "</strong>").concat(user.voice ? ", " + user.voice : "", ", \n  \xE9 integrante do ").concat(nomeApp, ", participando ativamente das atividades do grupo desde ").concat(admissao, ",\n  com registro de presen\xE7a em <strong>").concat(freqCorista.length, " evento").concat(freqCorista.length !== 1 ? "s" : "", "</strong> no per\xEDodo de ").concat(periodoFmt, ", conforme detalhado abaixo.") : "Declaramos para os devidos fins que <strong>".concat(user.name, "</strong>").concat(user.voice ? ", " + user.voice : "", ", \n  \xE9 integrante do ").concat(nomeApp, ", participando ativamente das atividades do grupo desde ").concat(admissao, ",\n  exercendo a fun\xE7\xE3o de <strong>").concat(user.funcao || "Corista", "</strong>.");
-    var html = "<!DOCTYPE html><html lang=\"pt-BR\"><head><meta charset=\"UTF-8\">\n<style>\n  body{font-family:Arial,sans-serif;font-size:12px;color:#222;margin:0;padding:0}\n  @media print{@page{margin:2cm}}\n  .header{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:3px solid ".concat(cor, ";padding-bottom:14px;margin-bottom:20px}\n  .logo{width:54px;height:54px;object-fit:contain}\n  .titulo{text-align:center;font-size:17px;font-weight:bold;color:").concat(cor, ";text-transform:uppercase;letter-spacing:2px;margin-bottom:6px}\n  .subtitulo{text-align:center;font-size:12px;color:#666;margin-bottom:20px}\n  .info-box{border:1px solid #EEE;border-radius:6px;padding:12px 16px;margin-bottom:16px;background:#FAFAFA}\n  .info-row{display:flex;gap:8px;margin-bottom:4px;font-size:12px}\n  .info-lbl{font-weight:bold;color:").concat(cor, ";min-width:100px;font-size:11px;text-transform:uppercase}\n  .decl{border-left:3px solid ").concat(cor, ";padding:10px 14px;margin:16px 0;background:#FAFAFA;font-size:13px;line-height:1.7}\n  table{width:100%;border-collapse:collapse;margin-bottom:20px}\n  th{background:").concat(cor, ";color:#fff;padding:7px 10px;text-align:left;font-size:10px;text-transform:uppercase}\n  td{padding:7px 10px;border-bottom:1px solid #EEE;font-size:12px}\n  tr:nth-child(even) td{background:#FAFAFA}\n  .assinaturas{display:flex;justify-content:space-around;margin-top:48px;text-align:center}\n  .assin img{height:52px;object-fit:contain;display:block;margin:0 auto 6px}\n  .assin-linha{border-top:1px solid #333;padding-top:5px;min-width:180px}\n  .assin-nome{font-weight:bold;font-size:12px}\n  .assin-cargo{font-size:10px;color:#888}\n  .rodape{text-align:center;font-size:10px;color:#AAA;margin-top:28px;border-top:1px solid #EEE;padding-top:8px}\n</style></head><body>\n<div class=\"header\">\n  <img src=\"").concat(logoUrl, "\" class=\"logo\"/>\n  <div style=\"text-align:right;font-size:11px;color:#666\"><strong>").concat(nomeApp, "</strong><br>").concat(cidade, "</div>\n</div>\n<div class=\"titulo\">Declara\xE7\xE3o de Participa\xE7\xE3o</div>\n<div class=\"subtitulo\">").concat(nomeApp, "</div>\n<div class=\"info-box\">\n  <div class=\"info-row\"><span class=\"info-lbl\">Nome:</span><span><strong>").concat(user.name, "</strong></span></div>\n  <div class=\"info-row\"><span class=\"info-lbl\">Naipe:</span><span>").concat(user.voice || "—", "</span></div>\n  <div class=\"info-row\"><span class=\"info-lbl\">Membro desde:</span><span>").concat(admissao, "</span></div>\n  <div class=\"info-row\"><span class=\"info-lbl\">Per\xEDodo:</span><span>").concat(periodoFmt, "</span></div>\n  ").concat(temFreq ? "<div class=\"info-row\"><span class=\"info-lbl\">Participa\xE7\xF5es:</span><span>".concat(freqCorista.length, " evento").concat(freqCorista.length !== 1 ? "s" : "", "</span></div>") : "", "\n</div>\n<div class=\"decl\">").concat(textoDecl, "</div>\n").concat(tabelaHTML, "\n<div class=\"assinaturas\">\n  <div class=\"assin\">").concat(sigMaestro ? "<img src=\"".concat(sigMaestro, "\"/>") : "<div style='height:52px'></div>", "\n    <div class=\"assin-linha\"><div class=\"assin-nome\">").concat(maestro, "</div><div class=\"assin-cargo\">Maestro \u2013 ").concat(nomeApp, "</div></div>\n  </div>\n  <div class=\"assin\">").concat(sigLucia ? "<img src=\"".concat(sigLucia, "\"/>") : "<div style='height:52px'></div>", "\n    <div class=\"assin-linha\"><div class=\"assin-nome\">").concat(produtora, "</div><div class=\"assin-cargo\">Produtora \u2013 ").concat(nomeApp, "</div></div>\n  </div>\n</div>\n<div class=\"rodape\">Documento gerado em ").concat(hoje, " pelo sistema de gest\xE3o do ").concat(nomeApp, ".</div>\n</body></html>");
+    }).join("");
+    var html = "<!DOCTYPE html><html lang=\"pt-BR\"><head><meta charset=\"UTF-8\">\n<style>\n  body{font-family:Arial,sans-serif;font-size:12px;color:#222;margin:0;padding:0}\n  @media print{@page{margin:2cm}}\n  .header{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:3px solid ".concat(cor, ";padding-bottom:14px;margin-bottom:20px}\n  .logo{width:54px;height:54px;object-fit:contain}\n  .titulo{text-align:center;font-size:17px;font-weight:bold;color:").concat(cor, ";text-transform:uppercase;letter-spacing:2px;margin-bottom:6px}\n  .subtitulo{text-align:center;font-size:12px;color:#666;margin-bottom:20px}\n  .info-box{border:1px solid #EEE;border-radius:6px;padding:12px 16px;margin-bottom:16px;background:#FAFAFA}\n  .info-row{display:flex;gap:8px;margin-bottom:4px;font-size:12px}\n  .info-lbl{font-weight:bold;color:").concat(cor, ";min-width:100px;font-size:11px;text-transform:uppercase}\n  .decl{border-left:3px solid ").concat(cor, ";padding:10px 14px;margin:16px 0;background:#FAFAFA;font-size:13px;line-height:1.7}\n  table{width:100%;border-collapse:collapse;margin-bottom:20px}\n  th{background:").concat(cor, ";color:#fff;padding:7px 10px;text-align:left;font-size:10px;text-transform:uppercase}\n  td{padding:7px 10px;border-bottom:1px solid #EEE;font-size:12px}\n  tr:nth-child(even) td{background:#FAFAFA}\n  .assinaturas{display:flex;justify-content:space-around;margin-top:48px;text-align:center}\n  .assin img{height:52px;object-fit:contain;display:block;margin:0 auto 6px}\n  .assin-linha{border-top:1px solid #333;padding-top:5px;min-width:180px}\n  .assin-nome{font-weight:bold;font-size:12px}\n  .assin-cargo{font-size:10px;color:#888}\n  .rodape{text-align:center;font-size:10px;color:#AAA;margin-top:28px;border-top:1px solid #EEE;padding-top:8px}\n</style></head><body>\n<div class=\"header\">\n  <img src=\"").concat(logoUrl, "\" class=\"logo\"/>\n  <div style=\"text-align:right;font-size:11px;color:#666\"><strong>").concat(nomeApp, "</strong><br>").concat(cidade, "</div>\n</div>\n<div class=\"titulo\">Declara\xE7\xE3o de Participa\xE7\xE3o</div>\n<div class=\"subtitulo\">").concat(nomeApp, "</div>\n<div class=\"info-box\">\n  <div class=\"info-row\"><span class=\"info-lbl\">Nome:</span><span><strong>").concat(user.name, "</strong></span></div>\n  <div class=\"info-row\"><span class=\"info-lbl\">Naipe:</span><span>").concat(user.voice || "—", "</span></div>\n  <div class=\"info-row\"><span class=\"info-lbl\">Per\xEDodo:</span><span>").concat(periodoFmt, "</span></div>\n  <div class=\"info-row\"><span class=\"info-lbl\">Participa\xE7\xF5es:</span><span>").concat(freqCorista.length, " evento").concat(freqCorista.length !== 1 ? "s" : "", "</span></div>\n</div>\n<div class=\"decl\">\n  Declaramos para os devidos fins que <strong>").concat(user.name, "</strong>").concat(user.voice ? ", " + user.voice : "", ", \n  \xE9 integrante do ").concat(nomeApp, ", participando ativamente das atividades do grupo no per\xEDodo de ").concat(periodoFmt, ",\n  com registro de presen\xE7a em <strong>").concat(freqCorista.length, " evento").concat(freqCorista.length !== 1 ? "s" : "", "</strong> conforme detalhado abaixo.\n</div>\n<table><thead><tr><th>#</th><th>Data</th><th>Evento</th></tr></thead>\n<tbody>").concat(linhas, "</tbody></table>\n<div class=\"assinaturas\">\n  <div class=\"assin\">").concat(sigMaestro ? "<img src=\"".concat(sigMaestro, "\"/>") : "<div style='height:52px'></div>", "\n    <div class=\"assin-linha\"><div class=\"assin-nome\">").concat(maestro, "</div><div class=\"assin-cargo\">Maestro \u2013 ").concat(nomeApp, "</div></div>\n  </div>\n  <div class=\"assin\">").concat(sigLucia ? "<img src=\"".concat(sigLucia, "\"/>") : "<div style='height:52px'></div>", "\n    <div class=\"assin-linha\"><div class=\"assin-nome\">").concat(produtora, "</div><div class=\"assin-cargo\">Produtora \u2013 ").concat(nomeApp, "</div></div>\n  </div>\n</div>\n<div class=\"rodape\">Documento gerado em ").concat(hoje, " pelo sistema de gest\xE3o do ").concat(nomeApp, ".</div>\n</body></html>");
     var win = window.open("", "_blank");
     win.document.write(html);
     win.document.close();
@@ -10497,69 +10191,10 @@ function MinhaDeclaracao(_ref46) {
     onChange: function onChange(e) {
       return setDataFim(e.target.value);
     }
-  }))), freqCorista.length > 0 && /*#__PURE__*/React.createElement("div", {
-    style: {
-      marginBottom: 14
-    }
-  }, freqCorista.map(function (f, i) {
-    return /*#__PURE__*/React.createElement("div", {
-      key: f.id,
-      style: {
-        display: "flex",
-        alignItems: "center",
-        gap: 10,
-        padding: "8px 0",
-        borderBottom: "1px solid #F5F0F0"
-      }
-    }, /*#__PURE__*/React.createElement("span", {
-      style: {
-        fontSize: 12,
-        color: "#AAA",
-        minWidth: 20
-      }
-    }, i + 1), /*#__PURE__*/React.createElement("span", {
-      style: {
-        fontSize: 12,
-        color: "#888",
-        minWidth: 90
-      }
-    }, f.eventoData ? new Date(f.eventoData + "T12:00:00").toLocaleDateString("pt-BR") : ""), /*#__PURE__*/React.createElement("span", {
-      style: {
-        fontSize: 13,
-        fontWeight: 600,
-        color: "#1A1D23",
-        flex: 1
-      }
-    }, f.eventoTitulo));
-  })), freqCorista.length === 0 && /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 12,
-      color: "#888",
-      padding: "8px 0 12px",
-      fontStyle: "italic"
-    }
-  }, "Nenhuma participa\xE7\xE3o no per\xEDodo \u2014 a declara\xE7\xE3o ser\xE1 gerada com seus dados de v\xEDnculo."), /*#__PURE__*/React.createElement("button", {
-    onClick: gerarPDF,
-    style: {
-      display: "flex",
-      alignItems: "center",
-      gap: 8,
-      padding: "11px 20px",
-      background: cor,
-      color: "#fff",
-      border: "none",
-      borderRadius: 10,
-      fontSize: 13,
-      fontWeight: 700,
-      cursor: "pointer",
-      fontFamily: "inherit"
-    }
-  }, /*#__PURE__*/React.createElement(Icon, {
-    name: "printer",
-    size: 14,
-    color: "#fff"
-  }), " Gerar Declara\xE7\xE3o PDF")));
+  }))), freqCorista.length > 0 && /*#__PURE__*/React.createElement("div",{style:{marginBottom:14}},freqCorista.map(function(f,i){return /*#__PURE__*/React.createElement("div",{key:f.id,style:{display:"flex",alignItems:"center",gap:10,padding:"8px 0",borderBottom:"1px solid #F5F0F0"}},/*#__PURE__*/React.createElement("span",{style:{fontSize:12,color:"#AAA",minWidth:20}},i+1),/*#__PURE__*/React.createElement("span",{style:{fontSize:12,color:"#888",minWidth:90}},f.eventoData?new Date(f.eventoData+"T12:00:00").toLocaleDateString("pt-BR"):""),/*#__PURE__*/React.createElement("span",{style:{fontSize:13,fontWeight:600,color:"#1A1D23",flex:1}},f.eventoTitulo));})),freqCorista.length===0&&/*#__PURE__*/React.createElement("div",{style:{fontSize:12,color:"#888",padding:"8px 0 12px",fontStyle:"italic"}},"Nenhuma participação — declaração gerada com dados de vínculo."),/*#__PURE__*/React.createElement("button",{onClick:gerarPDF,style:{display:"flex",alignItems:"center",gap:8,padding:"11px 20px",background:cor,color:"#fff",border:"none",borderRadius:10,fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}},/*#__PURE__*/React.createElement(Icon,{name:"printer",size:14,color:"#fff"})," Gerar Declaração PDF")));
 }
+
+// ── NOTÍCIAS / BLOG ───────────────────────────────────────────────────────────
 function ModalNoticia(_ref47) {
   var noticia = _ref47.noticia,
     onClose = _ref47.onClose,
@@ -10571,40 +10206,40 @@ function ModalNoticia(_ref47) {
     imageUrl: "",
     categoria: "Geral"
   };
-  var _useState187 = useState(noticia ? _objectSpread(_objectSpread({}, vazio), noticia) : vazio),
+  var _useState183 = useState(noticia ? _objectSpread(_objectSpread({}, vazio), noticia) : vazio),
+    _useState184 = _slicedToArray(_useState183, 2),
+    form = _useState184[0],
+    setForm = _useState184[1];
+  var _useState185 = useState(false),
+    _useState186 = _slicedToArray(_useState185, 2),
+    salvando = _useState186[0],
+    setSalvando = _useState186[1];
+  var _useState187 = useState(""),
     _useState188 = _slicedToArray(_useState187, 2),
-    form = _useState188[0],
-    setForm = _useState188[1];
-  var _useState189 = useState(false),
-    _useState190 = _slicedToArray(_useState189, 2),
-    salvando = _useState190[0],
-    setSalvando = _useState190[1];
-  var _useState191 = useState(""),
-    _useState192 = _slicedToArray(_useState191, 2),
-    erro = _useState192[0],
-    setErro = _useState192[1];
+    erro = _useState188[0],
+    setErro = _useState188[1];
   function salvar() {
     return _salvar7.apply(this, arguments);
   }
   function _salvar7() {
-    _salvar7 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee21() {
+    _salvar7 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee22() {
       var d;
-      return _regenerator().w(function (_context21) {
-        while (1) switch (_context21.n) {
+      return _regenerator().w(function (_context22) {
+        while (1) switch (_context22.n) {
           case 0:
             if (form.titulo.trim()) {
-              _context21.n = 1;
+              _context22.n = 1;
               break;
             }
             setErro("Título é obrigatório.");
-            return _context21.a(2);
+            return _context22.a(2);
           case 1:
             if (form.texto.trim()) {
-              _context21.n = 2;
+              _context22.n = 2;
               break;
             }
             setErro("Texto é obrigatório.");
-            return _context21.a(2);
+            return _context22.a(2);
           case 2:
             setSalvando(true);
             d = {
@@ -10615,26 +10250,26 @@ function ModalNoticia(_ref47) {
               createdAt: noticia ? noticia.createdAt : firebase.firestore.FieldValue.serverTimestamp()
             };
             if (!noticia) {
-              _context21.n = 4;
+              _context22.n = 4;
               break;
             }
-            _context21.n = 3;
-            return db.collection("noticias").doc(noticia.id).update(_objectSpread(_objectSpread({}, d), {}, {
+            _context22.n = 3;
+            return db.collection("estrelas_noticias").doc(noticia.id).update(_objectSpread(_objectSpread({}, d), {}, {
               updatedAt: firebase.firestore.FieldValue.serverTimestamp()
             }));
           case 3:
-            _context21.n = 5;
+            _context22.n = 5;
             break;
           case 4:
-            _context21.n = 5;
-            return db.collection("noticias").add(d);
+            _context22.n = 5;
+            return db.collection("estrelas_noticias").add(d);
           case 5:
             setSalvando(false);
             onClose();
           case 6:
-            return _context21.a(2);
+            return _context22.a(2);
         }
-      }, _callee21);
+      }, _callee22);
     }));
     return _salvar7.apply(this, arguments);
   }
@@ -10642,24 +10277,24 @@ function ModalNoticia(_ref47) {
     return _excluir6.apply(this, arguments);
   }
   function _excluir6() {
-    _excluir6 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee22() {
-      return _regenerator().w(function (_context22) {
-        while (1) switch (_context22.n) {
+    _excluir6 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee23() {
+      return _regenerator().w(function (_context23) {
+        while (1) switch (_context23.n) {
           case 0:
             if (window.confirm("Excluir esta notícia?")) {
-              _context22.n = 1;
+              _context23.n = 1;
               break;
             }
-            return _context22.a(2);
+            return _context23.a(2);
           case 1:
-            _context22.n = 2;
-            return db.collection("noticias").doc(noticia.id).delete();
+            _context23.n = 2;
+            return db.collection("estrelas_noticias").doc(noticia.id).delete();
           case 2:
             onClose();
           case 3:
-            return _context22.a(2);
+            return _context23.a(2);
         }
-      }, _callee22);
+      }, _callee23);
     }));
     return _excluir6.apply(this, arguments);
   }
@@ -10871,35 +10506,35 @@ function ModalNoticia(_ref47) {
 function AreaRH(_ref48) {
   var config = _ref48.config,
     abaInicial = _ref48.abaInicial;
-  var _useCollection24 = useCollection("members"),
-    members = _useCollection24.data;
-  var _useCollection25 = useCollection("events", "date"),
-    events = _useCollection25.data;
-  var _useCollection26 = useCollection("frequencias", "dataHora"),
-    frequencias = _useCollection26.data;
-  var _useCollection27 = useCollection("noticias"),
-    noticias = _useCollection27.data;
-  var _useCollection28 = useCollection("relatorios_historico"),
-    relatorios = _useCollection28.data;
-  var _useState193 = useState(abaInicial || "dashboard"),
-    _useState194 = _slicedToArray(_useState193, 2),
-    aba = _useState194[0],
-    setAba = _useState194[1];
+  var _useCollection25 = useCollection("estrelas_members"),
+    members = _useCollection25.data;
+  var _useCollection26 = useCollection("estrelas_events", "date"),
+    events = _useCollection26.data;
+  var _useCollection27 = useCollection("estrelas_frequencias", "dataHora"),
+    frequencias = _useCollection27.data;
+  var _useCollection28 = useCollection("estrelas_noticias"),
+    noticias = _useCollection28.data;
+  var _useCollection29 = useCollection("estrelas_relatorios_historico"),
+    relatorios = _useCollection29.data;
+  var _useState189 = useState(abaInicial || "dashboard"),
+    _useState190 = _slicedToArray(_useState189, 2),
+    aba = _useState190[0],
+    setAba = _useState190[1];
   useEffect(function () {
     if (abaInicial) setAba(abaInicial);
   }, [abaInicial]);
-  var _useState195 = useState(null),
-    _useState196 = _slicedToArray(_useState195, 2),
-    modalNoticia = _useState196[0],
-    setModalNoticia = _useState196[1];
-  var _useState197 = useState({}),
-    _useState198 = _slicedToArray(_useState197, 2),
-    textos = _useState198[0],
-    setTextos = _useState198[1];
+  var _useState191 = useState(null),
+    _useState192 = _slicedToArray(_useState191, 2),
+    modalNoticia = _useState192[0],
+    setModalNoticia = _useState192[1];
+  var _useState193 = useState({}),
+    _useState194 = _slicedToArray(_useState193, 2),
+    textos = _useState194[0],
+    setTextos = _useState194[1];
   var cor = config.corPrimaria || COR;
   var today = todayStr();
   useEffect(function () {
-    db.collection("config").doc("relatorio").get().then(function (doc) {
+    db.collection("estrelas_config").doc("relatorio").get().then(function (doc) {
       if (doc.exists) setTextos(doc.data());
     });
   }, []);
@@ -10954,12 +10589,12 @@ function AreaRH(_ref48) {
   })).concat([1]));
 
   // Confirmações
-  var _useState199 = useState([]),
-    _useState200 = _slicedToArray(_useState199, 2),
-    confirmacoes = _useState200[0],
-    setConfirmacoes = _useState200[1];
+  var _useState195 = useState([]),
+    _useState196 = _slicedToArray(_useState195, 2),
+    confirmacoes = _useState196[0],
+    setConfirmacoes = _useState196[1];
   useEffect(function () {
-    db.collection("confirmacoes").onSnapshot(function (snap) {
+    db.collection("estrelas_confirmacoes").onSnapshot(function (snap) {
       return setConfirmacoes(snap.docs.map(function (d) {
         return _objectSpread({
           id: d.id
@@ -11000,18 +10635,18 @@ function AreaRH(_ref48) {
   }];
 
   // ── DECLARAÇÕES POR CORISTA ──
-  var _useState201 = useState(""),
+  var _useState197 = useState(""),
+    _useState198 = _slicedToArray(_useState197, 2),
+    coristaDecl = _useState198[0],
+    setCoristaDecl = _useState198[1];
+  var _useState199 = useState(new Date().getFullYear() + "-01-01"),
+    _useState200 = _slicedToArray(_useState199, 2),
+    dataInicio = _useState200[0],
+    setDataInicio = _useState200[1];
+  var _useState201 = useState(todayStr()),
     _useState202 = _slicedToArray(_useState201, 2),
-    coristaDecl = _useState202[0],
-    setCoristaDecl = _useState202[1];
-  var _useState203 = useState(new Date().getFullYear() + "-01-01"),
-    _useState204 = _slicedToArray(_useState203, 2),
-    dataInicio = _useState204[0],
-    setDataInicio = _useState204[1];
-  var _useState205 = useState(todayStr()),
-    _useState206 = _slicedToArray(_useState205, 2),
-    dataFim = _useState206[0],
-    setDataFim = _useState206[1];
+    dataFim = _useState202[0],
+    setDataFim = _useState202[1];
   var coristaAtual = members.find(function (m) {
     return m.id === coristaDecl;
   });
@@ -11022,13 +10657,13 @@ function AreaRH(_ref48) {
   });
   function gerarDeclCorista() {
     if (!coristaAtual) return;
-    var nomeApp = config.nomeApp || "Flamboyant Coral",
+    var nomeApp = config.nomeApp || "Estrelas do Cerrado",
       logoUrl = config.logoUrl || LOGO_URL;
     var maestro = textos.maestro || "Maestro",
       produtora = textos.produtora || "Lucia Kratz",
       cidade = textos.cidade || "Goiânia – GO";
-    var sigL = textos.sigLucia || "https://raw.githubusercontent.com/luciakratz-arch/coral-flamboyant/main/lucia-sig.png";
-    var sigM = textos.sigMaestro || "https://raw.githubusercontent.com/luciakratz-arch/coral-flamboyant/main/paulo-sig.png";
+    var sigL = textos.sigLucia || "https://raw.githubusercontent.com/luciakratz-arch/vocal-estrelas-do-cerrado/main/lucia-sig.png";
+    var sigM = textos.sigMaestro || "https://raw.githubusercontent.com/luciakratz-arch/vocal-estrelas-do-cerrado/main/paulo-sig.png";
     var hoje = new Date().toLocaleDateString("pt-BR", {
       day: "numeric",
       month: "long",
@@ -11046,7 +10681,7 @@ function AreaRH(_ref48) {
       return win.print();
     }, 800);
     // Salvar no histórico
-    db.collection("relatorios_historico").add({
+    db.collection("estrelas_relatorios_historico").add({
       tipo: "Declaração Individual",
       corista: coristaAtual.name,
       periodo: "".concat(dataInicio, " a ").concat(dataFim),
@@ -11192,7 +10827,7 @@ function AreaRH(_ref48) {
     }, qtd, " \xB7 ", pct, "%")), /*#__PURE__*/React.createElement("div", {
       style: {
         height: 8,
-        background: "#F5EAEA",
+        background: "#F3E8F7",
         borderRadius: 4,
         overflow: "hidden"
       }
@@ -11242,7 +10877,7 @@ function AreaRH(_ref48) {
     }, qtd, " evento", qtd !== 1 ? "s" : "")), /*#__PURE__*/React.createElement("div", {
       style: {
         height: 6,
-        background: "#F5EAEA",
+        background: "#F3E8F7",
         borderRadius: 3,
         overflow: "hidden"
       }
@@ -11520,7 +11155,57 @@ function AreaRH(_ref48) {
     onChange: function onChange(e) {
       return setDataFim(e.target.value);
     }
-  }))), coristaDecl && /*#__PURE__*/React.createElement(React.Fragment, null, freqCorista.length > 0 && /*#__PURE__*/React.createElement("div", {style:{marginBottom:12}}, freqCorista.map(function(f,i){ return /*#__PURE__*/React.createElement("div",{key:f.id,style:{display:"flex",gap:10,padding:"8px 0",borderBottom:"1px solid #F5F0F0",alignItems:"center"}}, /*#__PURE__*/React.createElement("span",{style:{fontSize:12,color:"#AAA",minWidth:20}},i+1), /*#__PURE__*/React.createElement("span",{style:{fontSize:12,color:"#888",minWidth:90}},f.eventoData?new Date(f.eventoData+"T12:00:00").toLocaleDateString("pt-BR"):""), /*#__PURE__*/React.createElement("span",{style:{fontSize:13,fontWeight:600,color:"#1A1D23"}},f.eventoTitulo)); })), freqCorista.length === 0 && /*#__PURE__*/React.createElement("div",{style:{fontSize:12,color:"#888",padding:"8px 0 12px",fontStyle:"italic"}},"Nenhuma participação no período — a declaração será gerada com dados de vínculo."), /*#__PURE__*/React.createElement("button",{onClick:gerarDeclCorista,style:{display:"flex",alignItems:"center",gap:8,padding:"11px 20px",background:cor,color:"#fff",border:"none",borderRadius:10,fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}, /*#__PURE__*/React.createElement(Icon,{name:"printer",size:14,color:"#fff"}), " Gerar Declaração PDF")))), aba === "historico" && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+  }))), coristaDecl && (/*#__PURE__*/React.createElement(React.Fragment, null, freqCorista.length > 0 && /*#__PURE__*/React.createElement("div", {style:{marginBottom:12}}, freqCorista.map(function (f, i) {
+    return /*#__PURE__*/React.createElement("div", {
+      key: f.id,
+      style: {
+        display: "flex",
+        gap: 10,
+        padding: "8px 0",
+        borderBottom: "1px solid #F5F0F0",
+        alignItems: "center"
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 12,
+        color: "#AAA",
+        minWidth: 20
+      }
+    }, i + 1), /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 12,
+        color: "#888",
+        minWidth: 90
+      }
+    }, f.eventoData ? new Date(f.eventoData + "T12:00:00").toLocaleDateString("pt-BR") : ""), /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 13,
+        fontWeight: 600,
+        color: "#1A1D23"
+      }
+    }, f.eventoTitulo));
+  }), /*#__PURE__*/React.createElement("button", {
+    onClick: gerarDeclCorista,
+    style: {
+      display: "flex",
+      alignItems: "center",
+      gap: 8,
+      padding: "11px 20px",
+      background: cor,
+      color: "#fff",
+      border: "none",
+      borderRadius: 10,
+      fontSize: 13,
+      fontWeight: 700,
+      cursor: "pointer",
+      fontFamily: "inherit",
+      marginTop: 14
+    }
+  }, /*#__PURE__*/React.createElement(Icon, {
+    name: "printer",
+    size: 14,
+    color: "#fff"
+  }), " Gerar Declara\xE7\xE3o PDF"))))), aba === "historico" && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
     style: {
       fontSize: 14,
       fontWeight: 700,
@@ -11589,10 +11274,746 @@ function AreaRH(_ref48) {
         color: "#AAA"
       }
     }, r.geradoPor || "—"));
-  }))));
+  })))));
 }
 
 // ── NAV ───────────────────────────────────────────────────────────────────────
+
+// ── BLOG DO GRUPO ─────────────────────────────────────────────────────────────
+function BlogGrupo(_ref55) {
+  var config = _ref55.config,
+    isAdmin = _ref55.isAdmin,
+    user = _ref55.user;
+  var _useCollection30 = useCollection("estrelas_blog_posts"),
+    posts = _useCollection30.data,
+    loading = _useCollection30.loading;
+  var _useState203 = useState(null),
+    _useState204 = _slicedToArray(_useState203, 2),
+    modal = _useState204[0],
+    setModal = _useState204[1];
+  var _useState205 = useState({
+      titulo: "",
+      texto: "",
+      imageUrl: "",
+      categoria: "Geral"
+    }),
+    _useState206 = _slicedToArray(_useState205, 2),
+    form = _useState206[0],
+    setForm = _useState206[1];
+  var _useState207 = useState(false),
+    _useState208 = _slicedToArray(_useState207, 2),
+    salvando = _useState208[0],
+    setSalvando = _useState208[1];
+  var _useState209 = useState(""),
+    _useState210 = _slicedToArray(_useState209, 2),
+    erro = _useState210[0],
+    setErro = _useState210[1];
+  var _useState211 = useState("Todos"),
+    _useState212 = _slicedToArray(_useState211, 2),
+    filtro = _useState212[0],
+    setFiltro = _useState212[1];
+  var cor = config.corPrimaria || COR;
+  var categorias = ["Geral", "Apresentação", "Ensaio", "Conquista", "Comunicado", "Evento"];
+
+  // Admin vê tudo; corista vê só aprovados + seus próprios pendentes
+  var visiveis = posts.filter(function (p) {
+    if (isAdmin) return true;
+    return p.status === "publicado" || p.autorNome === user.name;
+  }).filter(function (p) {
+    return filtro === "Todos" || p.categoria === filtro;
+  });
+  function abrirNovo() {
+    setForm({
+      titulo: "",
+      texto: "",
+      imageUrl: "",
+      categoria: "Geral"
+    });
+    setModal("novo");
+    setErro("");
+  }
+  function abrirEditar(p) {
+    setForm(_objectSpread({}, p));
+    setModal(p);
+    setErro("");
+  }
+  function fechar() {
+    setModal(null);
+    setForm({
+      titulo: "",
+      texto: "",
+      imageUrl: "",
+      categoria: "Geral"
+    });
+  }
+  function salvar() {
+    return _salvar8.apply(this, arguments);
+  }
+  function _salvar8() {
+    _salvar8 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee24() {
+      var status;
+      return _regenerator().w(function (_context24) {
+        while (1) switch (_context24.n) {
+          case 0:
+            if (form.titulo.trim()) {
+              _context24.n = 1;
+              break;
+            }
+            setErro("Título é obrigatório.");
+            return _context24.a(2);
+          case 1:
+            if (form.texto.trim()) {
+              _context24.n = 2;
+              break;
+            }
+            setErro("Texto é obrigatório.");
+            return _context24.a(2);
+          case 2:
+            setSalvando(true);
+            if (!(modal && modal !== "novo")) {
+              _context24.n = 4;
+              break;
+            }
+            _context24.n = 3;
+            return db.collection("estrelas_blog_posts").doc(modal.id).update({
+              titulo: form.titulo,
+              texto: form.texto,
+              imageUrl: form.imageUrl || "",
+              categoria: form.categoria,
+              status: form.status || modal.status,
+              updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+          case 3:
+            _context24.n = 5;
+            break;
+          case 4:
+            // Novo post
+            status = isAdmin ? "publicado" : "pendente";
+            _context24.n = 5;
+            return db.collection("estrelas_blog_posts").add({
+              titulo: form.titulo,
+              texto: form.texto,
+              imageUrl: form.imageUrl || "",
+              categoria: form.categoria,
+              autorNome: user.name,
+              autorPerfil: isAdmin ? "admin" : "corista",
+              status: status,
+              createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+          case 5:
+            setSalvando(false);
+            fechar();
+          case 6:
+            return _context24.a(2);
+        }
+      }, _callee24);
+    }));
+    return _salvar8.apply(this, arguments);
+  }
+  function excluir() {
+    return _excluir7.apply(this, arguments);
+  }
+  function _excluir7() {
+    _excluir7 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee25() {
+      return _regenerator().w(function (_context25) {
+        while (1) switch (_context25.n) {
+          case 0:
+            if (window.confirm("Excluir este post?")) {
+              _context25.n = 1;
+              break;
+            }
+            return _context25.a(2);
+          case 1:
+            _context25.n = 2;
+            return db.collection("estrelas_blog_posts").doc(modal.id).delete();
+          case 2:
+            fechar();
+          case 3:
+            return _context25.a(2);
+        }
+      }, _callee25);
+    }));
+    return _excluir7.apply(this, arguments);
+  }
+  function aprovar(_x6) {
+    return _aprovar.apply(this, arguments);
+  }
+  function _aprovar() {
+    _aprovar = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee26(p) {
+      return _regenerator().w(function (_context26) {
+        while (1) switch (_context26.n) {
+          case 0:
+            _context26.n = 1;
+            return db.collection("estrelas_blog_posts").doc(p.id).update({
+              status: "publicado",
+              updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+          case 1:
+            return _context26.a(2);
+        }
+      }, _callee26);
+    }));
+    return _aprovar.apply(this, arguments);
+  }
+  function reprovar(_x7) {
+    return _reprovar.apply(this, arguments);
+  }
+  function _reprovar() {
+    _reprovar = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee27(p) {
+      return _regenerator().w(function (_context27) {
+        while (1) switch (_context27.n) {
+          case 0:
+            _context27.n = 1;
+            return db.collection("estrelas_blog_posts").doc(p.id).update({
+              status: "reprovado",
+              updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+          case 1:
+            return _context27.a(2);
+        }
+      }, _callee27);
+    }));
+    return _reprovar.apply(this, arguments);
+  }
+  if (loading) return /*#__PURE__*/React.createElement(Spinner, null);
+  var pendentes = posts.filter(function (p) {
+    return p.status === "pendente";
+  });
+  var inp = {
+    width: "100%",
+    padding: "11px 14px",
+    border: "1px solid #E8E0E0",
+    borderRadius: 10,
+    fontSize: 14,
+    outline: "none",
+    fontFamily: "inherit",
+    color: "#1A1D23",
+    background: "#FAFAFA"
+  };
+  var lbl = {
+    display: "block",
+    fontSize: 12,
+    fontWeight: 600,
+    color: "#888",
+    marginBottom: 5
+  };
+  var statusStyle = {
+    publicado: {
+      bg: "#E8F5E9",
+      color: "#2E7D32"
+    },
+    pendente: {
+      bg: "#FFF8E1",
+      color: "#E65100"
+    },
+    reprovado: {
+      bg: "#FFF0F0",
+      color: "#B41020"
+    }
+  };
+  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "flex-start",
+      marginBottom: 20
+    }
+  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontFamily: "'Playfair Display',serif",
+      fontSize: 28,
+      fontWeight: 700,
+      color: cor
+    }
+  }, "Blog do Grupo"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 13,
+      color: "#AAA",
+      marginTop: 2
+    }
+  }, "Not\xEDcias e hist\xF3rias do Estrelas do Cerrado")), /*#__PURE__*/React.createElement("button", {
+    onClick: abrirNovo,
+    style: {
+      display: "flex",
+      alignItems: "center",
+      gap: 8,
+      padding: "10px 20px",
+      background: cor,
+      border: "none",
+      borderRadius: 10,
+      fontSize: 13,
+      fontWeight: 700,
+      color: "#fff",
+      cursor: "pointer",
+      fontFamily: "inherit"
+    }
+  }, /*#__PURE__*/React.createElement(Icon, {
+    name: "plus",
+    size: 14,
+    color: "#fff"
+  }), " ", isAdmin ? "Nova Publicação" : "Sugerir Post")), isAdmin && pendentes.length > 0 && /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: "#FFF8E1",
+      border: "1px solid #FDE68A",
+      borderRadius: 12,
+      padding: "16px 20px",
+      marginBottom: 16
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 13,
+      fontWeight: 700,
+      color: "#E65100",
+      marginBottom: 12
+    }
+  }, "\u23F3 Aguardando aprova\xE7\xE3o (", pendentes.length, ")"), pendentes.map(function (p) {
+    return /*#__PURE__*/React.createElement("div", {
+      key: p.id,
+      style: {
+        background: "#fff",
+        borderRadius: 10,
+        padding: "12px 16px",
+        marginBottom: 8,
+        display: "flex",
+        alignItems: "center",
+        gap: 12
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        flex: 1
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 14,
+        fontWeight: 700,
+        color: "#1A1D23"
+      }
+    }, p.titulo), /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 12,
+        color: "#AAA"
+      }
+    }, "por ", p.autorNome, " \xB7 ", p.categoria), /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 13,
+        color: "#555",
+        marginTop: 4
+      }
+    }, p.texto.slice(0, 100), "...")), /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: "flex",
+        gap: 8
+      }
+    }, /*#__PURE__*/React.createElement("button", {
+      onClick: function onClick() {
+        return aprovar(p);
+      },
+      style: {
+        padding: "7px 14px",
+        background: "#E8F5E9",
+        color: "#2E7D32",
+        border: "none",
+        borderRadius: 8,
+        fontSize: 12,
+        fontWeight: 700,
+        cursor: "pointer",
+        fontFamily: "inherit"
+      }
+    }, "\u2713 Publicar"), /*#__PURE__*/React.createElement("button", {
+      onClick: function onClick() {
+        return reprovar(p);
+      },
+      style: {
+        padding: "7px 14px",
+        background: "#FFF0F0",
+        color: "#B41020",
+        border: "none",
+        borderRadius: 8,
+        fontSize: 12,
+        fontWeight: 700,
+        cursor: "pointer",
+        fontFamily: "inherit"
+      }
+    }, "\u2715 Reprovar"), /*#__PURE__*/React.createElement("button", {
+      onClick: function onClick() {
+        return abrirEditar(p);
+      },
+      style: {
+        padding: "7px 10px",
+        background: "#F5F5F5",
+        color: "#666",
+        border: "none",
+        borderRadius: 8,
+        fontSize: 12,
+        cursor: "pointer",
+        fontFamily: "inherit"
+      }
+    }, /*#__PURE__*/React.createElement(Icon, {
+      name: "pencil",
+      size: 13,
+      color: "#888"
+    }))));
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 8,
+      flexWrap: "wrap",
+      marginBottom: 16
+    }
+  }, ["Todos"].concat(categorias).map(function (c) {
+    return /*#__PURE__*/React.createElement("button", {
+      key: c,
+      onClick: function onClick() {
+        return setFiltro(c);
+      },
+      style: {
+        padding: "5px 14px",
+        borderRadius: 20,
+        border: "1px solid ".concat(filtro === c ? cor : "#EEE"),
+        background: filtro === c ? cor : "#fff",
+        color: filtro === c ? "#fff" : "#555",
+        fontSize: 13,
+        fontWeight: 600,
+        cursor: "pointer",
+        fontFamily: "inherit"
+      }
+    }, c);
+  })), visiveis.filter(function (p) {
+    return p.status !== "pendente" || isAdmin;
+  }).length === 0 ? /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: "#fff",
+      borderRadius: 12,
+      border: "1px solid #EEE8E8",
+      padding: "32px",
+      textAlign: "center",
+      color: "#CCC",
+      fontSize: 14
+    }
+  }, "Nenhuma publica\xE7\xE3o ainda.") : visiveis.map(function (p) {
+    var _p$createdAt;
+    var st = statusStyle[p.status] || statusStyle.publicado;
+    return /*#__PURE__*/React.createElement("div", {
+      key: p.id,
+      style: {
+        background: "#fff",
+        borderRadius: 12,
+        border: "1px solid #EEE8E8",
+        marginBottom: 12,
+        overflow: "hidden",
+        boxShadow: "0 1px 4px rgba(0,0,0,0.04)"
+      }
+    }, p.imageUrl && /*#__PURE__*/React.createElement("img", {
+      src: p.imageUrl,
+      alt: "",
+      style: {
+        width: "100%",
+        height: 160,
+        objectFit: "cover"
+      },
+      onError: function onError(e) {
+        return e.target.style.display = "none";
+      }
+    }), /*#__PURE__*/React.createElement("div", {
+      style: {
+        padding: "16px 20px"
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: "flex",
+        alignItems: "center",
+        gap: 8,
+        marginBottom: 8,
+        flexWrap: "wrap"
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 11,
+        padding: "2px 8px",
+        borderRadius: 10,
+        background: cor + "18",
+        color: cor,
+        fontWeight: 700
+      }
+    }, p.categoria || "Geral"), /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 11,
+        padding: "2px 8px",
+        borderRadius: 10,
+        background: st.bg,
+        color: st.color,
+        fontWeight: 700
+      }
+    }, p.status === "publicado" ? "✓ Publicado" : p.status === "pendente" ? "⏳ Aguardando" : p.status === "reprovado" ? "✕ Reprovado" : ""), ((_p$createdAt = p.createdAt) === null || _p$createdAt === void 0 ? void 0 : _p$createdAt.seconds) && /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 11,
+        color: "#AAA"
+      }
+    }, new Date(p.createdAt.seconds * 1000).toLocaleDateString("pt-BR", {
+      day: "numeric",
+      month: "long",
+      year: "numeric"
+    }))), /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 16,
+        fontWeight: 700,
+        color: "#1A1D23",
+        marginBottom: 6
+      }
+    }, p.titulo), /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 13,
+        color: "#555",
+        lineHeight: 1.6,
+        marginBottom: 8
+      }
+    }, p.texto), /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between"
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 12,
+        color: "#AAA"
+      }
+    }, "por ", p.autorNome || "Administrador"), (isAdmin || p.autorNome === user.name) && /*#__PURE__*/React.createElement("button", {
+      onClick: function onClick() {
+        return abrirEditar(p);
+      },
+      style: {
+        background: "none",
+        border: "none",
+        cursor: "pointer",
+        display: "flex",
+        alignItems: "center",
+        gap: 4,
+        fontSize: 12,
+        color: "#AAA",
+        fontFamily: "inherit"
+      }
+    }, /*#__PURE__*/React.createElement(Icon, {
+      name: "pencil",
+      size: 13,
+      color: "#AAA"
+    }), " Editar"))));
+  }), modal && /*#__PURE__*/React.createElement("div", {
+    style: {
+      position: "fixed",
+      inset: 0,
+      background: "rgba(0,0,0,0.5)",
+      zIndex: 300,
+      display: "flex",
+      alignItems: "flex-end",
+      justifyContent: "center"
+    },
+    onClick: function onClick(e) {
+      return e.target === e.currentTarget && fechar();
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: "#FAFAFA",
+      borderRadius: "20px 20px 0 0",
+      padding: "24px 20px",
+      width: "100%",
+      maxWidth: 640,
+      maxHeight: "92vh",
+      overflowY: "auto"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginBottom: 20
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontFamily: "'Playfair Display',serif",
+      fontSize: 20,
+      fontWeight: 700,
+      color: "#1A1D23"
+    }
+  }, modal === "novo" ? isAdmin ? "Nova Publicação" : "Sugerir Post" : "Editar Post"), /*#__PURE__*/React.createElement("button", {
+    onClick: fechar,
+    style: {
+      background: "#EEE",
+      border: "none",
+      borderRadius: 8,
+      width: 32,
+      height: 32,
+      cursor: "pointer",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center"
+    }
+  }, /*#__PURE__*/React.createElement(Icon, {
+    name: "x",
+    size: 16,
+    color: "#666"
+  }))), !isAdmin && modal === "novo" && /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: "#F3E8F7",
+      borderRadius: 10,
+      padding: "10px 14px",
+      marginBottom: 16,
+      fontSize: 13,
+      color: cor
+    }
+  }, "\u2728 Seu post ser\xE1 enviado para aprova\xE7\xE3o do administrador antes de ser publicado."), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 14
+    }
+  }, /*#__PURE__*/React.createElement("label", {
+    style: lbl
+  }, "T\xEDtulo *"), /*#__PURE__*/React.createElement("input", {
+    style: inp,
+    value: form.titulo || "",
+    onChange: function onChange(e) {
+      setForm(function (f) {
+        return _objectSpread(_objectSpread({}, f), {}, {
+          titulo: e.target.value
+        });
+      });
+      setErro("");
+    },
+    autoFocus: true
+  }), erro && /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 12,
+      color: cor,
+      marginTop: 4
+    }
+  }, erro)), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 14
+    }
+  }, /*#__PURE__*/React.createElement("label", {
+    style: lbl
+  }, "Categoria"), /*#__PURE__*/React.createElement("select", {
+    style: inp,
+    value: form.categoria || "Geral",
+    onChange: function onChange(e) {
+      return setForm(function (f) {
+        return _objectSpread(_objectSpread({}, f), {}, {
+          categoria: e.target.value
+        });
+      });
+    }
+  }, categorias.map(function (c) {
+    return /*#__PURE__*/React.createElement("option", {
+      key: c
+    }, c);
+  }))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 14
+    }
+  }, /*#__PURE__*/React.createElement("label", {
+    style: lbl
+  }, "URL da imagem (opcional)"), /*#__PURE__*/React.createElement("input", {
+    style: inp,
+    value: form.imageUrl || "",
+    onChange: function onChange(e) {
+      return setForm(function (f) {
+        return _objectSpread(_objectSpread({}, f), {}, {
+          imageUrl: e.target.value
+        });
+      });
+    },
+    placeholder: "https://..."
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 14
+    }
+  }, /*#__PURE__*/React.createElement("label", {
+    style: lbl
+  }, "Texto *"), /*#__PURE__*/React.createElement("textarea", {
+    style: _objectSpread(_objectSpread({}, inp), {}, {
+      minHeight: 140,
+      resize: "vertical"
+    }),
+    value: form.texto || "",
+    onChange: function onChange(e) {
+      setForm(function (f) {
+        return _objectSpread(_objectSpread({}, f), {}, {
+          texto: e.target.value
+        });
+      });
+      setErro("");
+    }
+  })), isAdmin && modal && modal !== "novo" && /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 14
+    }
+  }, /*#__PURE__*/React.createElement("label", {
+    style: lbl
+  }, "Status"), /*#__PURE__*/React.createElement("select", {
+    style: inp,
+    value: form.status || "publicado",
+    onChange: function onChange(e) {
+      return setForm(function (f) {
+        return _objectSpread(_objectSpread({}, f), {}, {
+          status: e.target.value
+        });
+      });
+    }
+  }, /*#__PURE__*/React.createElement("option", {
+    value: "publicado"
+  }, "Publicado"), /*#__PURE__*/React.createElement("option", {
+    value: "pendente"
+  }, "Pendente"), /*#__PURE__*/React.createElement("option", {
+    value: "reprovado"
+  }, "Reprovado"))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 10
+    }
+  }, modal !== "novo" && (isAdmin || modal && modal.autorNome === user.name) && /*#__PURE__*/React.createElement("button", {
+    onClick: excluir,
+    style: {
+      padding: "12px 16px",
+      background: "#FFF0F0",
+      color: "#B41020",
+      border: "1px solid #F5DADA",
+      borderRadius: 10,
+      fontSize: 13,
+      fontWeight: 600,
+      cursor: "pointer",
+      fontFamily: "inherit"
+    }
+  }, "Excluir"), /*#__PURE__*/React.createElement("button", {
+    onClick: fechar,
+    style: {
+      flex: 1,
+      padding: "13px",
+      background: "#F0EAE8",
+      color: "#666",
+      border: "none",
+      borderRadius: 10,
+      fontSize: 14,
+      fontWeight: 600,
+      cursor: "pointer",
+      fontFamily: "inherit"
+    }
+  }, "Cancelar"), /*#__PURE__*/React.createElement("button", {
+    onClick: salvar,
+    disabled: salvando,
+    style: {
+      flex: 1,
+      padding: "13px",
+      background: cor,
+      color: "#fff",
+      border: "none",
+      borderRadius: 10,
+      fontSize: 14,
+      fontWeight: 700,
+      cursor: "pointer",
+      fontFamily: "inherit",
+      opacity: salvando ? 0.7 : 1
+    }
+  }, salvando ? "Salvando..." : modal === "novo" ? isAdmin ? "Publicar" : "Enviar para aprovação" : "Salvar")))));
+}
 var NAV_ADMIN = [{
   key: "painel",
   label: "Painel",
@@ -11634,27 +12055,15 @@ var NAV_ADMIN = [{
   label: "Relatórios",
   icon: "chart-bar"
 }, {
+  key: "blog",
+  label: "Blog do Grupo",
+  icon: "newspaper"
+}, {
   key: "config",
   label: "Configurações",
   icon: "settings"
 }];
-var NAV_RH = [{
-  key: "rh_dashboard",
-  label: "Dashboard",
-  icon: "bar-chart-2"
-}, {
-  key: "rh_noticias",
-  label: "Notícias",
-  icon: "newspaper"
-}, {
-  key: "rh_declaracoes",
-  label: "Declarações",
-  icon: "file-text"
-}, {
-  key: "rh_historico",
-  label: "Histórico",
-  icon: "clock"
-}];
+var NAV_RH = [];
 var NAV_CORISTA = [{
   key: "inicio",
   label: "Início",
@@ -11671,33 +12080,37 @@ var NAV_CORISTA = [{
   key: "declaracao",
   label: "Minha Declaração",
   icon: "file-text"
+}, {
+  key: "blog",
+  label: "Blog do Grupo",
+  icon: "newspaper"
 }];
 
 // ── APP ───────────────────────────────────────────────────────────────────────
 function App() {
-  var _useState207 = useState(function () {
+  var _useState213 = useState(function () {
       try {
         return JSON.parse(localStorage.getItem("cf_user"));
       } catch (_unused) {
         return null;
       }
     }),
-    _useState208 = _slicedToArray(_useState207, 2),
-    user = _useState208[0],
-    setUser = _useState208[1];
-  var _useState209 = useState([]),
-    _useState210 = _slicedToArray(_useState209, 2),
-    members = _useState210[0],
-    setMembers = _useState210[1];
-  var _useState211 = useState("painel"),
-    _useState212 = _slicedToArray(_useState211, 2),
-    tab = _useState212[0],
-    setTab = _useState212[1];
+    _useState214 = _slicedToArray(_useState213, 2),
+    user = _useState214[0],
+    setUser = _useState214[1];
+  var _useState215 = useState([]),
+    _useState216 = _slicedToArray(_useState215, 2),
+    members = _useState216[0],
+    setMembers = _useState216[1];
+  var _useState217 = useState("painel"),
+    _useState218 = _slicedToArray(_useState217, 2),
+    tab = _useState218[0],
+    setTab = _useState218[1];
   var _useConfig = useConfig(),
     config = _useConfig.config,
     save = _useConfig.save;
   useEffect(function () {
-    var unsub = db.collection("members").onSnapshot(function (snap) {
+    var unsub = db.collection("estrelas_members").onSnapshot(function (snap) {
       return setMembers(snap.docs.map(function (d) {
         return _objectSpread({
           id: d.id
@@ -11713,7 +12126,7 @@ function App() {
     // Registrar acesso do corista
     if (u.role === "corista" && u.name) {
       var agora = new Date();
-      db.collection("acessos").add({
+      db.collection("estrelas_acessos").add({
         nome: u.name,
         dataHora: firebase.firestore.FieldValue.serverTimestamp(),
         data: agora.toISOString().split("T")[0]
@@ -11807,6 +12220,11 @@ function App() {
       config: config,
       abaInicial: "historico"
     }),
+    blog: /*#__PURE__*/React.createElement(BlogGrupo, {
+      config: config,
+      isAdmin: isAdmin,
+      user: user
+    }),
     config: /*#__PURE__*/React.createElement(Configuracoes, {
       config: config,
       save: save
@@ -11853,19 +12271,16 @@ function App() {
     style: {
       width: 40,
       height: 40,
-      background: fundo,
       borderRadius: 10,
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center"
+      overflow: "hidden"
     }
   }, /*#__PURE__*/React.createElement("img", {
     src: config.logoUrl || LOGO_URL,
     alt: "",
     style: {
-      width: 28,
-      height: 28,
-      objectFit: "contain"
+      width: "100%",
+      height: "100%",
+      objectFit: "cover"
     },
     onError: function onError(e) {
       return e.target.style.display = "none";
@@ -11878,7 +12293,7 @@ function App() {
       color: cor,
       lineHeight: 1.2
     }
-  }, config.nomeApp || "Flamboyant Coral"), /*#__PURE__*/React.createElement("div", {
+  }, config.nomeApp || "Estrelas do Cerrado"), /*#__PURE__*/React.createElement("div", {
     style: {
       fontSize: 11,
       color: "#AAA"
@@ -12032,7 +12447,7 @@ function App() {
       fontSize: 15,
       fontWeight: 700
     }
-  }, config.nomeApp || "Flamboyant Coral")), /*#__PURE__*/React.createElement("button", {
+  }, config.nomeApp || "Estrelas do Cerrado")), /*#__PURE__*/React.createElement("button", {
     onClick: handleLogout,
     style: {
       background: "rgba(255,255,255,0.15)",
