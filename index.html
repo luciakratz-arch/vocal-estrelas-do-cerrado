@@ -66,6 +66,7 @@
       window.addEventListener('beforeinstallprompt', function(e){
         e.preventDefault();
         deferredPrompt = e;
+        window.__pwaPrompt = e;
         console.log('[PWA] beforeinstallprompt capturado');
       });
 
