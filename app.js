@@ -911,7 +911,7 @@ function PlayerModal(_ref3) {
     name: "external-link",
     size: 12,
     color: "#AAA"
-  }), " Abrir em nova aba"))));
+  }), " Abrir em nova aba")));
 }
 
 // ── MESA DE SOM (página pública para sonoplasta) ──────────────────────────────
@@ -5503,7 +5503,9 @@ function Repertorio(_ref16) {
     }, /*#__PURE__*/React.createElement(MaterialBadge, {
       label: "Partitura",
       icon: "\uD83C\uDFBC",
-      url: s.partitura
+      url: s.partitura,
+      letra: s.letra,
+      songId: s.id
     }), /*#__PURE__*/React.createElement(MaterialBadge, {
       label: "\xC1udio Original",
       icon: "\uD83C\uDFB5",
