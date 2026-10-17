@@ -632,7 +632,7 @@ function PlayerModal(_ref3) {
       overflow: "hidden",
       display: "flex",
       flexDirection: "column",
-      height: isMobile ? "100vh" : "auto",
+      height: isMobile ? "100vh" : (canSplit ? "90vh" : "auto"),
       maxHeight: isMobile ? "100vh" : "90vh",
       boxShadow: "0 20px 60px rgba(0,0,0,0.5)"
     }
@@ -672,7 +672,7 @@ function PlayerModal(_ref3) {
       color: "#fff",
       fontWeight: 700
     }
-  }, "←"))), /*#__PURE__*/React.createElement("div", {
+  }, "←")), /*#__PURE__*/React.createElement("div", {
     style: {
       display: "flex",
       flexDirection: canSplit ? (isMobile ? "column" : "row") : "column",
@@ -683,7 +683,7 @@ function PlayerModal(_ref3) {
     }
   }, hasMedia && /*#__PURE__*/React.createElement("div", {
     style: {
-      flex: canSplit ? "0 0 30%" : 1,
+      flex: canSplit ? "0 0 30%" : "0 0 auto",
       minHeight: 0,
       overflow: "hidden",
       background: "#000"
@@ -692,7 +692,7 @@ function PlayerModal(_ref3) {
     src: embed,
     style: {
       width: "100%",
-      height: window.innerWidth < 600 ? 220 : 450,
+      height: canSplit ? "100%" : (window.innerWidth < 600 ? 220 : 450),
       border: "none",
       display: "block"
     },
@@ -701,17 +701,17 @@ function PlayerModal(_ref3) {
     title: title
   }), type === "audio" && /*#__PURE__*/React.createElement("div", {
     style: {
-      padding: "32px 24px",
+      padding: canSplit ? "16px 12px" : "32px 24px",
       textAlign: "center",
       background: "#1A1D23"
     }
   }, /*#__PURE__*/React.createElement(Icon, {
     name: "music",
-    size: 48,
+    size: canSplit ? 28 : 48,
     color: "#555"
   }), /*#__PURE__*/React.createElement("div", {
     style: {
-      marginTop: 16
+      marginTop: canSplit ? 8 : 16
     }
   }, /*#__PURE__*/React.createElement("iframe", {
     src: embed,
@@ -733,7 +733,7 @@ function PlayerModal(_ref3) {
     alt: title,
     style: {
       maxWidth: "100%",
-      maxHeight: 500,
+      maxHeight: canSplit ? "100%" : 500,
       objectFit: "contain",
       borderRadius: 8
     }
@@ -741,7 +741,7 @@ function PlayerModal(_ref3) {
     src: embed,
     style: {
       width: "100%",
-      height: window.innerWidth < 600 ? 400 : 600,
+      height: canSplit ? "100%" : (window.innerWidth < 600 ? 400 : 600),
       border: "none",
       display: "block"
     },
@@ -749,11 +749,14 @@ function PlayerModal(_ref3) {
   }))), /*#__PURE__*/React.createElement("div", {
     style: {
       flex: canSplit ? "0 0 70%" : 1,
+      minHeight: 0,
+      minWidth: 0,
       overflowY: "auto",
       display: "flex",
       flexDirection: "column",
       padding: "0 0 12px 0",
-      borderLeft: canSplit ? "1px solid #333" : "none"
+      borderLeft: canSplit && !isMobile ? "1px solid #333" : "none",
+      borderTop: canSplit && isMobile ? "1px solid #333" : "none"
     }
   }, letraMode === "edit" ? /*#__PURE__*/React.createElement("div", {
     style: { display: "flex", flexDirection: "column", flex: 1, padding: "0 16px 0 16px" }
@@ -886,7 +889,7 @@ function PlayerModal(_ref3) {
     name: "external-link",
     size: 12,
     color: "#AAA"
-  }), " Abrir em nova aba"))), document.body);
+  }), " Abrir em nova aba")))), document.body);
 }
 
 // ── MESA DE SOM (página pública para sonoplasta) ──────────────────────────────
@@ -5578,7 +5581,8 @@ function Repertorio(_ref16) {
       return setPlayer(null);
     },
     letra: player.letra,
-    naipes: player.naipes
+    naipes: player.naipes,
+    songId: player.songId
   }));
 }
 
