@@ -627,14 +627,17 @@ function PlayerModal(_ref3) {
   }, /*#__PURE__*/React.createElement("div", {
     style: {
       width: "100%",
-      maxWidth: showSplit ? 1100 : 800,
-      maxHeight: "90vh",
+      maxWidth: canSplit && showSplit ? "100%" : 800,
+      margin: "0 auto",
+      marginTop: isMobile ? 0 : "2vh",
       background: "#1A1D23",
-      borderRadius: 16,
+      borderRadius: isMobile ? 0 : 16,
       overflow: "hidden",
-      boxShadow: "0 20px 60px rgba(0,0,0,0.5)",
       display: "flex",
-      flexDirection: "column"
+      flexDirection: "column",
+      height: isMobile ? "100%" : "auto",
+      maxHeight: "96vh",
+      boxShadow: "0 20px 60px rgba(0,0,0,0.5)"
     }
   }, /*#__PURE__*/React.createElement("div", {
     style: {
@@ -695,7 +698,7 @@ function PlayerModal(_ref3) {
   }, /*#__PURE__*/React.createElement(Icon, { name: "columns", size: 14, color: "#fff" }), !isMobile && " Dividir"))), /*#__PURE__*/React.createElement("div", {
     style: {
       display: "flex",
-      flexDirection: showSplit ? "row" : "column",
+      flexDirection: canSplit && showSplit ? (isMobile ? "column" : "row") : "column",
       flex: 1,
       overflow: "hidden",
       minHeight: 0,
@@ -703,7 +706,7 @@ function PlayerModal(_ref3) {
     }
   }, hasMedia && /*#__PURE__*/React.createElement("div", {
     style: {
-      flex: showSplit ? "0 0 50%" : 1,
+      flex: 1,
       minHeight: 0,
       overflow: "hidden",
       background: "#000"
