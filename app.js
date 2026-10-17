@@ -517,9 +517,6 @@ function PlayerModal(_ref3) {
   var hasMedia = url && url !== "letra";
   var hasLetra = !!(letra);
   var canSplit = hasMedia && hasLetra;
-  var _useState_split = React.useState(false),
-    showSplit = _useState_split[0],
-    setShowSplit = _useState_split[1];
   var _useState_letraEdit = React.useState(letra || ""),
     letraEdit = _useState_letraEdit[0],
     setLetraEdit = _useState_letraEdit[1];
@@ -609,7 +606,7 @@ function PlayerModal(_ref3) {
   var _getEmbedUrl = getEmbedUrl(url),
     type = _getEmbedUrl.type,
     embed = _getEmbedUrl.embed;
-  return /*#__PURE__*/React.createElement("div", {
+  return ReactDOM.createPortal(/*#__PURE__*/React.createElement("div", {
     style: {
       position: "fixed",
       inset: 0,
@@ -618,8 +615,9 @@ function PlayerModal(_ref3) {
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
-      justifyContent: "center",
-      padding: 16
+      justifyContent: isMobile ? "flex-start" : "center",
+      padding: isMobile ? 0 : 16,
+      overflowY: "auto"
     },
     onClick: function onClick(e) {
       return e.target === e.currentTarget && onClose();
@@ -627,16 +625,15 @@ function PlayerModal(_ref3) {
   }, /*#__PURE__*/React.createElement("div", {
     style: {
       width: "100%",
-      maxWidth: canSplit && showSplit ? "100%" : 800,
+      maxWidth: canSplit ? "100%" : 800,
       margin: "0 auto",
-      marginTop: isMobile ? 0 : "2vh",
       background: "#1A1D23",
       borderRadius: isMobile ? 0 : 16,
       overflow: "hidden",
       display: "flex",
       flexDirection: "column",
-      height: isMobile ? "100%" : "auto",
-      maxHeight: "96vh",
+      height: isMobile ? "100vh" : "auto",
+      maxHeight: isMobile ? "100vh" : "90vh",
       boxShadow: "0 20px 60px rgba(0,0,0,0.5)"
     }
   }, /*#__PURE__*/React.createElement("div", {
@@ -675,38 +672,18 @@ function PlayerModal(_ref3) {
       color: "#fff",
       fontWeight: 700
     }
-  }, "←"), canSplit && /*#__PURE__*/React.createElement("button", {
-    onClick: function() { setShowSplit(!showSplit); },
-    title: showSplit ? "Ver separado" : "Ver letra e música juntos",
-    style: {
-      background: showSplit ? "rgba(123,45,139,0.25)" : "rgba(255,255,255,0.08)",
-      border: showSplit ? "1px solid rgba(123,45,139,0.5)" : "1px solid rgba(255,255,255,0.15)",
-      borderRadius: 8,
-      padding: "0 10px",
-      height: 36,
-      cursor: "pointer",
-      display: "inline-flex",
-      alignItems: "center",
-      gap: 5,
-      fontSize: 11,
-      fontWeight: 600,
-      color: "#fff",
-      marginLeft: 6,
-      flexShrink: 0,
-      fontFamily: "inherit"
-    }
-  }, /*#__PURE__*/React.createElement(Icon, { name: "columns", size: 14, color: "#fff" }), !isMobile && " Dividir"))), /*#__PURE__*/React.createElement("div", {
+  }, "←"))), /*#__PURE__*/React.createElement("div", {
     style: {
       display: "flex",
-      flexDirection: canSplit && showSplit ? (isMobile ? "column" : "row") : "column",
+      flexDirection: canSplit ? (isMobile ? "column" : "row") : "column",
       flex: 1,
       overflow: "hidden",
       minHeight: 0,
-      background: "#000"
+      background: "#1A1D23"
     }
   }, hasMedia && /*#__PURE__*/React.createElement("div", {
     style: {
-      flex: 1,
+      flex: canSplit ? "0 0 30%" : 1,
       minHeight: 0,
       overflow: "hidden",
       background: "#000"
@@ -771,11 +748,12 @@ function PlayerModal(_ref3) {
     title: title
   }))), /*#__PURE__*/React.createElement("div", {
     style: {
-      flex: 1,
+      flex: canSplit ? "0 0 70%" : 1,
       overflowY: "auto",
       display: "flex",
       flexDirection: "column",
-      padding: "0 0 12px 0"
+      padding: "0 0 12px 0",
+      borderLeft: canSplit ? "1px solid #333" : "none"
     }
   }, letraMode === "edit" ? /*#__PURE__*/React.createElement("div", {
     style: { display: "flex", flexDirection: "column", flex: 1, padding: "0 16px 0 16px" }
@@ -836,7 +814,7 @@ function PlayerModal(_ref3) {
     }, "✏️ Editar"),
     letraMsg && /*#__PURE__*/React.createElement("div", { style: { fontSize: 12, color: "#7B2D8B", marginBottom: 8 } }, letraMsg),
     /*#__PURE__*/React.createElement("div", {
-      style: { fontSize: 14, color: "#EEE", lineHeight: 1.8, whiteSpace: "pre-wrap" }
+      style: { fontSize: 14, color: "#fff", lineHeight: 1.8, whiteSpace: "pre-wrap" }
     }, renderLetraFormatada(letraEdit || letra))
   ) : null), naipes && /*#__PURE__*/React.createElement("div", {
     style: {
@@ -908,7 +886,7 @@ function PlayerModal(_ref3) {
     name: "external-link",
     size: 12,
     color: "#AAA"
-  }), " Abrir em nova aba")));
+  }), " Abrir em nova aba"))), document.body);
 }
 
 // ── MESA DE SOM (página pública para sonoplasta) ──────────────────────────────
