@@ -697,10 +697,10 @@ function PlayerModal(_ref3) {
       overflow: "hidden",
       background: "#000"
     }
-  }, hasMedia && /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React.createElement("div", {
     style: {
       flex: showSplit ? "0 0 50%" : 1,
-      display: "flex",
+      display: hasMedia ? "flex" : "none",
       flexDirection: "column",
       overflow: "hidden",
       minWidth: 0
