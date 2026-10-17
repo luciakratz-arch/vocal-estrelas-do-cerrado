@@ -697,7 +697,7 @@ function PlayerModal(_ref3) {
       overflow: "hidden",
       background: "#000"
     }
-  }, /*#__PURE__*/React.createElement("div", {
+  }, hasMedia && /*#__PURE__*/React.createElement("div", {
     style: {
       flex: showSplit ? "0 0 50%" : "none",
       display: "flex",
@@ -765,8 +765,8 @@ function PlayerModal(_ref3) {
     title: title
   }))), /*#__PURE__*/React.createElement("div", {
     style: {
-      flex: showSplit ? "0 0 50%" : "none",
-      display: "flex",
+      flex: showSplit ? "0 0 50%" : 1,
+      display: showSplit || (url === "letra") ? "flex" : (letra ? "flex" : "none"),
       flexDirection: "column",
       overflow: "hidden",
       minWidth: 0,
