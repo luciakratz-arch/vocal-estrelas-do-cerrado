@@ -699,7 +699,7 @@ function PlayerModal(_ref3) {
     }
   }, hasMedia && /*#__PURE__*/React.createElement("div", {
     style: {
-      flex: showSplit ? "0 0 50%" : "none",
+      flex: showSplit ? "0 0 50%" : 1,
       display: "flex",
       flexDirection: "column",
       overflow: "hidden",
