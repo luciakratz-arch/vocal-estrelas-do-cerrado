@@ -685,7 +685,10 @@ function PlayerModal(_ref3) {
     style: {
       flex: canSplit ? "0 0 30%" : "0 0 auto",
       minHeight: 0,
+      minWidth: 0,
       overflow: "hidden",
+      display: canSplit ? "flex" : "block",
+      flexDirection: "column",
       background: "#000"
     }
   }, (type === "youtube" || type === "iframe") && url !== "letra" && /*#__PURE__*/React.createElement("iframe", {
@@ -746,7 +749,7 @@ function PlayerModal(_ref3) {
       display: "block"
     },
     title: title
-  }))), /*#__PURE__*/React.createElement("div", {
+  })), /*#__PURE__*/React.createElement("div", {
     style: {
       flex: canSplit ? "0 0 70%" : 1,
       minHeight: 0,
@@ -817,9 +820,9 @@ function PlayerModal(_ref3) {
     }, "✏️ Editar"),
     letraMsg && /*#__PURE__*/React.createElement("div", { style: { fontSize: 12, color: "#7B2D8B", marginBottom: 8 } }, letraMsg),
     /*#__PURE__*/React.createElement("div", {
-      style: { fontSize: 14, color: "#fff", lineHeight: 1.8, whiteSpace: "pre-wrap" }
+      style: { fontSize: 14, color: "#fff", lineHeight: 1.8 }
     }, renderLetraFormatada(letraEdit || letra))
-  ) : null), naipes && /*#__PURE__*/React.createElement("div", {
+  ) : null)), naipes && /*#__PURE__*/React.createElement("div", {
     style: {
       padding: "16px 18px",
       background: "#1A1D23"
