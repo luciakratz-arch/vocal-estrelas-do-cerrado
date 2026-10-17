@@ -768,16 +768,6 @@ function PlayerModal(_ref3) {
     title: title
   }))), /*#__PURE__*/React.createElement("div", {
     style: {
-      flex: showSplit ? "0 0 50%" : 1,
-      display: showSplit || (url === "letra") ? "flex" : (letra ? "flex" : "none"),
-      flexDirection: "column",
-      overflow: "hidden",
-      minHeight: 0,
-      minWidth: 0,
-      borderLeft: showSplit ? "1px solid #333" : "none"
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
       flex: 1,
       overflowY: "auto",
       display: "flex",
@@ -845,7 +835,7 @@ function PlayerModal(_ref3) {
     /*#__PURE__*/React.createElement("div", {
       style: { fontSize: 14, color: "#EEE", lineHeight: 1.8, whiteSpace: "pre-wrap" }
     }, renderLetraFormatada(letraEdit || letra))
-  ) : null)), naipes && /*#__PURE__*/React.createElement("div", {
+  ) : null), naipes && /*#__PURE__*/React.createElement("div", {
     style: {
       padding: "16px 18px",
       background: "#1A1D23"
