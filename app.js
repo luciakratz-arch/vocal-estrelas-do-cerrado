@@ -628,10 +628,13 @@ function PlayerModal(_ref3) {
     style: {
       width: "100%",
       maxWidth: showSplit ? 1100 : 800,
+      maxHeight: "90vh",
       background: "#1A1D23",
       borderRadius: 16,
       overflow: "hidden",
-      boxShadow: "0 20px 60px rgba(0,0,0,0.5)"
+      boxShadow: "0 20px 60px rgba(0,0,0,0.5)",
+      display: "flex",
+      flexDirection: "column"
     }
   }, /*#__PURE__*/React.createElement("div", {
     style: {
@@ -695,15 +698,15 @@ function PlayerModal(_ref3) {
       flexDirection: showSplit ? "row" : "column",
       flex: 1,
       overflow: "hidden",
+      minHeight: 0,
       background: "#000"
     }
-  }, /*#__PURE__*/React.createElement("div", {
+  }, hasMedia && /*#__PURE__*/React.createElement("div", {
     style: {
       flex: showSplit ? "0 0 50%" : 1,
-      display: hasMedia ? "flex" : "none",
-      flexDirection: "column",
+      minHeight: 0,
       overflow: "hidden",
-      minWidth: 0
+      background: "#000"
     }
   }, (type === "youtube" || type === "iframe") && url !== "letra" && /*#__PURE__*/React.createElement("iframe", {
     src: embed,
@@ -769,6 +772,7 @@ function PlayerModal(_ref3) {
       display: showSplit || (url === "letra") ? "flex" : (letra ? "flex" : "none"),
       flexDirection: "column",
       overflow: "hidden",
+      minHeight: 0,
       minWidth: 0,
       borderLeft: showSplit ? "1px solid #333" : "none"
     }
